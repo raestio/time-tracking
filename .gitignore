@@ -1,6 +1,6 @@
 HELP.md
 .gradle
-/build/
+build/
 !time-tracking-backend/gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

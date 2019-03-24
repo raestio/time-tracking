@@ -4,3 +4,7 @@ services:
     build: ./postgres
     ports:
       - "5432:5432"
+  time-tracking-backend:
+    build: ./time-tracking-backend
+    ports:
+    - "8080:8080"
