@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.data.core.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
@@ -35,6 +37,9 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
+
     @ManyToMany
     @JoinTable(name = "user_roles_assignment", schema = "time_tracking_schema",
                joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_user_role"))
@@ -46,6 +51,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<ProjectAssignment> getProjectAssignments() {
+        return projectAssignments;
+    }
+
+    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+        this.projectAssignments = projectAssignments;
     }
 
     public Set<UserRole> getUserRoles() {

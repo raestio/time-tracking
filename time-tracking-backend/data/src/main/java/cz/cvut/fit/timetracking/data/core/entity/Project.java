@@ -1,14 +1,18 @@
 package cz.cvut.fit.timetracking.data.core.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "project", schema = "time_tracking_schema")
@@ -33,12 +37,23 @@ public class Project {
     @Column(name = "end")
     private LocalDate end;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<ProjectAssignment> getProjectAssignments() {
+        return projectAssignments;
+    }
+
+    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+        this.projectAssignments = projectAssignments;
     }
 
     public String getName() {

@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -31,6 +32,14 @@ public class ProjectAssignment {
     @Column(name = "valid_to")
     private LocalDate validTo;
 
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_project")
+    private Project project;
+
     @ManyToMany
     @JoinTable(name = "project_roles_assignment", schema = "time_tracking_schema",
             joinColumns = @JoinColumn(name = "id_project_assignment"), inverseJoinColumns = @JoinColumn(name = "id_project_role"))
@@ -42,6 +51,22 @@ public class ProjectAssignment {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public Set<ProjectRole> getProjectRoles() {
