@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.data.core.entity;
+package cz.cvut.fit.timetracking.data.core.enums;
 
 public enum ProjectRoleName {
     DEVELOPER,

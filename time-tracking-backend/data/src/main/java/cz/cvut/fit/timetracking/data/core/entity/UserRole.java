@@ -1,5 +1,7 @@
 package cz.cvut.fit.timetracking.data.core.entity;
 
+import cz.cvut.fit.timetracking.data.core.enums.UserRoleName;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
