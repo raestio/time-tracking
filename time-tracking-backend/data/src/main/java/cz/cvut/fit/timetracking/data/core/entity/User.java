@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author Rastislav Zlacky (rastislav.zlacky@inventi.cz) on 31.03.2019.
@@ -19,12 +20,15 @@ public class User {
     @Column(name = "id")
     private Integer id;
 
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
+    @NotEmpty
     @Column(name = "surname")
     private String surname;
 
+    @NotEmpty
     @Column(name = "email")
     private String email;
 
