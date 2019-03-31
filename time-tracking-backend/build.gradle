@@ -1,15 +1,23 @@
 plugins {
-	id 'java'
+	id 'org.springframework.boot' version '2.1.3.RELEASE'
 }
 
-group = 'cz.cvut.fit'
-version = '1.0.0-SNAPSHOT'
-sourceCompatibility = '11'
-
-repositories {
-	mavenCentral()
+allprojects {
+	ext {
+		springBootVersion = "2.1.3.RELEASE"
+	}
 }
 
-dependencies {
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+	sourceCompatibility = '11'
 
+	dependencyManagement {
+		imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+	}
+
+	repositories {
+		mavenCentral()
+	}
 }
