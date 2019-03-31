@@ -17,7 +17,8 @@ CREATE TABLE time_tracking_schema."user" (
 CREATE TABLE time_tracking_schema.user_roles_assignment (
 	id SERIAL PRIMARY KEY,
 	id_user INTEGER REFERENCES time_tracking_schema."user"(id) NOT NULL,
-	id_user_role INTEGER REFERENCES time_tracking_schema.user_role(id) NOT NULL
+	id_user_role INTEGER REFERENCES time_tracking_schema.user_role(id) NOT NULL,
+	UNIQUE (id_user, id_user_role)
 );
 
 CREATE TABLE time_tracking_schema.project_role (
@@ -43,7 +44,8 @@ CREATE TABLE time_tracking_schema.work_type (
 CREATE TABLE time_tracking_schema.project_work_type (
 	id SERIAL PRIMARY KEY,
 	id_work_type INTEGER REFERENCES time_tracking_schema.work_type(id) NOT NULL,
-	id_project INTEGER REFERENCES time_tracking_schema.project(id) NOT NULL
+	id_project INTEGER REFERENCES time_tracking_schema.project(id) NOT NULL,
+	UNIQUE (id_project, id_work_type)
 );
 
 CREATE TABLE time_tracking_schema.project_assignment (
@@ -57,7 +59,8 @@ CREATE TABLE time_tracking_schema.project_assignment (
 CREATE TABLE time_tracking_schema.project_roles_assignment (
 	id SERIAL PRIMARY KEY,
 	id_project_role INTEGER REFERENCES time_tracking_schema.project_role(id) NOT NULL,
-	id_project_assignment INTEGER REFERENCES time_tracking_schema.project_assignment(id) NOT NULL
+	id_project_assignment INTEGER REFERENCES time_tracking_schema.project_assignment(id) NOT NULL,
+	UNIQUE (id_project_role, id_project_assignment)
 );
 
 CREATE TABLE time_tracking_schema.work_record (
