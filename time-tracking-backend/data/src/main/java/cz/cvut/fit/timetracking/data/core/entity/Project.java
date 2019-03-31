@@ -10,9 +10,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-/**
- * @author Rastislav Zlacky (rastislav.zlacky@inventi.cz) on 26.03.2019.
- */
 @Entity
 @Table(name = "project")
 public class Project {

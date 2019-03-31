@@ -6,23 +6,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-/**
- * @author Rastislav Zlacky (rastislav.zlacky@inventi.cz) on 31.03.2019.
- */
+
 @Entity
-@Table(name = "user_right")
-public class UserRight {
+@Table(name = "project_role")
+public class ProjectRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "name")
-    private String name;
+    private ProjectRoleName name;
 
     @Column(name = "description")
     private String description;
@@ -35,11 +33,11 @@ public class UserRight {
         this.id = id;
     }
 
-    public String getName() {
+    public ProjectRoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(ProjectRoleName name) {
         this.name = name;
     }
 

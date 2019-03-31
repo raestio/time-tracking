@@ -6,28 +6,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "user_role")
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "name")
-    private String name;
+    private UserRoleName name;
 
-    @NotEmpty
-    @Column(name = "surname")
-    private String surname;
-
-    @NotEmpty
-    @Column(name = "email")
-    private String email;
+    @Column(name = "description")
+    private String description;
 
     public Integer getId() {
         return id;
@@ -37,27 +32,19 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
+    public UserRoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(UserRoleName name) {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -1,7 +1,7 @@
 DROP SCHEMA IF EXISTS time_tracking_schema CASCADE;
 CREATE SCHEMA time_tracking_schema;
 
-CREATE TABLE time_tracking_schema.user_right (
+CREATE TABLE time_tracking_schema.user_role (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) UNIQUE NOT NULL,
 	description VARCHAR(255) NULL
@@ -14,13 +14,13 @@ CREATE TABLE time_tracking_schema."user" (
 	email VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE time_tracking_schema.user_rights_assignment (
+CREATE TABLE time_tracking_schema.user_roles_assignment (
 	id SERIAL PRIMARY KEY,
 	id_user INTEGER REFERENCES time_tracking_schema."user"(id) NOT NULL,
-	id_user_right INTEGER REFERENCES time_tracking_schema.user_right(id) NOT NULL
+	id_user_role INTEGER REFERENCES time_tracking_schema.user_role(id) NOT NULL
 );
 
-CREATE TABLE time_tracking_schema.project_right (
+CREATE TABLE time_tracking_schema.project_role (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(50) UNIQUE NOT NULL,
 	description VARCHAR(255) NULL
@@ -54,9 +54,9 @@ CREATE TABLE time_tracking_schema.project_assignment (
 	id_project INTEGER REFERENCES time_tracking_schema.project(id) NOT NULL
 );
 
-CREATE TABLE time_tracking_schema.project_rights_assignment (
+CREATE TABLE time_tracking_schema.project_roles_assignment (
 	id SERIAL PRIMARY KEY,
-	id_project_right INTEGER REFERENCES time_tracking_schema.project_right(id) NOT NULL,
+	id_project_role INTEGER REFERENCES time_tracking_schema.project_role(id) NOT NULL,
 	id_project_assignment INTEGER REFERENCES time_tracking_schema.project_assignment(id) NOT NULL
 );
 
