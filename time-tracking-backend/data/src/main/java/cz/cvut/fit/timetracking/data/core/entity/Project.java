@@ -40,12 +40,23 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<WorkRecord> workRecords = new HashSet<>();
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<WorkRecord> getWorkRecords() {
+        return workRecords;
+    }
+
+    public void setWorkRecords(Set<WorkRecord> workRecords) {
+        this.workRecords = workRecords;
     }
 
     public Set<ProjectAssignment> getProjectAssignments() {

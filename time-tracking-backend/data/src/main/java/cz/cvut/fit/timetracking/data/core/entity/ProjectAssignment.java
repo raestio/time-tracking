@@ -32,10 +32,12 @@ public class ProjectAssignment {
     @Column(name = "valid_to")
     private LocalDate validTo;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_project")
     private Project project;

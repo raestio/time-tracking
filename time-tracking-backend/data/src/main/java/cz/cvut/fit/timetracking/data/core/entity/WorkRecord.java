@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "work_record", schema = "time_tracking_schema")
@@ -38,12 +41,51 @@ public class WorkRecord {
     @Column(name = "date_updated")
     private ZonedDateTime dateUpdated;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "id_project")
+    private Project project;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "id_work_type")
+    private WorkType workType;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public WorkType getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(WorkType workType) {
+        this.workType = workType;
     }
 
     public ZonedDateTime getDateFrom() {
@@ -84,5 +126,18 @@ public class WorkRecord {
 
     public void setDateUpdated(ZonedDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkRecord that = (WorkRecord) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

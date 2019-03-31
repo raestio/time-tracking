@@ -40,6 +40,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<WorkRecord> workRecords = new HashSet<>();
+
     @ManyToMany
     @JoinTable(name = "user_roles_assignment", schema = "time_tracking_schema",
                joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_user_role"))
@@ -67,6 +70,14 @@ public class User {
 
     public void setUserRoles(Set<UserRole> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public Set<WorkRecord> getWorkRecords() {
+        return workRecords;
+    }
+
+    public void setWorkRecords(Set<WorkRecord> workRecords) {
+        this.workRecords = workRecords;
     }
 
     public String getName() {
