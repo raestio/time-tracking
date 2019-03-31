@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "work_record")
+@Table(name = "work_record", schema = "time_tracking_schema")
 public class WorkRecord {
 
     @Id

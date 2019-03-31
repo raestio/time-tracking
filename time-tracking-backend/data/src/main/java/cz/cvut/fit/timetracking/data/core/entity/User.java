@@ -5,11 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", schema = "time_tracking_schema")
 public class User {
 
     @Id
@@ -26,8 +32,13 @@ public class User {
     private String surname;
 
     @NotEmpty
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @ManyToMany
+    @JoinTable(name = "user_roles_assignment", schema = "time_tracking_schema",
+               joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_user_role"))
+    private Set<UserRole> userRoles = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -35,6 +46,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public String getName() {
@@ -59,5 +78,18 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

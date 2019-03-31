@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "work_type")
+@Table(name = "work_type", schema = "time_tracking_schema")
 public class WorkType {
 
     @Id
@@ -18,7 +18,7 @@ public class WorkType {
     private Integer id;
 
     @NotEmpty
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "description")

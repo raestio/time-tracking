@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
-@Table(name = "project_role")
+@Table(name = "project_role", schema = "time_tracking_schema")
 public class ProjectRole {
 
     @Id
@@ -19,7 +19,7 @@ public class ProjectRole {
     private Integer id;
 
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private ProjectRoleName name;
 
     @Column(name = "description")

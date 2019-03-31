@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "project_assignment")
+@Table(name = "project_assignment", schema = "time_tracking_schema")
 public class ProjectAssignment {
 
     @Id
