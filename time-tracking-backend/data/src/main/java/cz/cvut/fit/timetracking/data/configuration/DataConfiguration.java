@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@Import(DataConfiguration.class)
+@Import(DatabaseConfiguration.class)
 @ComponentScan(basePackages = PackageNames.DATA_CORE)
 @EnableTransactionManagement
 public class DataConfiguration {
