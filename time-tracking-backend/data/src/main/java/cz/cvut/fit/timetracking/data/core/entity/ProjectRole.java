@@ -4,6 +4,8 @@ import cz.cvut.fit.timetracking.data.core.enums.ProjectRoleName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,7 @@ public class ProjectRole {
 
     @NotNull
     @Column(name = "name", unique = true)
+    @Enumerated(EnumType.STRING)
     private ProjectRoleName name;
 
     @Column(name = "description")
