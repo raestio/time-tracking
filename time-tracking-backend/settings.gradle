@@ -1,4 +1,5 @@
 rootProject.name = 'time-tracking'
 include 'data'
 include 'app'
+include 'data-api'
 
