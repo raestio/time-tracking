@@ -24,6 +24,11 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
         assertThat(createdUser.getSurname()).isEqualTo(userDTO.getSurname());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void whenUserIsNull_createUser_expectIllegalArgumentException() {
+        dataAccessApi.createOrUpdateUser(null);
+    }
+
     @Test
     @Transactional
     public void deleteUser() {
