@@ -3,15 +3,15 @@ package cz.cvut.fit.timetracking.data.api.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-public class User {
+public class UserDTO {
 
     private Integer id;
     private String name;
     private String surname;
     private String email;
-    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
-    private Set<WorkRecord> workRecords = new HashSet<>();
-    private Set<UserRole> userRoles = new HashSet<>();
+    private Set<ProjectAssignmentDTO> projectAssignments = new HashSet<>();
+    private Set<WorkRecordDTO> workRecords = new HashSet<>();
+    private Set<UserRoleDTO> userRoles = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -21,27 +21,27 @@ public class User {
         this.id = id;
     }
 
-    public Set<ProjectAssignment> getProjectAssignments() {
+    public Set<ProjectAssignmentDTO> getProjectAssignments() {
         return projectAssignments;
     }
 
-    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+    public void setProjectAssignments(Set<ProjectAssignmentDTO> projectAssignments) {
         this.projectAssignments = projectAssignments;
     }
 
-    public Set<UserRole> getUserRoles() {
+    public Set<UserRoleDTO> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(Set<UserRole> userRoles) {
+    public void setUserRoles(Set<UserRoleDTO> userRoles) {
         this.userRoles = userRoles;
     }
 
-    public Set<WorkRecord> getWorkRecords() {
+    public Set<WorkRecordDTO> getWorkRecords() {
         return workRecords;
     }
 
-    public void setWorkRecords(Set<WorkRecord> workRecords) {
+    public void setWorkRecords(Set<WorkRecordDTO> workRecords) {
         this.workRecords = workRecords;
     }
 

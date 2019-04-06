@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProjectAssignment {
+public class ProjectAssignmentDTO {
 
     private Integer id;
     private LocalDate validFrom;
     private LocalDate validTo;
-    private User user;
-    private Project project;
-    private Set<ProjectRole> projectRoles = new HashSet<>();
+    private UserDTO user;
+    private ProjectDTO project;
+    private Set<ProjectRoleDTO> projectRoles = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -21,27 +21,27 @@ public class ProjectAssignment {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public Project getProject() {
+    public ProjectDTO getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDTO project) {
         this.project = project;
     }
 
-    public Set<ProjectRole> getProjectRoles() {
+    public Set<ProjectRoleDTO> getProjectRoles() {
         return projectRoles;
     }
 
-    public void setProjectRoles(Set<ProjectRole> projectRoles) {
+    public void setProjectRoles(Set<ProjectRoleDTO> projectRoles) {
         this.projectRoles = projectRoles;
     }
 

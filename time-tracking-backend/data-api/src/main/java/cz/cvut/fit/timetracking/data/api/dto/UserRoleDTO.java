@@ -1,10 +1,16 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
-public class WorkType {
+import cz.cvut.fit.timetracking.data.api.enums.UserRoleName;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class UserRoleDTO {
 
     private Integer id;
-    private String name;
+    private UserRoleName name;
     private String description;
+    private Set<UserDTO> users = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -14,11 +20,19 @@ public class WorkType {
         this.id = id;
     }
 
-    public String getName() {
+    public Set<UserDTO> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
+    }
+
+    public UserRoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(UserRoleName name) {
         this.name = name;
     }
 

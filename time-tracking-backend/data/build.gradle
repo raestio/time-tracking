@@ -1,6 +1,7 @@
 dependencies {
     api project(':data-api')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
     implementation 'javax.validation:validation-api'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

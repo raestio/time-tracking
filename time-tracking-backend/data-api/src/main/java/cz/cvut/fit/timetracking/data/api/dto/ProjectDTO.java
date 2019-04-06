@@ -4,15 +4,15 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Project {
+public class ProjectDTO {
 
     private Integer id;
     private String name;
     private String description;
     private LocalDate start;
     private LocalDate end;
-    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
-    private Set<WorkRecord> workRecords = new HashSet<>();
+    private Set<ProjectAssignmentDTO> projectAssignments = new HashSet<>();
+    private Set<WorkRecordDTO> workRecords = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -22,19 +22,19 @@ public class Project {
         this.id = id;
     }
 
-    public Set<WorkRecord> getWorkRecords() {
+    public Set<WorkRecordDTO> getWorkRecords() {
         return workRecords;
     }
 
-    public void setWorkRecords(Set<WorkRecord> workRecords) {
+    public void setWorkRecords(Set<WorkRecordDTO> workRecords) {
         this.workRecords = workRecords;
     }
 
-    public Set<ProjectAssignment> getProjectAssignments() {
+    public Set<ProjectAssignmentDTO> getProjectAssignments() {
         return projectAssignments;
     }
 
-    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+    public void setProjectAssignments(Set<ProjectAssignmentDTO> projectAssignments) {
         this.projectAssignments = projectAssignments;
     }
 

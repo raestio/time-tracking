@@ -2,7 +2,7 @@ package cz.cvut.fit.timetracking.data.api.dto;
 
 import java.time.ZonedDateTime;
 
-public class WorkRecord {
+public class WorkRecordDTO {
 
     private Integer id;
     private ZonedDateTime dateFrom;
@@ -10,9 +10,9 @@ public class WorkRecord {
     private String description;
     private ZonedDateTime dateCreated;
     private ZonedDateTime dateUpdated;
-    private User user;
-    private Project project;
-    private WorkType workType;
+    private UserDTO user;
+    private ProjectDTO project;
+    private WorkTypeDTO workType;
 
     public Integer getId() {
         return id;
@@ -22,27 +22,27 @@ public class WorkRecord {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public Project getProject() {
+    public ProjectDTO getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDTO project) {
         this.project = project;
     }
 
-    public WorkType getWorkType() {
+    public WorkTypeDTO getWorkType() {
         return workType;
     }
 
-    public void setWorkType(WorkType workType) {
+    public void setWorkType(WorkTypeDTO workType) {
         this.workType = workType;
     }
 

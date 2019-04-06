@@ -5,12 +5,12 @@ import cz.cvut.fit.timetracking.data.api.enums.ProjectRoleName;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProjectRole {
+public class ProjectRoleDTO {
 
     private Integer id;
     private ProjectRoleName name;
     private String description;
-    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
+    private Set<ProjectAssignmentDTO> projectAssignments = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -20,11 +20,11 @@ public class ProjectRole {
         this.id = id;
     }
 
-    public Set<ProjectAssignment> getProjectAssignments() {
+    public Set<ProjectAssignmentDTO> getProjectAssignments() {
         return projectAssignments;
     }
 
-    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+    public void setProjectAssignments(Set<ProjectAssignmentDTO> projectAssignments) {
         this.projectAssignments = projectAssignments;
     }
 
