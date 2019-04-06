@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface DataAccessApi {
     Optional<UserDTO> findUserById(Integer id);
     UserDTO createOrUpdateUser(UserDTO user);
+    void deleteUserById(Integer id);
 }

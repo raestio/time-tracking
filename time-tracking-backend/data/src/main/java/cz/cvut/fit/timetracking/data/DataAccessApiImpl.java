@@ -36,4 +36,9 @@ public class DataAccessApiImpl implements DataAccessApi {
         UserDTO result = dataModelMapper.map(userDAO, UserDTO.class);
         return result;
     }
+
+    @Override
+    public void deleteUserById(Integer id) {
+        userService.deleteById(id);
+    }
 }
