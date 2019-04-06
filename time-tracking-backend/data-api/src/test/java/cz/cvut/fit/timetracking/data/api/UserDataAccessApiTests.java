@@ -4,7 +4,6 @@ import cz.cvut.fit.timetracking.configuration.DataAccessApiTestsConfiguration;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +13,6 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
     private DataAccessApi dataAccessApi;
 
     @Test
-    @Transactional
     public void createUser() {
         UserDTO userDTO = getUser();
         UserDTO createdUser = dataAccessApi.createOrUpdateUser(userDTO);
@@ -22,6 +20,7 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
         assertThat(createdUser.getName()).isEqualTo(userDTO.getName());
         assertThat(createdUser.getEmail()).isEqualTo(userDTO.getEmail());
         assertThat(createdUser.getSurname()).isEqualTo(userDTO.getSurname());
+        dataAccessApi.deleteUserById(createdUser.getId());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -30,7 +29,6 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
     }
 
     @Test
-    @Transactional
     public void deleteUser() {
         UserDTO createdUser = dataAccessApi.createOrUpdateUser(getUser());
         dataAccessApi.deleteUserById(createdUser.getId());
