@@ -9,4 +9,5 @@ import java.util.Optional;
  */
 public interface UserService {
     Optional<User> findById(Integer id);
+    User createOrUpdateUser(User user);
 }
