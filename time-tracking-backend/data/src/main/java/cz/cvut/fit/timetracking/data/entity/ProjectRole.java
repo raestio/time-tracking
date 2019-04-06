@@ -1,29 +1,41 @@
-package cz.cvut.fit.timetracking.data.core.entity;
+package cz.cvut.fit.timetracking.data.entity;
+
+import cz.cvut.fit.timetracking.data.enums.ProjectRoleName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 
 @Entity
-@Table(name = "work_type", schema = "time_tracking_schema")
-public class WorkType {
+@Table(name = "project_role", schema = "time_tracking_schema")
+public class ProjectRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "name", unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ProjectRoleName name;
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(mappedBy = "projectRoles")
+    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -33,11 +45,19 @@ public class WorkType {
         this.id = id;
     }
 
-    public String getName() {
+    public Set<ProjectAssignment> getProjectAssignments() {
+        return projectAssignments;
+    }
+
+    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
+        this.projectAssignments = projectAssignments;
+    }
+
+    public ProjectRoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(ProjectRoleName name) {
         this.name = name;
     }
 
@@ -53,8 +73,8 @@ public class WorkType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkType workType = (WorkType) o;
-        return Objects.equals(id, workType.id);
+        ProjectRole that = (ProjectRole) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

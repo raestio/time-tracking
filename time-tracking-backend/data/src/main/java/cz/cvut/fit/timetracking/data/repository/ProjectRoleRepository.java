@@ -1,6 +1,6 @@
-package cz.cvut.fit.timetracking.data.core.repository;
+package cz.cvut.fit.timetracking.data.repository;
 
-import cz.cvut.fit.timetracking.data.core.entity.ProjectRole;
+import cz.cvut.fit.timetracking.data.entity.ProjectRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProjectRoleRepository extends JpaRepository<ProjectRole, Integer> {

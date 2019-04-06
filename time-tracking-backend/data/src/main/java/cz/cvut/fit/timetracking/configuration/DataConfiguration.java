@@ -1,6 +1,6 @@
-package cz.cvut.fit.timetracking.data.configuration;
+package cz.cvut.fit.timetracking.configuration;
 
-import cz.cvut.fit.timetracking.data.core.constants.PackageNames;
+import cz.cvut.fit.timetracking.data.constants.PackageNames;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

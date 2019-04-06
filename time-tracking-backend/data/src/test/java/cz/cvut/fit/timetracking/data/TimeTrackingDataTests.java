@@ -1,6 +1,6 @@
 package cz.cvut.fit.timetracking.data;
 
-import cz.cvut.fit.timetracking.data.configuration.DatabaseConfiguration;
+import cz.cvut.fit.timetracking.configuration.DatabaseConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

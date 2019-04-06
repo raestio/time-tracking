@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.data.core.enums;
+package cz.cvut.fit.timetracking.data.enums;
 
 public enum UserRoleName {
     USER,

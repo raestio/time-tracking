@@ -1,8 +1,8 @@
-package cz.cvut.fit.timetracking.data.configuration;
+package cz.cvut.fit.timetracking.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import cz.cvut.fit.timetracking.data.core.constants.PackageNames;
+import cz.cvut.fit.timetracking.data.constants.PackageNames;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

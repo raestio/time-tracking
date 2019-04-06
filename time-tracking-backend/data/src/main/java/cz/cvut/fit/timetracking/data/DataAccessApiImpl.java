@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.data.core;
+package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.User;

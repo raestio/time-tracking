@@ -1,6 +1,6 @@
-package cz.cvut.fit.timetracking.data.core.entity;
+package cz.cvut.fit.timetracking.data.entity;
 
-import cz.cvut.fit.timetracking.data.core.enums.ProjectRoleName;
+import cz.cvut.fit.timetracking.data.enums.UserRoleName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +16,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
 @Entity
-@Table(name = "project_role", schema = "time_tracking_schema")
-public class ProjectRole {
+@Table(name = "user_role", schema = "time_tracking_schema")
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +28,13 @@ public class ProjectRole {
     @NotNull
     @Column(name = "name", unique = true)
     @Enumerated(EnumType.STRING)
-    private ProjectRoleName name;
+    private UserRoleName name;
 
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "projectRoles")
-    private Set<ProjectAssignment> projectAssignments = new HashSet<>();
+    @ManyToMany(mappedBy = "userRoles")
+    private Set<User> users = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -45,19 +44,19 @@ public class ProjectRole {
         this.id = id;
     }
 
-    public Set<ProjectAssignment> getProjectAssignments() {
-        return projectAssignments;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setProjectAssignments(Set<ProjectAssignment> projectAssignments) {
-        this.projectAssignments = projectAssignments;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
-    public ProjectRoleName getName() {
+    public UserRoleName getName() {
         return name;
     }
 
-    public void setName(ProjectRoleName name) {
+    public void setName(UserRoleName name) {
         this.name = name;
     }
 
@@ -73,8 +72,8 @@ public class ProjectRole {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProjectRole that = (ProjectRole) o;
-        return Objects.equals(id, that.id);
+        UserRole userRole = (UserRole) o;
+        return Objects.equals(id, userRole.id);
     }
 
     @Override

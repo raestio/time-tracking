@@ -1,40 +1,29 @@
-package cz.cvut.fit.timetracking.data.core.entity;
-
-import cz.cvut.fit.timetracking.data.core.enums.UserRoleName;
+package cz.cvut.fit.timetracking.data.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name = "user_role", schema = "time_tracking_schema")
-public class UserRole {
+@Table(name = "work_type", schema = "time_tracking_schema")
+public class WorkType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "name", unique = true)
-    @Enumerated(EnumType.STRING)
-    private UserRoleName name;
+    private String name;
 
     @Column(name = "description")
     private String description;
-
-    @ManyToMany(mappedBy = "userRoles")
-    private Set<User> users = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -44,19 +33,11 @@ public class UserRole {
         this.id = id;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public UserRoleName getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(UserRoleName name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -72,8 +53,8 @@ public class UserRole {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserRole userRole = (UserRole) o;
-        return Objects.equals(id, userRole.id);
+        WorkType workType = (WorkType) o;
+        return Objects.equals(id, workType.id);
     }
 
     @Override

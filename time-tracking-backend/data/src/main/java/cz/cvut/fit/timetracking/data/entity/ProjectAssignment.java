@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.data.core.entity;
+package cz.cvut.fit.timetracking.data.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
