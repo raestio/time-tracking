@@ -8,7 +8,6 @@ import cz.cvut.fit.timetracking.data.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Service
@@ -28,7 +27,10 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
-    public UserDTO createOrUpdateUser(@NotNull UserDTO user) {
+    public UserDTO createOrUpdateUser(UserDTO user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         User userDAO = dataModelMapper.map(user, User.class);
         userDAO = userService.createOrUpdateUser(userDAO);
         UserDTO result = dataModelMapper.map(userDAO, UserDTO.class);
