@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.data;
 
+import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.service.UserService;
 import org.junit.Test;
@@ -8,15 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserTests extends TimeTrackingDataTestsConfiguration {
+public class UserTests extends DataTestsConfiguration {
 
     @Autowired
     private UserService userService;
-
-    @Test
-    public void contextLoads() {
-        assertThat(userService).isNotNull();
-    }
 
     @Test
     @Transactional
