@@ -6,11 +6,11 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan(basePackages = PackageNames.REST_CORE)
-@EnableWebMvc
+@Import(SwaggerConfiguration.class)
 public class RestConfiguration {
 
     @Bean
