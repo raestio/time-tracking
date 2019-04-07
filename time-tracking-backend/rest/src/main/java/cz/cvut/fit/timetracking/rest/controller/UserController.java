@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<UserDTO> createOrUpdateUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createOrUpdateUser(@Valid @RequestBody UserDTO userDTO) {
         User user = userService.createOrUpdate(restModelMapper.map(userDTO, User.class));
         ResponseEntity<UserDTO> response = ResponseEntity.ok(restModelMapper.map(user, UserDTO.class));
         return response;

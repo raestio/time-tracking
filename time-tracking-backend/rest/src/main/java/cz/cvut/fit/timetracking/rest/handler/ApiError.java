@@ -1,8 +1,11 @@
 package cz.cvut.fit.timetracking.rest.handler;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 class ApiError {
 
@@ -15,8 +18,8 @@ class ApiError {
     @JsonProperty("message")
     private String message;
 
-    @JsonProperty("debugMessage")
-    private String debugMessage;
+    @JacksonInject("subErrors")
+    private List<ApiSubError> subErrors = new ArrayList<>();
 
     private ApiError() {
         timestamp = LocalDateTime.now();
@@ -31,30 +34,28 @@ class ApiError {
         this();
         this.status = status;
         this.message = "Unexpected error";
-        this.debugMessage = ex.getLocalizedMessage();
     }
 
-    ApiError(int status, String message, Throwable ex) {
+    ApiError(int status, String message) {
         this();
         this.status = status;
         this.message = message;
-        this.debugMessage = ex.getLocalizedMessage();
     }
 
     Integer getStatus() {
         return status;
     }
 
-    void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public String getDebugMessage() {
-        return debugMessage;
+    public List<ApiSubError> getSubErrors() {
+        return subErrors;
     }
 
-    public void setDebugMessage(String debugMessage) {
-        this.debugMessage = debugMessage;
+    public void setSubErrors(List<ApiSubError> subErrors) {
+        this.subErrors = subErrors;
     }
 
     LocalDateTime getTimestamp() {

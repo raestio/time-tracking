@@ -2,6 +2,8 @@ package cz.cvut.fit.timetracking.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class UserDTO implements Serializable {
@@ -9,12 +11,15 @@ public class UserDTO implements Serializable {
     @JsonProperty("id")
     private Integer id;
 
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
+    @NotEmpty
     @JsonProperty("surname")
     private String surname;
 
+    @Email
     @JsonProperty("email")
     private String email;
 
