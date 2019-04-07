@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.user.service.impl;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.user.dto.User;
+import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import cz.cvut.fit.timetracking.user.mapper.UserModelMapper;
 import cz.cvut.fit.timetracking.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Integer id) {
-        dataAccessApi.deleteUserById(id);
+        Optional<User> user = findById(id);
+        user.ifPresentOrElse(u -> dataAccessApi.deleteUserById(id), () -> {
+            throw new UserNotFoundException(id);
+        });
     }
 }
