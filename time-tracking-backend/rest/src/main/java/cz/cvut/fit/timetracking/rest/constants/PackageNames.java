@@ -6,5 +6,5 @@ public class PackageNames {
 
     }
 
-    public static final String REST_CORE = "cz.cvut.fit.timetracking.data";
+    public static final String REST_CORE = "cz.cvut.fit.timetracking.rest";
 }

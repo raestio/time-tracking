@@ -1,19 +1,17 @@
-package cz.cvut.fit.timetracking.data.api.dto;
+package cz.cvut.fit.timetracking.rest.dto;
 
-public class UserDTO {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private Integer id;
+public class UpdateUserRequest {
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("surname")
     private String surname;
+
+    @JsonProperty("email")
     private String email;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

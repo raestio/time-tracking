@@ -4,7 +4,7 @@ import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.mapper.DataModelMapper;
-import cz.cvut.fit.timetracking.data.service.UserService;
+import cz.cvut.fit.timetracking.data.service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class DataAccessApiImpl implements DataAccessApi {
 
     @Autowired
-    private UserService userService;
+    private UserDataService userService;
 
     @Autowired
     private DataModelMapper dataModelMapper;
@@ -22,7 +22,7 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public Optional<UserDTO> findUserById(Integer id) {
         Optional<User> userDAO = userService.findById(id);
-        Optional<UserDTO> result = userDAO.map(user -> dataModelMapper.map(userDAO, UserDTO.class));
+        Optional<UserDTO> result = userDAO.map(user -> dataModelMapper.map(user, UserDTO.class));
         return result;
     }
 

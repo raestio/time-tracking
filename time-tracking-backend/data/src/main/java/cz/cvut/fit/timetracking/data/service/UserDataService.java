@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * User data access service
  */
-public interface UserService {
+public interface UserDataService {
     Optional<User> findById(Integer id);
     User createOrUpdateUser(User user);
     void deleteById(Integer id);

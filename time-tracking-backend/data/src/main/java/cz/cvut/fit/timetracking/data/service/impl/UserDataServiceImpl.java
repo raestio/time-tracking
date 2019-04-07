@@ -2,14 +2,14 @@ package cz.cvut.fit.timetracking.data.service.impl;
 
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.repository.UserRepository;
-import cz.cvut.fit.timetracking.data.service.UserService;
+import cz.cvut.fit.timetracking.data.service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserDataServiceImpl implements UserDataService {
 
     @Autowired
     private UserRepository userRepository;

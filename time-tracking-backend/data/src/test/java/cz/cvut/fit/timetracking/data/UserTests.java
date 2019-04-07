@@ -2,7 +2,7 @@ package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
 import cz.cvut.fit.timetracking.data.entity.User;
-import cz.cvut.fit.timetracking.data.service.UserService;
+import cz.cvut.fit.timetracking.data.service.UserDataService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserTests extends DataTestsConfiguration {
 
     @Autowired
-    private UserService userService;
+    private UserDataService userService;
 
     @Test
     @Transactional

@@ -1,10 +1,21 @@
-package cz.cvut.fit.timetracking.data.api.dto;
+package cz.cvut.fit.timetracking.rest.dto;
 
-public class UserDTO {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
+
+    @JsonProperty("id")
     private Integer id;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("surname")
     private String surname;
+
+    @JsonProperty("email")
     private String email;
 
     public Integer getId() {
@@ -38,4 +49,5 @@ public class UserDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
