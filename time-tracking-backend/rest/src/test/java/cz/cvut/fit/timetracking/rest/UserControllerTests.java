@@ -1,13 +1,18 @@
 package cz.cvut.fit.timetracking.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fit.timetracking.configuration.RestApiTestsConfiguration;
+import cz.cvut.fit.timetracking.user.dto.User;
+import cz.cvut.fit.timetracking.user.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,13 +24,22 @@ public class UserControllerTests extends RestApiTestsConfiguration {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private UserService userService;
+
     @Test
     public void whenIdIs1_shouldReturnUser() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+        given(userService.findById(1)).willReturn(Optional.of(user("ahoj", "cau")));
         mockMvc.perform(get(PATH + "/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("ahoj")))
                 .andExpect(jsonPath("$.surname", is("cau")));
     }
 
+    private User user(String name, String surname) {
+        User user = new User();
+        user.setName(name);
+        user.setSurname(surname);
+        return user;
+    }
 }
