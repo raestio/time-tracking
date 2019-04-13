@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
-import cz.cvut.fit.timetracking.rest.dto.UpdateUserRequest;
-import cz.cvut.fit.timetracking.rest.dto.UserDTO;
+import cz.cvut.fit.timetracking.rest.dto.user.UpdateUserRequest;
+import cz.cvut.fit.timetracking.rest.dto.user.UserDTO;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.service.UserService;
@@ -34,14 +34,25 @@ public class UserController {
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<UserDTO> createOrUpdateUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createOrUpdate(@Valid @RequestBody UserDTO userDTO) {
         User user = userService.createOrUpdate(restModelMapper.map(userDTO, User.class));
         ResponseEntity<UserDTO> response = ResponseEntity.ok(restModelMapper.map(user, UserDTO.class));
         return response;
     }
 
+    @ApiOperation(value = "Get an user by ID", response = UserDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "User with given ID not found")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
+        Optional<User> user = userService.findById(id);
+        ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
+        return response;
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Integer id, @RequestBody UpdateUserRequest updateUserRequest) {
+    public ResponseEntity<UserDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> {
             u.setName(updateUserRequest.getName());
@@ -53,19 +64,8 @@ public class UserController {
         return response;
     }
 
-    @ApiOperation(value = "Get an user by ID", response = UserDTO.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "User with given ID not found")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
-        Optional<User> user = userService.findById(id);
-        ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
-        return response;
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUserById(@PathVariable("id") Integer id) {
+    public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
     }

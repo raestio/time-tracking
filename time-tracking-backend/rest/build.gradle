@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":user")
+    implementation project(":project")
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggerVersion}"

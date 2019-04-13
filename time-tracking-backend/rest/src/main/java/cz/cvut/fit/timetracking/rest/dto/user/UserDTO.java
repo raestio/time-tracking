@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.rest.dto;
+package cz.cvut.fit.timetracking.rest.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

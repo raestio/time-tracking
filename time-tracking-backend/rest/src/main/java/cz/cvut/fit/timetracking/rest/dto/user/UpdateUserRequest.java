@@ -1,15 +1,21 @@
-package cz.cvut.fit.timetracking.rest.dto;
+package cz.cvut.fit.timetracking.rest.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class UpdateUserRequest {
 
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
+    @NotEmpty
     @JsonProperty("surname")
     private String surname;
 
+    @Email
     @JsonProperty("email")
     private String email;
 
