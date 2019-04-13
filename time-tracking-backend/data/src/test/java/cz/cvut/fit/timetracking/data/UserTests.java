@@ -18,30 +18,30 @@ public class UserTests extends DataTestsConfiguration {
     @Transactional
     public void testCreateUser() {
         User user = getUser();
-        user = userService.createOrUpdateUser(user);
+        user = userService.createOrUpdate(user);
         assertThat(user.getId()).isNotNull();
     }
 
     @Test
     @Transactional
     public void testUpdateUser() {
-        User user = userService.createOrUpdateUser(getUser());
+        User user = userService.createOrUpdate(getUser());
         user.setName("Rob");
-        User updatedUser = userService.createOrUpdateUser(user);
+        User updatedUser = userService.createOrUpdate(user);
         assertThat(userService.findById(updatedUser.getId()).get().getName()).isEqualTo("Rob");
     }
 
     @Test
     @Transactional
     public void testFindUserById() {
-        User user = userService.createOrUpdateUser(getUser());
+        User user = userService.createOrUpdate(getUser());
         assertThat(user.getEmail()).isEqualTo(userService.findById(user.getId()).get().getEmail());
     }
 
     @Test
     @Transactional
     public void testDeleteUserById() {
-        User user = userService.createOrUpdateUser(getUser());
+        User user = userService.createOrUpdate(getUser());
         userService.deleteById(user.getId());
         assertThat(userService.findById(user.getId())).isEmpty();
     }
