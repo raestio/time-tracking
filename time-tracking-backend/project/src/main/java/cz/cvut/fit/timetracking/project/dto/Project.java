@@ -2,9 +2,6 @@ package cz.cvut.fit.timetracking.project.dto;
 
 import java.time.LocalDate;
 
-/**
- * @author Rastislav Zlacky (rastislav.zlacky@inventi.cz) on 13.04.2019.
- */
 public class Project {
 
     private Integer id;

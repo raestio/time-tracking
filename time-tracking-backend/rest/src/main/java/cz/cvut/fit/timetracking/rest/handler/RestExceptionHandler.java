@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.rest.handler;
 
+import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -28,6 +29,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({UserNotFoundException.class, ProjectNotFoundException.class})
+    protected ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return buildResponseEntity(apiError, HttpStatus.NOT_FOUND);
+    }
+
     private ApiSubError mapValidationError(FieldError fieldError) {
         ApiValidationError apiValidationError = new ApiValidationError();
         apiValidationError.setMessage(fieldError.getDefaultMessage());
@@ -35,12 +42,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         apiValidationError.setRejectedValue(fieldError.getRejectedValue());
         apiValidationError.setField(fieldError.getField());
         return apiValidationError;
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    protected ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return buildResponseEntity(apiError, HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError, HttpStatus httpStatus) {
