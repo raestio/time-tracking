@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
+import cz.cvut.fit.timetracking.rest.dto.workrecord.CreateOrUpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.UpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
@@ -30,8 +31,8 @@ public class WorkRecordController {
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<WorkRecordDTO> createOrUpdate(@Valid @RequestBody WorkRecordDTO workRecordDTO) {
-        WorkRecord workRecord = restModelMapper.map(workRecordDTO, WorkRecord.class);
+    public ResponseEntity<WorkRecordDTO> createOrUpdate(@Valid @RequestBody CreateOrUpdateWorkRecordRequest createOrUpdateWorkRecordRequest) {
+        WorkRecord workRecord = restModelMapper.map(createOrUpdateWorkRecordRequest, WorkRecord.class);
         workRecord = workRecordService.createOrUpdate(workRecord);
         WorkRecordDTO result = restModelMapper.map(workRecord, WorkRecordDTO.class);
         return ResponseEntity.ok(result);
