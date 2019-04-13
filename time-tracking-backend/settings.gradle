@@ -9,4 +9,5 @@ include 'work-record'
 include 'jira'
 include 'data-api'
 include 'data'
+include 'security'
 

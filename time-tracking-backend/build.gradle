@@ -8,6 +8,7 @@ allprojects {
 		modelMapperVersion = "2.3.2"
 		springfoxSwaggerVersion = "2.9.2"
 		springfoxSwaggerUIVersion = "2.9.2"
+		springSecurityOAuth2Version = "2.3.5.RELEASE"
 	}
 }
 
