@@ -1,8 +1,12 @@
 package cz.cvut.fit.timetracking.data.entity;
 
+import cz.cvut.fit.timetracking.data.enums.AuthProvider;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -38,6 +43,11 @@ public class User {
     @Email
     @Column(name = "email", unique = true)
     private String email;
+
+    @NotNull
+    @Column(name = "authProvider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
@@ -80,6 +90,14 @@ public class User {
 
     public void setWorkRecords(Set<WorkRecord> workRecords) {
         this.workRecords = workRecords;
+    }
+
+    public AuthProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
     }
 
     public String getName() {
