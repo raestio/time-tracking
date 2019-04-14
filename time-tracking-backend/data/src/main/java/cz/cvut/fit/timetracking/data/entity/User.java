@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Objects;
@@ -34,6 +35,7 @@ public class User {
     private String surname;
 
     @NotEmpty
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 
