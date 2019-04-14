@@ -22,14 +22,14 @@ public class UserDataServiceImpl implements UserDataService {
     @Override
     public Optional<UserDTO> findById(Integer id) {
         Optional<User> userDAO = userRepository.findById(id);
-        Optional<UserDTO> result = userDAO.map(user -> map(user));
+        Optional<UserDTO> result = userDAO.map(this::map);
         return result;
     }
 
     @Override
     public Optional<UserDTO> findByEmail(String email) {
         Optional<User> userDAO = userRepository.findByEmail(email);
-        Optional<UserDTO> result = userDAO.map(user -> map(user));
+        Optional<UserDTO> result = userDAO.map(this::map);
         return result;
     }
 
