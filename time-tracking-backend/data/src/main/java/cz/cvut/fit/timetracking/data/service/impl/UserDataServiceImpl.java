@@ -22,7 +22,14 @@ public class UserDataServiceImpl implements UserDataService {
     @Override
     public Optional<UserDTO> findById(Integer id) {
         Optional<User> userDAO = userRepository.findById(id);
-        Optional<UserDTO> result = userDAO.map(user -> dataModelMapper.map(user, UserDTO.class));
+        Optional<UserDTO> result = userDAO.map(user -> map(user));
+        return result;
+    }
+
+    @Override
+    public Optional<UserDTO> findByEmail(String email) {
+        Optional<User> userDAO = userRepository.findByEmail(email);
+        Optional<UserDTO> result = userDAO.map(user -> map(user));
         return result;
     }
 
@@ -30,12 +37,16 @@ public class UserDataServiceImpl implements UserDataService {
     public UserDTO createOrUpdate(UserDTO user) {
         User userEntity = dataModelMapper.map(user, User.class);
         userEntity = userRepository.save(userEntity);
-        UserDTO result = dataModelMapper.map(userEntity, UserDTO.class);
+        UserDTO result = map(userEntity);
         return result;
     }
 
     @Override
     public void deleteById(Integer id) {
         userRepository.deleteById(id);
+    }
+
+    private UserDTO map(User user) {
+        return dataModelMapper.map(user, UserDTO.class);
     }
 }

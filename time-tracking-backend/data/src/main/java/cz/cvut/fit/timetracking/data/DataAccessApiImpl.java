@@ -26,6 +26,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
+    public Optional<UserDTO> findUserByEmail(String email) {
+        return userDataService.findByEmail(email);
+    }
+
+    @Override
     public UserDTO createOrUpdateUser(UserDTO user) {
         return userDataService.createOrUpdate(user);
     }

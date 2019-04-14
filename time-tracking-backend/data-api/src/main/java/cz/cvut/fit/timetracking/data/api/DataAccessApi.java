@@ -11,6 +11,7 @@ public interface DataAccessApi {
     //user
     UserDTO createOrUpdateUser(UserDTO user);
     Optional<UserDTO> findUserById(Integer id);
+    Optional<UserDTO> findUserByEmail(String email);
     void deleteUserById(Integer id);
 
     //project

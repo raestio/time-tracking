@@ -9,6 +9,7 @@ import java.util.Optional;
  */
 public interface UserDataService {
     Optional<UserDTO> findById(Integer id);
+    Optional<UserDTO> findByEmail(String email);
     UserDTO createOrUpdate(UserDTO user);
     void deleteById(Integer id);
 }
