@@ -1,4 +1,6 @@
 dependencies {
-    implementation "org.springframework.security.oauth:spring-security-oauth2:${springSecurityOAuth2Version}"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation "io.jsonwebtoken:jjwt:${jsonWebTokenVersion}"
     implementation 'org.springframework:spring-context'
 }
