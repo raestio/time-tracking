@@ -2,9 +2,11 @@ dependencies {
     implementation project(":user")
     implementation project(":project")
     implementation project(":work-record")
+    implementation project(":security")
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${springfoxSwaggerUIVersion}"
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

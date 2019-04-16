@@ -1,7 +1,5 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
-import cz.cvut.fit.timetracking.data.api.enums.ProjectRoleName;
-
 import java.util.HashSet;
 import java.util.Set;
 

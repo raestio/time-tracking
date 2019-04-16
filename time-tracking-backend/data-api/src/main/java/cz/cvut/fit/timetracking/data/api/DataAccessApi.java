@@ -2,6 +2,8 @@ package cz.cvut.fit.timetracking.data.api;
 
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +16,14 @@ public interface DataAccessApi {
     Optional<UserDTO> findUserByEmail(String email);
     void deleteUserById(Integer id);
 
+    //user roles
+    List<UserRoleDTO> findAllUserRolesByUserId(Integer id);
+    List<UserRoleDTO> findUserRolesByNameIn(List<UserRoleName> roleNames);
+
     //project
     ProjectDTO createOrUpdateProject(ProjectDTO project);
     List<ProjectDTO> findAllProjects();
     Optional<ProjectDTO> findProjectById(Integer id);
+
     void deleteProjectById(Integer id);
 }

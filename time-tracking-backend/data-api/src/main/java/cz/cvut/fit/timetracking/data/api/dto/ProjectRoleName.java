@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.data.api.enums;
+package cz.cvut.fit.timetracking.data.api.dto;
 
 public enum ProjectRoleName {
     DEVELOPER,

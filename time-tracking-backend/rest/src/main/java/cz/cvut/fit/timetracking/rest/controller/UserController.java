@@ -60,7 +60,7 @@ public class UserController {
             u.setSurname(updateUserRequest.getSurname());
             User updatedUser = userService.createOrUpdate(u);
             return ResponseEntity.ok(restModelMapper.map(updatedUser, UserDTO.class));
-        }).orElse(ResponseEntity.notFound().build());
+        }).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
     }
 

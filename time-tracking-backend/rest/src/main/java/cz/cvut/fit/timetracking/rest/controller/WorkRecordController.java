@@ -54,7 +54,7 @@ public class WorkRecordController {
             p.setDescription(updateWorkRecordRequest.getDescription());
             WorkRecord updatedWorkRecord = workRecordService.createOrUpdate(p);
             return ResponseEntity.ok(restModelMapper.map(updatedWorkRecord, WorkRecordDTO.class));
-        }).orElse(ResponseEntity.notFound().build());
+        }).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
     }
 

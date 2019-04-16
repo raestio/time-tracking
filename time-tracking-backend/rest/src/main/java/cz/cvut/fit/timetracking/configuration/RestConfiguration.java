@@ -1,5 +1,7 @@
 package cz.cvut.fit.timetracking.configuration;
 
+import cz.cvut.fit.timetracking.configuration.documentation.SwaggerConfiguration;
+import cz.cvut.fit.timetracking.configuration.security.RestSecurityConfiguration;
 import cz.cvut.fit.timetracking.rest.constants.PackageNames;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -12,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = PackageNames.REST_CORE)
-@Import(SwaggerConfiguration.class)
+@Import({SwaggerConfiguration.class, RestSecurityConfiguration.class})
 public class RestConfiguration implements WebMvcConfigurer {
 
     private final int MAX_AGE_SECS = 3600;

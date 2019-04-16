@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.configuration;
+package cz.cvut.fit.timetracking.configuration.documentation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -12,6 +12,7 @@ CREATE TABLE time_tracking_schema."user" (
 	name VARCHAR(50) NOT NULL,
 	surname VARCHAR(50) NOT NULL,
 	email VARCHAR(50) UNIQUE NOT NULL,
+	pictureUrl VARCHAR(600) NULL,
 	authProvider VARCHAR(50) NOT NULL
 );
 

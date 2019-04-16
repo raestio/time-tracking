@@ -1,8 +1,11 @@
 package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
-import cz.cvut.fit.timetracking.data.entity.User;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.repository.UserRepository;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
+import cz.cvut.fit.timetracking.data.utils.UserTestUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,43 +17,46 @@ public class UserTests extends DataTestsConfiguration {
     @Autowired
     private UserDataService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     @Transactional
     public void testCreateUser() {
-        User user = getUser();
+        UserDTO user = UserTestUtils.getUserDTO();
         user = userService.createOrUpdate(user);
         assertThat(user.getId()).isNotNull();
     }
 
+    @After
+    public void cleanUp() {
+        userRepository.deleteAll();
+    }
+
     @Test
-    @Transactional
     public void testUpdateUser() {
-        User user = userService.createOrUpdate(getUser());
+        UserDTO user = userService.createOrUpdate(UserTestUtils.getUserDTO());
         user.setName("Rob");
-        User updatedUser = userService.createOrUpdate(user);
+        UserDTO updatedUser = userService.createOrUpdate(user);
         assertThat(userService.findById(updatedUser.getId()).get().getName()).isEqualTo("Rob");
     }
 
     @Test
-    @Transactional
     public void testFindUserById() {
-        User user = userService.createOrUpdate(getUser());
+        UserDTO user = userService.createOrUpdate(UserTestUtils.getUserDTO());
         assertThat(user.getEmail()).isEqualTo(userService.findById(user.getId()).get().getEmail());
     }
 
     @Test
-    @Transactional
-    public void testDeleteUserById() {
-        User user = userService.createOrUpdate(getUser());
-        userService.deleteById(user.getId());
-        assertThat(userService.findById(user.getId())).isEmpty();
+    public void testFindUserByEmail() {
+        UserDTO user = userService.createOrUpdate(UserTestUtils.getUserDTO());
+        assertThat(user.getId()).isEqualTo(userService.findByEmail(user.getEmail()).get().getId());
     }
 
-    private User getUser() {
-        User user = new User();
-        user.setName("Test");
-        user.setSurname("Novy");
-        user.setEmail("tmp@test.com");
-        return user;
+    @Test
+    public void testDeleteUserById() {
+        UserDTO user = userService.createOrUpdate(UserTestUtils.getUserDTO());
+        userService.deleteById(user.getId());
+        assertThat(userService.findById(user.getId())).isEmpty();
     }
 }

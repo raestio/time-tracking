@@ -1,6 +1,6 @@
 package cz.cvut.fit.timetracking.data.entity;
 
-import cz.cvut.fit.timetracking.data.enums.ProjectRoleName;
+import cz.cvut.fit.timetracking.data.entity.enums.ProjectRoleName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

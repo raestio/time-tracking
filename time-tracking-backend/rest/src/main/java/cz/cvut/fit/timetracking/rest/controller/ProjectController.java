@@ -68,7 +68,7 @@ public class ProjectController {
             p.setEnd(updateProjectRequest.getEnd());
             Project updatedProject = projectService.createOrUpdate(p);
             return ResponseEntity.ok(restModelMapper.map(updatedProject, ProjectDTO.class));
-        }).orElse(ResponseEntity.notFound().build());
+        }).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
     }
 

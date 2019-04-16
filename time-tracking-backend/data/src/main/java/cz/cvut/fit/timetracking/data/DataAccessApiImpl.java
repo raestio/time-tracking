@@ -3,8 +3,11 @@ package cz.cvut.fit.timetracking.data;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
+import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,9 @@ public class DataAccessApiImpl implements DataAccessApi {
 
     @Autowired
     private UserDataService userDataService;
+
+    @Autowired
+    private UserRoleDataService userRoleDataService;
 
     @Autowired
     private ProjectDataService projectDataService;
@@ -38,6 +44,17 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public void deleteUserById(Integer id) {
         userDataService.deleteById(id);
+    }
+
+
+    @Override
+    public List<UserRoleDTO> findAllUserRolesByUserId(Integer id) {
+        return userRoleDataService.findAllByUserId(id);
+    }
+
+    @Override
+    public List<UserRoleDTO> findUserRolesByNameIn(List<UserRoleName> roleNames) {
+        return userRoleDataService.findAllByNameIn(roleNames);
     }
 
     @Override

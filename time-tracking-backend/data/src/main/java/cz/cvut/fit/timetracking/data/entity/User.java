@@ -1,6 +1,6 @@
 package cz.cvut.fit.timetracking.data.entity;
 
-import cz.cvut.fit.timetracking.data.enums.AuthProvider;
+import cz.cvut.fit.timetracking.data.entity.enums.AuthProviderEnum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -22,6 +24,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@NamedEntityGraph(name = "User.userRoles", attributeNodes = @NamedAttributeNode("userRoles"))
 @Entity
 @Table(name = "user", schema = "time_tracking_schema")
 public class User {
@@ -44,10 +47,13 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "pictureUrl")
+    private String pictureUrl;
+
     @NotNull
     @Column(name = "authProvider")
     @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
+    private AuthProviderEnum authProvider;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
@@ -92,11 +98,19 @@ public class User {
         this.workRecords = workRecords;
     }
 
-    public AuthProvider getAuthProvider() {
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public AuthProviderEnum getAuthProvider() {
         return authProvider;
     }
 
-    public void setAuthProvider(AuthProvider authProvider) {
+    public void setAuthProvider(AuthProviderEnum authProvider) {
         this.authProvider = authProvider;
     }
 

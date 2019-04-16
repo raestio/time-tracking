@@ -9,6 +9,7 @@ allprojects {
 		springfoxSwaggerVersion = "2.9.2"
 		springfoxSwaggerUIVersion = "2.9.2"
 		jsonWebTokenVersion = "0.9.1"
+		apacheCommonsLangVersion = "3.0"
 	}
 }
 

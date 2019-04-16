@@ -1,6 +1,8 @@
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation project(':user')
+    api 'org.springframework.boot:spring-boot-starter-security'
+    api 'org.springframework.security:spring-security-oauth2-client'
     implementation "io.jsonwebtoken:jjwt:${jsonWebTokenVersion}"
     implementation 'org.springframework:spring-context'
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
 }

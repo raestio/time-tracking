@@ -1,18 +1,8 @@
-package cz.cvut.fit.timetracking.data.api.dto;
+package cz.cvut.fit.timetracking.user.dto;
 
-public class UserRoleDTO {
-
-    private Integer id;
+public class UserRole {
     private UserRoleName name;
     private String description;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public UserRoleName getName() {
         return name;
