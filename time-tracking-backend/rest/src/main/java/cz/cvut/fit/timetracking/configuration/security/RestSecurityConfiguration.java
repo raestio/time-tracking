@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.configuration.security;
 
 import cz.cvut.fit.timetracking.rest.component.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import cz.cvut.fit.timetracking.security.oauth2.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
 

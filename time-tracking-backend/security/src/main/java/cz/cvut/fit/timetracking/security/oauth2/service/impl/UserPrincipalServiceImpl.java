@@ -1,7 +1,7 @@
-package cz.cvut.fit.timetracking.security.service.impl;
+package cz.cvut.fit.timetracking.security.oauth2.service.impl;
 
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
-import cz.cvut.fit.timetracking.security.service.UserPrincipalService;
+import cz.cvut.fit.timetracking.security.oauth2.service.UserPrincipalService;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.dto.UserRole;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.security.service;
+package cz.cvut.fit.timetracking.security.oauth2.service;
 
 import cz.cvut.fit.timetracking.user.dto.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;

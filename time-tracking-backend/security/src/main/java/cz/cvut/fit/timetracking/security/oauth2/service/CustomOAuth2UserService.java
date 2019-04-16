@@ -3,7 +3,6 @@ package cz.cvut.fit.timetracking.security.oauth2.service;
 import cz.cvut.fit.timetracking.security.oauth2.exception.OAuth2AuthenticationProcessingException;
 import cz.cvut.fit.timetracking.security.oauth2.user.OAuth2UserInfo;
 import cz.cvut.fit.timetracking.security.oauth2.user.OAuth2UserInfoFactory;
-import cz.cvut.fit.timetracking.security.service.UserPrincipalService;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.service.UserService;
