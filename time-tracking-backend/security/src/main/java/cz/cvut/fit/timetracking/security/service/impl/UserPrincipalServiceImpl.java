@@ -1,6 +1,6 @@
 package cz.cvut.fit.timetracking.security.service.impl;
 
-import cz.cvut.fit.timetracking.security.UserPrincipal;
+import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.security.service.UserPrincipalService;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.dto.UserRole;
