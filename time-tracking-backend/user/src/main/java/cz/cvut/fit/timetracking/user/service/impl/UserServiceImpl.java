@@ -47,15 +47,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        Assert.notNull(user.getId(), "User update ID cannot be null");
-        if (!hasUserRole(user)) {
-            throw new UpdateUserException("User role USER can't be removed.");
-        }
-
+        checkBeforeUpdateOrThrow(user);
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
+        userDTO.setEmail(user.getEmail());
         userDTO.setAuthProvider(mapAuthProvider(user.getAuthProvider()));
         userDTO.setPictureUrl(user.getPictureUrl());
         userDTO.setUserRoles(findUserRolesByNameIn(user.getUserRoles().stream().map(UserRole::getName).collect(Collectors.toList())));
@@ -95,8 +92,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<UserRoleDTO> findUserRolesByNameIn(List<UserRoleName> userRoleNames) {
+        Assert.notEmpty(userRoleNames, "Role names cannot be empty");
         List<cz.cvut.fit.timetracking.data.api.dto.UserRoleName> roleNames = userRoleNames.stream().map(this::mapUserRoleName).collect(Collectors.toList());
         List<UserRoleDTO> userRoleDTOS = dataAccessApi.findUserRolesByNameIn(roleNames);
+        Assert.isTrue(userRoleDTOS.size() == userRoleNames.size(), "All user roles must be persisted in DB: " + userRoleNames);
         return userRoleDTOS;
     }
 
@@ -115,5 +114,19 @@ public class UserServiceImpl implements UserService {
 
     private boolean hasUserRole(User user) {
         return user.getUserRoles().stream().anyMatch(r -> UserRoleName.USER.equals(r.getName()));
+    }
+
+    private void checkBeforeUpdateOrThrow(User user) {
+        Assert.notNull(user.getId(), "User update ID cannot be null");
+
+        if (!hasUserRole(user)) {
+            throw new UpdateUserException("User role USER can't be removed.");
+        }
+
+        Optional<User> optionalUser = findById(user.getId());
+        User u = optionalUser.orElseThrow(() -> new UserNotFoundException(user.getId()));
+        if (!u.getEmail().equals(user.getEmail())) {
+            throw new UpdateUserException("Email address cannot be changed.");
+        }
     }
 }

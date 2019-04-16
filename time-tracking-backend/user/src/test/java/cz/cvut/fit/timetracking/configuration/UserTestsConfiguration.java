@@ -5,7 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DataAccessApiTestContextConfiguration.class)
-public abstract class DataAccessApiTestsConfiguration {
-
+@SpringBootTest(classes = UserTestContextConfiguration.class)
+public abstract class UserTestsConfiguration {
 }

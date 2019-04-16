@@ -9,13 +9,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
+    //create
     User create(String name, String surname, String email, AuthProvider authProvider);
     User create(String name, String surname, String email, AuthProvider authProvider, String pictureUrl);
 
+    //read
     Optional<User> findById(Integer id);
     Optional<User> findByEmail(String email);
 
+    //update
     User update(User user);
 
+    //delete
     void deleteById(Integer id);
 }
