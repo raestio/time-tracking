@@ -7,4 +7,8 @@ services:
   time-tracking-backend:
     build: ./time-tracking-backend
     ports:
-    - "8080:8080"
+      - "8080:8080"
+  google-login-poc-app:
+    build: ./google-login-poc-app
+    ports:
+      - "80:80"
