@@ -8,7 +8,7 @@ allprojects {
 		modelMapperVersion = "2.3.2"
 		springfoxSwaggerVersion = "2.9.2"
 		springfoxSwaggerUIVersion = "2.9.2"
-		jsonWebTokenVersion = "0.9.1"
+		jsonWebTokenVersion = "0.10.5"
 		apacheCommonsLangVersion = "3.0"
 	}
 }
