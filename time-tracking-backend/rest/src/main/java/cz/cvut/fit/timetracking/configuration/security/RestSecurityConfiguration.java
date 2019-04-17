@@ -1,12 +1,20 @@
 package cz.cvut.fit.timetracking.configuration.security;
 
 import cz.cvut.fit.timetracking.rest.component.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import cz.cvut.fit.timetracking.rest.filter.TokenAuthenticationFilter;
+import cz.cvut.fit.timetracking.rest.handler.OAuth2AuthenticationFailureHandler;
+import cz.cvut.fit.timetracking.rest.handler.OAuth2AuthenticationSuccessHandler;
+import cz.cvut.fit.timetracking.rest.handler.RestAuthenticationEntryPoint;
 import cz.cvut.fit.timetracking.security.oauth2.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 
 @Configuration
 public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -35,19 +43,14 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
-
+/*
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+*/
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -58,52 +61,52 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
+            .cors()
                 .and()
-                .sessionManagement()
+            .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf()
+            .csrf()
                 .disable()
-                .formLogin()
+            .formLogin()
                 .disable()
-                .httpBasic()
+            .httpBasic()
                 .disable()
-                .exceptionHandling()
+            .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
-                .authorizeRequests()
+            .authorizeRequests()
                 .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-                .antMatchers("/auth/**", "/oauth2/**")
-                .permitAll()
+                    "/error",
+                    "/favicon.ico",
+                    "/**/*.png",
+                    "/**/*.gif",
+                    "/**/*.svg",
+                    "/**/*.jpg",
+                    "/**/*.html",
+                    "/**/*.css",
+                    "/**/*.js")
+                    .permitAll()
+                .antMatchers("/oauth2/**")
+                    .permitAll()
                 .anyRequest()
-                .authenticated()
+                    .authenticated()
                 .and()
-                .oauth2Login()
+            .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
-                .and()
+                    .baseUri("/oauth2/authorize")
+                    .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                    .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
-                .and()
+                    .baseUri("/oauth2/callback/*")
+                    .and()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
+                    .userService(customOAuth2UserService)
+                    .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler);
 
         // Add our custom Token based authentication filter
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenAuthenticationFilter(), OAuth2LoginAuthenticationFilter.class);
     }
 }

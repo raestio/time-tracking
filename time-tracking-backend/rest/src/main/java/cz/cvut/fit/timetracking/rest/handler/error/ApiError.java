@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.rest.handler;
+package cz.cvut.fit.timetracking.rest.handler.error;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-class ApiError {
+public class ApiError {
 
     @JsonProperty("status")
     private Integer status;
@@ -25,24 +25,24 @@ class ApiError {
         timestamp = LocalDateTime.now();
     }
 
-    ApiError(int status) {
+    public ApiError(int status) {
         this();
         this.status = status;
     }
 
-    ApiError(int status, Throwable ex) {
+    public ApiError(int status, Throwable ex) {
         this();
         this.status = status;
         this.message = "Unexpected error";
     }
 
-    ApiError(int status, String message) {
+    public ApiError(int status, String message) {
         this();
         this.status = status;
         this.message = message;
     }
 
-    Integer getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
@@ -58,19 +58,19 @@ class ApiError {
         this.subErrors = subErrors;
     }
 
-    LocalDateTime getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    void setMessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 }

@@ -1,8 +1,8 @@
-package cz.cvut.fit.timetracking.rest.handler;
+package cz.cvut.fit.timetracking.rest.handler.error;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class ApiValidationError extends ApiSubError {
+public class ApiValidationError extends ApiSubError {
 
     @JsonProperty("object")
     private String object;
@@ -16,43 +16,43 @@ class ApiValidationError extends ApiSubError {
     @JsonProperty("message")
     private String message;
 
-    ApiValidationError() {
+    public ApiValidationError() {
     }
 
-    ApiValidationError(String object, String message) {
+    public ApiValidationError(String object, String message) {
         this.object = object;
         this.message = message;
     }
 
-    String getObject() {
+    public String getObject() {
         return object;
     }
 
-    void setObject(String object) {
+    public void setObject(String object) {
         this.object = object;
     }
 
-    String getField() {
+    public String getField() {
         return field;
     }
 
-    void setField(String field) {
+    public void setField(String field) {
         this.field = field;
     }
 
-    Object getRejectedValue() {
+    public Object getRejectedValue() {
         return rejectedValue;
     }
 
-    void setRejectedValue(Object rejectedValue) {
+    public void setRejectedValue(Object rejectedValue) {
         this.rejectedValue = rejectedValue;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    void setMessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 }

@@ -1,6 +1,9 @@
 package cz.cvut.fit.timetracking.rest.handler;
 
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
+import cz.cvut.fit.timetracking.rest.handler.error.ApiError;
+import cz.cvut.fit.timetracking.rest.handler.error.ApiSubError;
+import cz.cvut.fit.timetracking.rest.handler.error.ApiValidationError;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

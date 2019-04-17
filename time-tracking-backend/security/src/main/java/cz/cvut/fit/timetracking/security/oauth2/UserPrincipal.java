@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
-public class UserPrincipal implements OAuth2User {
+public class UserPrincipal implements OAuth2User{
 
     private Integer id;
     private String email;

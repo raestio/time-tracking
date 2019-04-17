@@ -1,0 +1,30 @@
+time-tracking:
+  configuration:
+    basePackageName: cz.cvut.fit.timetracking.configuration
+  data:
+    datasource:
+      driver: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/time_tracking
+      maximum-pool-size: 16
+      password: a63$%a<sdAZ@95(p))>
+      username: postgres
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      hbm2ddl:
+        auto: validate
+      show_sql: false
+  security:
+    auth:
+      jwt:
+        encodedSecretKey: OBX+pZKgG25dGxU4vZlhkDkeMcnKB8AeLUJ604sVlC4hNIS0gMXAKIh699iTrNoNVPxoVYasIT1xKCJ9hh/vaw==
+        secretKeyAlgorithm : HmacSHA512
+        tokenExpirationSec: 864000
+    oauth2:
+      authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+      client:
+        registration:
+          google:
+            clientId: 185475724985-bc71ltf88i5rvfrcnvvp51n2l5u2lfen.apps.googleusercontent.com
+            clientSecret: UfLq1xByllR6SVnJ8dFvJ5XE
+            redirectUriTemplate: {baseUrl}/oauth2/callback/{registrationId}
+            scope: email,profile
