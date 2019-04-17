@@ -1,0 +1,15 @@
+time-tracking:
+  configuration:
+    basePackageName: cz.cvut.fit.timetracking.configuration
+  data:
+    datasource:
+      driver: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/time_tracking
+      maximum-pool-size: 16
+      password: a63$%a<sdAZ@95(p))>
+      username: postgres
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      hbm2ddl:
+        auto: validate
+      show_sql: false
