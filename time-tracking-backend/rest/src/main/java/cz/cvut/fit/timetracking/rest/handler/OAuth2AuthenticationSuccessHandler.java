@@ -71,7 +71,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean matchesClientRedirectUri(URI clientRedirectUri, String authorizedRedirectUri) {
         URI authorizedURI = URI.create(authorizedRedirectUri);
-        if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedURI.getPort() == clientRedirectUri.getPort()) {
+        if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedURI.getPort() == clientRedirectUri.getPort()) {
             return true;
         }
         return false;
