@@ -21,10 +21,16 @@ time-tracking:
         tokenExpirationSec: 864000
     oauth2:
       authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+
+spring:
+  security:
+    oauth2:
       client:
         registration:
           google:
             clientId: 185475724985-bc71ltf88i5rvfrcnvvp51n2l5u2lfen.apps.googleusercontent.com
             clientSecret: UfLq1xByllR6SVnJ8dFvJ5XE
-            redirectUriTemplate: {baseUrl}/oauth2/callback/{registrationId}
-            scope: email,profile
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
