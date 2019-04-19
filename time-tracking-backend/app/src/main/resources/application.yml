@@ -20,7 +20,7 @@ time-tracking:
         secretKeyAlgorithm : HmacSHA512
         tokenExpirationSec: 864000
     oauth2:
-      authorizedRedirectUris: http://google-login-poc-app:3000/oauth2/redirect
+      authorizedRedirectUris: http://localhost:3000/oauth2/redirect
 
 server:
   port: 8080
