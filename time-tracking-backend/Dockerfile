@@ -6,10 +6,10 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 RUN     useradd --create-home time-tracking --shell /bin/bash --password kfwef5484$56@qQ
-USER    time-tracking
 WORKDIR /home/time-tracking/
 COPY    . ./
 RUN     chown -R time-tracking:time-tracking .
+USER    time-tracking
 RUN     ./gradlew clean build -x test
 
 EXPOSE 8080
