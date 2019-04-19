@@ -9,7 +9,7 @@ RUN     useradd --create-home time-tracking --shell /bin/bash --password kfwef54
 USER    time-tracking
 WORKDIR /home/time-tracking/
 COPY    . ./
-RUN     chown -R time-tracking:time-tracking
+RUN     chown -R time-tracking:time-tracking .
 RUN     ./gradlew clean build -x test
 
 EXPOSE 8080
