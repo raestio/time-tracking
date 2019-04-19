@@ -16,6 +16,9 @@ CREATE TABLE time_tracking_schema."user" (
 	authProvider VARCHAR(50) NOT NULL
 );
 
+CREATE INDEX idx_user_email
+ON time_tracking_schema."user"(email);
+
 CREATE TABLE time_tracking_schema.user_roles_assignment (
 	id SERIAL PRIMARY KEY,
 	id_user INTEGER REFERENCES time_tracking_schema."user"(id) NOT NULL,
