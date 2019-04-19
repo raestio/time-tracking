@@ -12,4 +12,4 @@ RUN     ./gradlew clean build -x test
 
 EXPOSE 8080
 CMD dockerize -wait tcp://db:5432 -timeout 60s \
-    java -jar /home/time-tracking/app/build/libs/time-tracking-1.0.0-SNAPSHOT.jar
+    java -jar /home/time-tracking/app/build/libs/time-tracking-app-1.0-SNAPSHOT.jar

@@ -1,3 +1,10 @@
+apply plugin: "org.springframework.boot"
+
+bootJar {
+    baseName = timeTrackingAppName
+    version = timeTrackingAppVersion
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation project(':rest')
