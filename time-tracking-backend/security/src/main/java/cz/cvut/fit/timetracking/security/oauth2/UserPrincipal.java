@@ -3,15 +3,17 @@ package cz.cvut.fit.timetracking.security.oauth2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
-public class UserPrincipal implements OAuth2User{
+public class UserPrincipal implements OAuth2User {
 
     private Integer id;
     private String email;
-    private Collection<? extends GrantedAuthority> authorities;
-    private Map<String, Object> attributes;
+    private Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
+    private Map<String, Object> attributes = new HashMap<>();
 
     public void setId(Integer id) {
         this.id = id;

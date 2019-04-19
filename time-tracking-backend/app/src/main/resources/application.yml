@@ -22,6 +22,9 @@ time-tracking:
     oauth2:
       authorizedRedirectUris: http://localhost:3000/oauth2/redirect
 
+server:
+  port: 8080
+
 spring:
   security:
     oauth2:

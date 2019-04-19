@@ -27,6 +27,15 @@ public class UserPrincipalServiceImpl implements UserPrincipalService {
         return userPrincipal;
     }
 
+    @Override
+    public OAuth2User create(User user) {
+        UserPrincipal userPrincipal = new UserPrincipal();
+        userPrincipal.setId(user.getId());
+        userPrincipal.setEmail(user.getEmail());
+        userPrincipal.setAuthorities(createAuthorities(user.getUserRoles()));
+        return userPrincipal;
+    }
+
     private Collection<? extends GrantedAuthority> createAuthorities(List<UserRole> userRoles) {
         List<GrantedAuthority> grantedAuthorities = userRoles.stream().map(this::createSimpleGrantedAuthority).collect(Collectors.toList());
         return grantedAuthorities;

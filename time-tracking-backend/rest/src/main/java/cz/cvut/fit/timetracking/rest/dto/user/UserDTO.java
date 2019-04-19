@@ -23,6 +23,9 @@ public class UserDTO implements Serializable {
     @JsonProperty("email")
     private String email;
 
+    @JsonProperty("pictureUrl")
+    private String pictureUrl;
+
     public Integer getId() {
         return id;
     }
@@ -55,4 +58,11 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 }

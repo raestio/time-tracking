@@ -7,4 +7,6 @@ import java.util.Map;
 
 public interface UserPrincipalService {
     OAuth2User create(User user, Map<String, Object> attributes);
+
+    OAuth2User create(User user);
 }

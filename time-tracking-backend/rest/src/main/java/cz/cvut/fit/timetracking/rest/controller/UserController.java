@@ -64,10 +64,11 @@ public class UserController {
     */
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userService.findById(userPrincipal.getId())
-                .orElseThrow(() -> new UserNotFoundException(userPrincipal.getId()));
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<UserDTO> getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        User user = userService.findById(userPrincipal.getId()).orElseThrow(() -> new UserNotFoundException(userPrincipal.getId()));
+        UserDTO userDTO = restModelMapper.map(user, UserDTO.class);
+        return ResponseEntity.ok(userDTO);
     }
 
     @DeleteMapping("/{id}")

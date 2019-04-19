@@ -43,14 +43,7 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
-/*
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-*/
+
 /*
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
