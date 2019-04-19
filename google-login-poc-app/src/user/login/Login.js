@@ -46,7 +46,7 @@ class SocialLogin extends Component {
     render() {
         return (
             <div className="social-login">
-                <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
+                <a className="social-btn" href={GOOGLE_AUTH_URL}>
                     <img src={googleSignIn} alt="Google" />
                 </a>
             </div>
