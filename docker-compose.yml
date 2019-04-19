@@ -11,4 +11,4 @@ services:
   google-login-poc-app:
     build: ./google-login-poc-app
     ports:
-      - "80:3000"
+      - "3000:3000"

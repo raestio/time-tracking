@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Route,
-  Switch
-} from 'react-router-dom'
+    Route,
+    Switch
+} from 'react-router-dom';
 import AppHeader from '../common/AppHeader';
 import Home from '../home/Home';
 import Login from '../user/login/Login';
-import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
@@ -27,8 +26,9 @@ class App extends Component {
             currentUser: null,
             loading: false
         }
-        this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser().bind(this);
-        this.handleLogout = this.handleLogout().bind(this);
+
+        this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     loadCurrentlyLoggedInUser() {
@@ -48,8 +48,6 @@ class App extends Component {
                 loading: false
             });
         });
-
-
     }
 
     handleLogout() {
@@ -66,34 +64,29 @@ class App extends Component {
     }
 
     render() {
-        if (this.state.loading) {
-            return <LoadingIndicator/>
+        if(this.state.loading) {
+            return <LoadingIndicator />
         }
 
         return (
             <div className="app">
                 <div className="app-top-box">
-                    <AppHeader authenticated={this.state.authenticated} onLogout={this.handleLogout}/>
+                    <AppHeader authenticated={this.state.authenticated} onLogout={this.handleLogout} />
                 </div>
                 <div className="app-body">
                     <Switch>
                         <Route exact path="/" component={Home}></Route>
-                        <PrivateRoute path="/profile" authenticated={this.state.authenticated}
-                                      currentUser={this.state.currentUser}
+                        <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
                                       component={Profile}></PrivateRoute>
                         <Route path="/login"
-                               render={(props) => <Login
-                                   authenticated={this.state.authenticated} {...props} />}></Route>
-                        <Route path="/signup"
-                               render={(props) => <Signup
-                                   authenticated={this.state.authenticated} {...props} />}></Route>
+                               render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
                         <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
                         <Route component={NotFound}></Route>
                     </Switch>
                 </div>
                 <Alert stack={{limit: 3}}
-                       timeout={3000}
-                       position='top-right' effect='slide' offset={65}/>
+                       timeout = {3000}
+                       position='top-right' effect='slide' offset={65} />
             </div>
         );
     }
