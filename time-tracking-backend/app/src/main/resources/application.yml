@@ -4,7 +4,7 @@ time-tracking:
   data:
     datasource:
       driver: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/time_tracking
+      jdbc-url: jdbc:postgresql://db:5432/time_tracking
       maximum-pool-size: 16
       password: a63$%a<sdAZ@95(p))>
       username: postgres
@@ -20,7 +20,7 @@ time-tracking:
         secretKeyAlgorithm : HmacSHA512
         tokenExpirationSec: 864000
     oauth2:
-      authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+      authorizedRedirectUris: http://google-login-poc-app:3000/oauth2/redirect
 
 server:
   port: 8080

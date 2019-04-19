@@ -2,7 +2,7 @@ time-tracking:
   data:
     datasource:
       driver: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/time_tracking
+      jdbc-url: jdbc:postgresql://db:5432/time_tracking
       maximum-pool-size: 16
       password: a63$%a<sdAZ@95(p))>
       username: postgres
