@@ -8,7 +8,9 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 RUN     useradd --create-home time-tracking --shell /bin/bash --password kfwef5484$56@qQ
 USER    time-tracking
 WORKDIR /home/time-tracking/
-COPY    build/libs/time-tracking-1.0.0-SNAPSHOT.jar /home/time-tracking
+COPY    . ./
+RUN     ./gradlew clean build -x test
 
+EXPOSE 8080
 CMD dockerize -wait tcp://db:5432 -timeout 60s \
-    java -jar time-tracking-1.0.0-SNAPSHOT.jar
+    java -jar build/libs/time-tracking-1.0.0-SNAPSHOT.jar
