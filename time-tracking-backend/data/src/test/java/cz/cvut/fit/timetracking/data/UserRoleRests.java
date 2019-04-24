@@ -7,7 +7,7 @@ import cz.cvut.fit.timetracking.data.entity.UserRole;
 import cz.cvut.fit.timetracking.data.repository.UserRepository;
 import cz.cvut.fit.timetracking.data.repository.UserRoleRepository;
 import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
-import cz.cvut.fit.timetracking.data.utils.UserTestUtils;
+import cz.cvut.fit.timetracking.data.utils.DataTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +31,9 @@ public class UserRoleRests extends DataTestsConfiguration {
 
     @Before
     public void init() {
-        List<UserRole> userRoles = UserTestUtils.getUserRoles();
+        List<UserRole> userRoles = DataTestUtils.getUserRoles();
         userRoles = userRoleRepository.saveAll(userRoles);
-        User user = UserTestUtils.getUser();
+        User user = DataTestUtils.getUser();
         user.setUserRoles(new HashSet<>(userRoles));
         userRepository.save(user);
     }
@@ -46,15 +46,15 @@ public class UserRoleRests extends DataTestsConfiguration {
 
     @Test
     public void testDataServiceFindUserRoles() {
-        User user = userRepository.findByEmail(UserTestUtils.getUser().getEmail()).get();
+        User user = userRepository.findByEmail(DataTestUtils.getUser().getEmail()).get();
         List<UserRoleDTO> userRoleLit = userRoleDataService.findAllByUserId(user.getId());
-        assertThat(userRoleLit.size()).isEqualTo(UserTestUtils.getUserRoles().size());
+        assertThat(userRoleLit.size()).isEqualTo(DataTestUtils.getUserRoles().size());
     }
 
     @Test
     public void testFetchedUserRoles() {
-        User user = userRepository.findByEmail(UserTestUtils.getUser().getEmail()).get();
-        assertThat(user.getUserRoles().size()).isEqualTo(UserTestUtils.getUserRoles().size());
+        User user = userRepository.findByEmail(DataTestUtils.getUser().getEmail()).get();
+        assertThat(user.getUserRoles().size()).isEqualTo(DataTestUtils.getUserRoles().size());
     }
 
 }

@@ -2,7 +2,7 @@ package cz.cvut.fit.timetracking.rest.dto.workrecord;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class WorkRecordDTO {
 
@@ -10,19 +10,19 @@ public class WorkRecordDTO {
     private Integer id;
 
     @JsonProperty("dateFrom")
-    private ZonedDateTime dateFrom;
+    private LocalDateTime dateFrom;
 
     @JsonProperty("dateTo")
-    private ZonedDateTime dateTo;
+    private LocalDateTime dateTo;
 
     @JsonProperty("description")
     private String description;
 
     @JsonProperty("dateCreated")
-    private ZonedDateTime dateCreated;
+    private LocalDateTime dateCreated;
 
     @JsonProperty("dateUpdated")
-    private ZonedDateTime dateUpdated;
+    private LocalDateTime dateUpdated;
 
     public Integer getId() {
         return id;
@@ -32,19 +32,19 @@ public class WorkRecordDTO {
         this.id = id;
     }
 
-    public ZonedDateTime getDateFrom() {
+    public LocalDateTime getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(ZonedDateTime dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public ZonedDateTime getDateTo() {
+    public LocalDateTime getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(ZonedDateTime dateTo) {
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 
@@ -56,19 +56,19 @@ public class WorkRecordDTO {
         this.description = description;
     }
 
-    public ZonedDateTime getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public ZonedDateTime getDateUpdated() {
+    public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(ZonedDateTime dateUpdated) {
+    public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 }

@@ -51,7 +51,7 @@ public class User {
     private String pictureUrl;
 
     @NotNull
-    @Column(name = "authProvider")
+    @Column(name = "auth_provider")
     @Enumerated(EnumType.STRING)
     private AuthProviderEnum authProvider;
 

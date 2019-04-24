@@ -8,9 +8,11 @@ import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
+import cz.cvut.fit.timetracking.data.service.WorkRecordDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +27,9 @@ public class DataAccessApiImpl implements DataAccessApi {
 
     @Autowired
     private ProjectDataService projectDataService;
+
+    @Autowired
+    private WorkRecordDataService workRecordDataService;
 
     @Override
     public Optional<UserDTO> findUserById(Integer id) {
@@ -75,5 +80,10 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public void deleteProjectById(Integer id) {
         projectDataService.deleteById(id);
+    }
+
+    @Override
+    public boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId) {
+        return workRecordDataService.recordTimesOverlapsWithOtherRecords(from, to, userId);
     }
 }

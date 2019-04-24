@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -24,11 +24,11 @@ public class WorkRecord {
 
     @NotNull
     @Column(name = "date_from")
-    private ZonedDateTime dateFrom;
+    private LocalDateTime dateFrom;
 
     @NotNull
     @Column(name = "date_to")
-    private ZonedDateTime dateTo;
+    private LocalDateTime dateTo;
 
     @NotEmpty
     @Column(name = "description")
@@ -36,10 +36,10 @@ public class WorkRecord {
 
     @NotNull
     @Column(name = "date_created")
-    private ZonedDateTime dateCreated;
+    private LocalDateTime dateCreated;
 
     @Column(name = "date_updated")
-    private ZonedDateTime dateUpdated;
+    private LocalDateTime dateUpdated;
 
     @NotNull
     @ManyToOne
@@ -88,19 +88,19 @@ public class WorkRecord {
         this.workType = workType;
     }
 
-    public ZonedDateTime getDateFrom() {
+    public LocalDateTime getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(ZonedDateTime dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public ZonedDateTime getDateTo() {
+    public LocalDateTime getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(ZonedDateTime dateTo) {
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 
@@ -112,19 +112,19 @@ public class WorkRecord {
         this.description = description;
     }
 
-    public ZonedDateTime getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public ZonedDateTime getDateUpdated() {
+    public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(ZonedDateTime dateUpdated) {
+    public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 

@@ -13,7 +13,7 @@ CREATE TABLE time_tracking_schema."user" (
 	surname VARCHAR(50) NOT NULL,
 	email VARCHAR(50) UNIQUE NOT NULL,
 	pictureUrl VARCHAR(600) NULL,
-	authProvider VARCHAR(50) NOT NULL
+	auth_provider VARCHAR(50) NOT NULL
 );
 
 CREATE INDEX idx_user_email
@@ -70,11 +70,11 @@ CREATE TABLE time_tracking_schema.project_roles_assignment (
 
 CREATE TABLE time_tracking_schema.work_record (
 	id SERIAL PRIMARY KEY,
-	date_from TIMESTAMPTZ NOT NULL,
-	date_to TIMESTAMPTZ NOT NULL,
+	date_from TIMESTAMP NOT NULL,
+	date_to TIMESTAMP NOT NULL,
 	description VARCHAR(255) NOT NULL,
-	date_created TIMESTAMPTZ NOT NULL,
-	date_updated TIMESTAMPTZ NULL,
+	date_created TIMESTAMP NOT NULL,
+	date_updated TIMESTAMP NULL,
 	id_project INTEGER REFERENCES time_tracking_schema.project(id) NOT NULL,
 	id_work_type INTEGER REFERENCES time_tracking_schema.work_type(id) NOT NULL,
 	id_user INTEGER REFERENCES time_tracking_schema."user"(id) NOT NULL

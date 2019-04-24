@@ -35,7 +35,7 @@ public class Project {
     @Column(name = "start")
     private LocalDate start;
 
-    @Column(name = "end")
+    @Column(name = "\"end\"")
     private LocalDate end;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)

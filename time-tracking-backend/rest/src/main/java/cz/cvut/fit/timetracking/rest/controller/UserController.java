@@ -36,20 +36,21 @@ public class UserController {
     @Autowired
     private RestModelMapper restModelMapper;
 
-    /*
+
     @ApiOperation(value = "Get an user by ID", response = UserDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
-    }*/
-
-    /*
+    }
+/*
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> {
@@ -60,8 +61,7 @@ public class UserController {
             return ResponseEntity.ok(restModelMapper.map(updatedUser, UserDTO.class));
         }).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
-    }
-    */
+    }*/
 
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('USER')")
@@ -72,6 +72,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();

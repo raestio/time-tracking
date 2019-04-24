@@ -1,15 +1,15 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class WorkRecordDTO {
 
     private Integer id;
-    private ZonedDateTime dateFrom;
-    private ZonedDateTime dateTo;
+    private LocalDateTime dateFrom;
+    private LocalDateTime dateTo;
     private String description;
-    private ZonedDateTime dateCreated;
-    private ZonedDateTime dateUpdated;
+    private LocalDateTime dateCreated;
+    private LocalDateTime dateUpdated;
     private UserDTO user;
     private ProjectDTO project;
     private WorkTypeDTO workType;
@@ -46,19 +46,19 @@ public class WorkRecordDTO {
         this.workType = workType;
     }
 
-    public ZonedDateTime getDateFrom() {
+    public LocalDateTime getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(ZonedDateTime dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public ZonedDateTime getDateTo() {
+    public LocalDateTime getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(ZonedDateTime dateTo) {
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 
@@ -70,19 +70,19 @@ public class WorkRecordDTO {
         this.description = description;
     }
 
-    public ZonedDateTime getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public ZonedDateTime getDateUpdated() {
+    public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(ZonedDateTime dateUpdated) {
+    public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
 }

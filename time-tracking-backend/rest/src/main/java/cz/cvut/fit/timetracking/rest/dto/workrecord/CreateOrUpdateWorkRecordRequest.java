@@ -3,7 +3,7 @@ package cz.cvut.fit.timetracking.rest.dto.workrecord;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class CreateOrUpdateWorkRecordRequest {
 
@@ -12,11 +12,11 @@ public class CreateOrUpdateWorkRecordRequest {
 
     @NotNull
     @JsonProperty("dateFrom")
-    private ZonedDateTime dateFrom;
+    private LocalDateTime dateFrom;
 
     @NotNull
     @JsonProperty("dateTo")
-    private ZonedDateTime dateTo;
+    private LocalDateTime dateTo;
 
     @NotEmpty
     @JsonProperty("description")
@@ -30,19 +30,19 @@ public class CreateOrUpdateWorkRecordRequest {
         this.id = id;
     }
 
-    public ZonedDateTime getDateFrom() {
+    public LocalDateTime getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(ZonedDateTime dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public ZonedDateTime getDateTo() {
+    public LocalDateTime getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(ZonedDateTime dateTo) {
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 

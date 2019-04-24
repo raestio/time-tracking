@@ -1,5 +1,7 @@
 dependencies {
     implementation 'org.springframework:spring-context'
     implementation project(':data-api')
+    implementation project(':user')
+    implementation project(':project')
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
 }
