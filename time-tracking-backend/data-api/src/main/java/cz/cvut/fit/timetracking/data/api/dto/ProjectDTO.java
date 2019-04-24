@@ -11,8 +11,6 @@ public class ProjectDTO {
     private String description;
     private LocalDate start;
     private LocalDate end;
-    private Set<ProjectAssignmentDTO> projectAssignments = new HashSet<>();
-    private Set<WorkRecordDTO> workRecords = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -20,22 +18,6 @@ public class ProjectDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Set<WorkRecordDTO> getWorkRecords() {
-        return workRecords;
-    }
-
-    public void setWorkRecords(Set<WorkRecordDTO> workRecords) {
-        this.workRecords = workRecords;
-    }
-
-    public Set<ProjectAssignmentDTO> getProjectAssignments() {
-        return projectAssignments;
-    }
-
-    public void setProjectAssignments(Set<ProjectAssignmentDTO> projectAssignments) {
-        this.projectAssignments = projectAssignments;
     }
 
     public String getName() {

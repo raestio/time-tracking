@@ -9,7 +9,7 @@ public class ProjectAssignmentDTO {
     private Integer id;
     private LocalDate validFrom;
     private LocalDate validTo;
-    private UserDTO user;
+    private UserDTOLight user;
     private ProjectDTO project;
     private Set<ProjectRoleDTO> projectRoles = new HashSet<>();
 
@@ -21,11 +21,11 @@ public class ProjectAssignmentDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
+    public UserDTOLight getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(UserDTOLight user) {
         this.user = user;
     }
 

@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.user.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
@@ -15,12 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,14 +30,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(Integer id) {
-        Optional<UserDTO> user = dataAccessApi.findUserById(id);
+        Optional<UserDTOLight> user = dataAccessApi.findUserById(id);
         Optional<User> result = user.map(this::map);
         return result;
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<UserDTO> user = dataAccessApi.findUserByEmail(email);
+        Optional<UserDTOLight> user = dataAccessApi.findUserByEmail(email);
         Optional<User> result = user.map(this::map);
         return result;
     }
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         checkBeforeUpdateOrThrow(user);
-        UserDTO userDTO = new UserDTO();
+        UserDTOLight userDTO = new UserDTOLight();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
@@ -79,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User create(String name, String surname, String email, AuthProvider authProvider, String pictureUrl, UserRoleName... userRoleNames) {
-        UserDTO userDTO = new UserDTO();
+        UserDTOLight userDTO = new UserDTOLight();
         userDTO.setName(name);
         userDTO.setSurname(surname);
         userDTO.setEmail(email);
@@ -99,7 +96,7 @@ public class UserServiceImpl implements UserService {
         return userRoleDTOS;
     }
 
-    private User map(UserDTO u) {
+    private User map(UserDTOLight u) {
         User user = userModelMapper.map(u, User.class);
         return user;
     }

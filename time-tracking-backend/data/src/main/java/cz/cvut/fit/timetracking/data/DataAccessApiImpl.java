@@ -3,8 +3,11 @@ package cz.cvut.fit.timetracking.data;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
+import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
+import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
@@ -42,7 +45,7 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
-    public UserDTO createOrUpdateUser(UserDTO user) {
+    public UserDTOLight createOrUpdateUser(UserDTOLight user) {
         return userDataService.createOrUpdate(user);
     }
 
@@ -86,4 +89,26 @@ public class DataAccessApiImpl implements DataAccessApi {
     public boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId) {
         return workRecordDataService.recordTimesOverlapsWithOtherRecords(from, to, userId);
     }
+
+    @Override
+    public WorkRecordDTOLight createOrUpdateWorkRecord(WorkRecordDTOLight workRecordDTOLight) {
+        return workRecordDataService.createOrUpdate(workRecordDTOLight);
+    }
+
+    @Override
+    public WorkRecordDTO createOrUpdateWorkRecord(WorkRecordDTO workRecordDTO) {
+        return workRecordDataService.createOrUpdate(workRecordDTO);
+    }
+
+    @Override
+    public void deleteWorkRecordById(Integer id) {
+        workRecordDataService.deleteById(id);
+    }
+
+    @Override
+    public Optional<WorkRecordDTO> findWorkRecordById(Integer id) {
+        return workRecordDataService.findById(id);
+    }
+
+
 }

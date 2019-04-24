@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.workrecord.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
-import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
+import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 import cz.cvut.fit.timetracking.user.service.UserService;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
 import cz.cvut.fit.timetracking.workrecord.exception.WorkRecordServiceException;
@@ -25,15 +25,15 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     @Override
     public WorkRecord create(LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId, Integer userId) {
         checkWorkRecordsOverlapOrThrow(from, to, userId);
-        WorkRecordDTO workRecordDTO = new WorkRecordDTO();
-        workRecordDTO.setDateFrom(from);
-        workRecordDTO.setDateTo(to);
-        workRecordDTO.setDescription(description);
-        workRecordDTO.setDateCreated(LocalDateTime.now());
-        fillUser(workRecordDTO, userId);
-        fillProject(workRecordDTO, projectId);
-        fillWorkType();
-        workRecordDTO.setUser();
+        WorkRecordDTOLight workRecordDTOLight = new WorkRecordDTOLight();
+        workRecordDTOLight.setDateFrom(from);
+        workRecordDTOLight.setDateTo(to);
+        workRecordDTOLight.setDescription(description);
+        workRecordDTOLight.setDateCreated(LocalDateTime.now());
+        workRecordDTOLight.setUserId(userId);
+        workRecordDTOLight.setProjectId(projectId);
+        workRecordDTOLight.setWorkTypeId(workTypeId);
+        WorkRecordDTOLight workRecordDTOLightCreated = dataAccessApi.createOrUpdateWorkRecord(workRecordDTOLight);
         return ;
     }
 

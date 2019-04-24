@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.data.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.mapper.DataModelMapper;
 import cz.cvut.fit.timetracking.data.repository.UserRepository;
@@ -34,10 +35,10 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     @Override
-    public UserDTO createOrUpdate(UserDTO user) {
+    public UserDTOLight createOrUpdate(UserDTOLight user) {
         User userEntity = dataModelMapper.map(user, User.class);
         userEntity = userRepository.save(userEntity);
-        UserDTO result = map(userEntity);
+        UserDTOLight result = mapLight(userEntity);
         return result;
     }
 
@@ -48,5 +49,8 @@ public class UserDataServiceImpl implements UserDataService {
 
     private UserDTO map(User user) {
         return dataModelMapper.map(user, UserDTO.class);
+    }
+    private UserDTOLight mapLight(User user) {
+        return dataModelMapper.map(user, UserDTOLight.class);
     }
 }

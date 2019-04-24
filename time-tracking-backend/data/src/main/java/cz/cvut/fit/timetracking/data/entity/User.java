@@ -66,6 +66,13 @@ public class User {
                joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_user_role"))
     private Set<UserRole> userRoles = new HashSet<>();
 
+    public User(Integer id) {
+        this.id = id;
+    }
+
+    public User() {
+    }
+
     public Integer getId() {
         return id;
     }

@@ -1,17 +1,13 @@
 package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
-import cz.cvut.fit.timetracking.data.entity.Project;
-import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.entity.WorkRecord;
-import cz.cvut.fit.timetracking.data.entity.WorkType;
 import cz.cvut.fit.timetracking.data.repository.ProjectRepository;
 import cz.cvut.fit.timetracking.data.repository.WorkRecordRepository;
 import cz.cvut.fit.timetracking.data.repository.WorkTypeRepository;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.utils.DataTestUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

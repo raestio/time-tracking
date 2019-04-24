@@ -25,6 +25,14 @@ public class WorkType {
     @Column(name = "description")
     private String description;
 
+    public WorkType(Integer id) {
+        this.id = id;
+    }
+
+    public WorkType() {
+
+    }
+
     public Integer getId() {
         return id;
     }

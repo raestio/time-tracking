@@ -2,8 +2,11 @@ package cz.cvut.fit.timetracking.data.api;
 
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
+import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
+import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.Optional;
 public interface DataAccessApi {
 
     //user
-    UserDTO createOrUpdateUser(UserDTO user);
+    UserDTOLight createOrUpdateUser(UserDTOLight user);
     Optional<UserDTO> findUserById(Integer id);
     Optional<UserDTO> findUserByEmail(String email);
     void deleteUserById(Integer id);
@@ -30,4 +33,8 @@ public interface DataAccessApi {
 
     //work records
     boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId);
+    WorkRecordDTOLight createOrUpdateWorkRecord(WorkRecordDTOLight workRecordDTOLight);
+    WorkRecordDTO createOrUpdateWorkRecord(WorkRecordDTO workRecordDTO);
+    void deleteWorkRecordById(Integer id);
+    Optional<WorkRecordDTO> findWorkRecordById(Integer id);
 }

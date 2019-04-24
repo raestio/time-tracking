@@ -44,6 +44,14 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Set<WorkRecord> workRecords = new HashSet<>();
 
+    public Project() {
+
+    }
+
+    public Project(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -1,8 +1,9 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
+
 import java.time.LocalDateTime;
 
-public class WorkRecordDTO {
+public class WorkRecordDTOLight {
 
     private Integer id;
     private LocalDateTime dateFrom;
@@ -10,9 +11,9 @@ public class WorkRecordDTO {
     private String description;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
-    private UserDTOLight user;
-    private ProjectDTO project;
-    private WorkTypeDTO workType;
+    private Integer userId;
+    private Integer projectId;
+    private Integer workTypeId;
 
     public Integer getId() {
         return id;
@@ -20,30 +21,6 @@ public class WorkRecordDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public UserDTOLight getUser() {
-        return user;
-    }
-
-    public void setUser(UserDTOLight user) {
-        this.user = user;
-    }
-
-    public ProjectDTO getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectDTO project) {
-        this.project = project;
-    }
-
-    public WorkTypeDTO getWorkType() {
-        return workType;
-    }
-
-    public void setWorkType(WorkTypeDTO workType) {
-        this.workType = workType;
     }
 
     public LocalDateTime getDateFrom() {
@@ -84,5 +61,29 @@ public class WorkRecordDTO {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Integer getWorkTypeId() {
+        return workTypeId;
+    }
+
+    public void setWorkTypeId(Integer workTypeId) {
+        this.workTypeId = workTypeId;
     }
 }
