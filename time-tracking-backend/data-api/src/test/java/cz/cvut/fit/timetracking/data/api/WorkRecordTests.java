@@ -4,13 +4,11 @@ import cz.cvut.fit.timetracking.configuration.DataAccessApiTestsConfiguration;
 import cz.cvut.fit.timetracking.data.api.dto.AuthProvider;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
-import cz.cvut.fit.timetracking.data.entity.WorkRecord;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

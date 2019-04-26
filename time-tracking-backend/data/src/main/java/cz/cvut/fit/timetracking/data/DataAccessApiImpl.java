@@ -3,7 +3,6 @@ package cz.cvut.fit.timetracking.data;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
@@ -45,7 +44,7 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
-    public UserDTOLight createOrUpdateUser(UserDTOLight user) {
+    public UserDTO createOrUpdateUser(UserDTO user) {
         return userDataService.createOrUpdate(user);
     }
 

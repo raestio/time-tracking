@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.user.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
@@ -30,14 +30,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(Integer id) {
-        Optional<UserDTOLight> user = dataAccessApi.findUserById(id);
+        Optional<UserDTO> user = dataAccessApi.findUserById(id);
         Optional<User> result = user.map(this::map);
         return result;
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<UserDTOLight> user = dataAccessApi.findUserByEmail(email);
+        Optional<UserDTO> user = dataAccessApi.findUserByEmail(email);
         Optional<User> result = user.map(this::map);
         return result;
     }
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         checkBeforeUpdateOrThrow(user);
-        UserDTOLight userDTO = new UserDTOLight();
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User create(String name, String surname, String email, AuthProvider authProvider, String pictureUrl, UserRoleName... userRoleNames) {
-        UserDTOLight userDTO = new UserDTOLight();
+        UserDTO userDTO = new UserDTO();
         userDTO.setName(name);
         userDTO.setSurname(surname);
         userDTO.setEmail(email);
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
         return userRoleDTOS;
     }
 
-    private User map(UserDTOLight u) {
+    private User map(UserDTO u) {
         User user = userModelMapper.map(u, User.class);
         return user;
     }

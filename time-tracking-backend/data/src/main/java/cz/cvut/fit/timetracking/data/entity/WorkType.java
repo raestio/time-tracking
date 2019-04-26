@@ -5,9 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "work_type", schema = "time_tracking_schema")
@@ -25,12 +28,23 @@ public class WorkType {
     @Column(name = "description")
     private String description;
 
+    @ManyToMany(mappedBy = "workTypes")
+    private Set<Project> projects = new HashSet<>();
+
     public WorkType(Integer id) {
         this.id = id;
     }
 
     public WorkType() {
 
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     public Integer getId() {

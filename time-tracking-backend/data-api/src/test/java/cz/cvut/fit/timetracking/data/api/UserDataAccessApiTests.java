@@ -2,7 +2,7 @@ package cz.cvut.fit.timetracking.data.api;
 
 import cz.cvut.fit.timetracking.configuration.DataAccessApiTestsConfiguration;
 import cz.cvut.fit.timetracking.data.api.dto.AuthProvider;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,8 +15,8 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
 
     @Test
     public void createUser() {
-        UserDTOLight userDTO = getUser();
-        UserDTOLight createdUser = dataAccessApi.createOrUpdateUser(userDTO);
+        UserDTO userDTO = getUser();
+        UserDTO createdUser = dataAccessApi.createOrUpdateUser(userDTO);
         assertThat(createdUser.getId()).isNotNull();
         assertThat(createdUser.getName()).isEqualTo(userDTO.getName());
         assertThat(createdUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -32,13 +32,13 @@ public class UserDataAccessApiTests extends DataAccessApiTestsConfiguration {
 
     @Test
     public void deleteUser() {
-        UserDTOLight createdUser = dataAccessApi.createOrUpdateUser(getUser());
+        UserDTO createdUser = dataAccessApi.createOrUpdateUser(getUser());
         dataAccessApi.deleteUserById(createdUser.getId());
         assertThat(dataAccessApi.findUserById(createdUser.getId())).isEmpty();
     }
 
-    private UserDTOLight getUser() {
-        UserDTOLight userDTO = new UserDTOLight();
+    private UserDTO getUser() {
+        UserDTO userDTO = new UserDTO();
         userDTO.setName("Test");
         userDTO.setEmail("tm@tmp.com");
         userDTO.setSurname("Testovic");

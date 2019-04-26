@@ -10,9 +10,9 @@ public class WorkRecordDTO {
     private String description;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
-    private UserDTOLight user;
     private ProjectDTO project;
     private WorkTypeDTO workType;
+    private UserDTOLight user;
 
     public Integer getId() {
         return id;

@@ -1,5 +1,7 @@
 package cz.cvut.fit.timetracking.workrecord.dto;
 
+import cz.cvut.fit.timetracking.project.dto.Project;
+
 import java.time.LocalDateTime;
 
 public class WorkRecord {
@@ -8,8 +10,8 @@ public class WorkRecord {
     private LocalDateTime dateFrom;
     private LocalDateTime dateTo;
     private String description;
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateUpdated;
+    private Project project;
+    private WorkType workType;
 
     public Integer getId() {
         return id;
@@ -43,19 +45,19 @@ public class WorkRecord {
         this.description = description;
     }
 
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
+    public Project getProject() {
+        return project;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public LocalDateTime getDateUpdated() {
-        return dateUpdated;
+    public WorkType getWorkType() {
+        return workType;
     }
 
-    public void setDateUpdated(LocalDateTime dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setWorkType(WorkType workType) {
+        this.workType = workType;
     }
 }

@@ -6,6 +6,7 @@ import cz.cvut.fit.timetracking.rest.handler.OAuth2AuthenticationFailureHandler;
 import cz.cvut.fit.timetracking.rest.handler.OAuth2AuthenticationSuccessHandler;
 import cz.cvut.fit.timetracking.rest.handler.RestAuthenticationEntryPoint;
 import cz.cvut.fit.timetracking.security.oauth2.service.CustomOAuth2UserService;
+import cz.cvut.fit.timetracking.user.dto.UserRoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,13 +45,6 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
-/*
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-*/
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -84,6 +78,8 @@ public class RestSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .anyRequest()
                     .authenticated()
+                .anyRequest()
+                    .hasAuthority(UserRoleName.USER.toString())
                 .and()
             .oauth2Login()
                 .authorizationEndpoint()

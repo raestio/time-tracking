@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.repository.UserRepository;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.utils.DataTestUtils;
@@ -21,7 +21,7 @@ public class UserTests extends DataTestsConfiguration {
 
     @Test
     public void testCreateUser() {
-        UserDTOLight user = DataTestUtils.getUserDTO();
+        UserDTO user = DataTestUtils.getUserDTO();
         user = userService.createOrUpdate(user);
         assertThat(user.getId()).isNotNull();
     }
@@ -33,27 +33,27 @@ public class UserTests extends DataTestsConfiguration {
 
     @Test
     public void testUpdateUser() {
-        UserDTOLight user = userService.createOrUpdate(DataTestUtils.getUserDTO());
+        UserDTO user = userService.createOrUpdate(DataTestUtils.getUserDTO());
         user.setName("Rob");
-        UserDTOLight updatedUser = userService.createOrUpdate(user);
+        UserDTO updatedUser = userService.createOrUpdate(user);
         assertThat(userService.findById(updatedUser.getId()).get().getName()).isEqualTo("Rob");
     }
 
     @Test
     public void testFindUserById() {
-        UserDTOLight user = userService.createOrUpdate(DataTestUtils.getUserDTO());
+        UserDTO user = userService.createOrUpdate(DataTestUtils.getUserDTO());
         assertThat(user.getEmail()).isEqualTo(userService.findById(user.getId()).get().getEmail());
     }
 
     @Test
     public void testFindUserByEmail() {
-        UserDTOLight user = userService.createOrUpdate(DataTestUtils.getUserDTO());
+        UserDTO user = userService.createOrUpdate(DataTestUtils.getUserDTO());
         assertThat(user.getId()).isEqualTo(userService.findByEmail(user.getEmail()).get().getId());
     }
 
     @Test
     public void testDeleteUserById() {
-        UserDTOLight user = userService.createOrUpdate(DataTestUtils.getUserDTO());
+        UserDTO user = userService.createOrUpdate(DataTestUtils.getUserDTO());
         userService.deleteById(user.getId());
         assertThat(userService.findById(user.getId())).isEmpty();
     }

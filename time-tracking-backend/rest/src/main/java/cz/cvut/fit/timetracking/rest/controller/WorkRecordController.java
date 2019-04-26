@@ -1,9 +1,10 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
 import cz.cvut.fit.timetracking.rest.dto.workrecord.CreateOrUpdateWorkRecordRequest;
-import cz.cvut.fit.timetracking.rest.dto.workrecord.UpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
+import cz.cvut.fit.timetracking.security.CurrentUser;
+import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,9 @@ public class WorkRecordController {
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<WorkRecordDTO> createOrUpdate(@Valid @RequestBody CreateOrUpdateWorkRecordRequest createOrUpdateWorkRecordRequest) {
-        WorkRecord workRecord = restModelMapper.map(createOrUpdateWorkRecordRequest, WorkRecord.class);
-        workRecord = workRecordService.createOrUpdate(workRecord);
-        WorkRecordDTO result = restModelMapper.map(workRecord, WorkRecordDTO.class);
+    public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
+        WorkRecord workRecord = workRecordService.create(request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId(), user.getId());
+        WorkRecordDTO result = map(workRecord);
         return ResponseEntity.ok(result);
     }
 
@@ -46,16 +46,9 @@ public class WorkRecordController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WorkRecordDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateWorkRecordRequest updateWorkRecordRequest) {
-        Optional<WorkRecord> workRecord = workRecordService.findById(id);
-        ResponseEntity<WorkRecordDTO> response = workRecord.map(p -> {
-            p.setDateFrom(updateWorkRecordRequest.getDateFrom());
-            p.setDateTo(updateWorkRecordRequest.getDateTo());
-            p.setDescription(updateWorkRecordRequest.getDescription());
-            WorkRecord updatedWorkRecord = workRecordService.createOrUpdate(p);
-            return ResponseEntity.ok(restModelMapper.map(updatedWorkRecord, WorkRecordDTO.class));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
-        return response;
+    public ResponseEntity<WorkRecordDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateWorkRecordRequest request) {
+        WorkRecord workRecord = workRecordService.update(id, request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId());
+        return ResponseEntity.ok(map(workRecord));
     }
 
     @DeleteMapping("/{id}")

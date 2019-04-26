@@ -35,10 +35,10 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     @Override
-    public UserDTOLight createOrUpdate(UserDTOLight user) {
+    public UserDTO createOrUpdate(UserDTO user) {
         User userEntity = dataModelMapper.map(user, User.class);
         userEntity = userRepository.save(userEntity);
-        UserDTOLight result = mapLight(userEntity);
+        UserDTO result = map(userEntity);
         return result;
     }
 

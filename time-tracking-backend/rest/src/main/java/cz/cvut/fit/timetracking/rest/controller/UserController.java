@@ -42,7 +42,6 @@ public class UserController {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
@@ -64,15 +63,13 @@ public class UserController {
     }*/
 
     @GetMapping("/me")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<UserDTO> getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userService.findById(userPrincipal.getId()).orElseThrow(() -> new UserNotFoundException(userPrincipal.getId()));
         UserDTO userDTO = restModelMapper.map(user, UserDTO.class);
         return ResponseEntity.ok(userDTO);
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();

@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -44,8 +47,21 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Set<WorkRecord> workRecords = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "project_work_type", schema = "time_tracking_schema",
+            joinColumns = @JoinColumn(name = "id_project"), inverseJoinColumns = @JoinColumn(name = "id_work_type"))
+    private Set<WorkType> workTypes = new HashSet<>();
+
     public Project() {
 
+    }
+
+    public Set<WorkType> getWorkTypes() {
+        return workTypes;
+    }
+
+    public void setWorkTypes(Set<WorkType> workTypes) {
+        this.workTypes = workTypes;
     }
 
     public Project(Integer id) {

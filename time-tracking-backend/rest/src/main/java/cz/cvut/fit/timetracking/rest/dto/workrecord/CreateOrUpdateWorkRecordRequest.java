@@ -1,14 +1,14 @@
 package cz.cvut.fit.timetracking.rest.dto.workrecord;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.validation.constraints.ConsistentDateParameters;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+@ConsistentDateParameters(field = "dateTo", isAfter = "dateFrom", message = "dateTo must be after dateFrom")
 public class CreateOrUpdateWorkRecordRequest {
-
-    @JsonProperty("id")
-    private Integer id;
 
     @NotNull
     @JsonProperty("dateFrom")
@@ -22,13 +22,13 @@ public class CreateOrUpdateWorkRecordRequest {
     @JsonProperty("description")
     private String description;
 
-    public Integer getId() {
-        return id;
-    }
+    @NotNull
+    @JsonProperty("projectId")
+    private Integer projectId;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @NotNull
+    @JsonProperty("workTypeId")
+    private Integer workTypeId;
 
     public LocalDateTime getDateFrom() {
         return dateFrom;
@@ -52,5 +52,21 @@ public class CreateOrUpdateWorkRecordRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Integer getWorkTypeId() {
+        return workTypeId;
+    }
+
+    public void setWorkTypeId(Integer workTypeId) {
+        this.workTypeId = workTypeId;
     }
 }

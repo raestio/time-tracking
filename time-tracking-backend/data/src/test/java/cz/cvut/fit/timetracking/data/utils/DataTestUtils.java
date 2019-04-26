@@ -1,7 +1,7 @@
 package cz.cvut.fit.timetracking.data.utils;
 
 import cz.cvut.fit.timetracking.data.api.dto.AuthProvider;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.entity.Project;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.entity.UserRole;
@@ -51,8 +51,8 @@ public class DataTestUtils {
         return workType;
     }
 
-    public static UserDTOLight getUserDTO() {
-        UserDTOLight user = new UserDTOLight();
+    public static UserDTO getUserDTO() {
+        UserDTO user = new UserDTO();
         user.setName("Test");
         user.setSurname("Novy");
         user.setAuthProvider(AuthProvider.GOOGLE);

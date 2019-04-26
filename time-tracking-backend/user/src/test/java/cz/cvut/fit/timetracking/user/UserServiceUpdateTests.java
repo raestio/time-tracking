@@ -1,8 +1,6 @@
 package cz.cvut.fit.timetracking.user;
 
 import cz.cvut.fit.timetracking.configuration.UserTestsConfiguration;
-import cz.cvut.fit.timetracking.data.entity.UserRole;
-import cz.cvut.fit.timetracking.data.entity.enums.UserRoleName;
 import cz.cvut.fit.timetracking.data.repository.UserRoleRepository;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
@@ -105,9 +103,4 @@ public class UserServiceUpdateTests extends UserTestsConfiguration {
         userService.create(name, surname, email, authProvider, pictureUrl);
     }
 
-    private void createUserRole(UserRoleName role) {
-        UserRole userRole = new UserRole();
-        userRole.setName(role);
-        userRoleRepository.save(userRole);
-    }
 }
