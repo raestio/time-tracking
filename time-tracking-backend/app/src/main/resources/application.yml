@@ -17,10 +17,16 @@ time-tracking:
     auth:
       jwt:
         encodedSecretKey: OBX+pZKgG25dGxU4vZlhkDkeMcnKB8AeLUJ604sVlC4hNIS0gMXAKIh699iTrNoNVPxoVYasIT1xKCJ9hh/vaw==
-        secretKeyAlgorithm : HmacSHA512
+        secretKeyAlgorithm: HmacSHA512
         tokenExpirationSec: 864000
     oauth2:
       authorizedRedirectUris: http://localhost:3000/oauth2/redirect
+  jira:
+    restClient:
+      serverUri: http://localhost:8081
+      authentication:
+        username: time.tracking
+        password: Q557hKbtsRT9yf6
 
 server:
   port: 8080

@@ -1,0 +1,7 @@
+time-tracking:
+  jira:
+    restClient:
+      serverUri: http://localhost:8081
+      authentication:
+        username: time.tracking
+        password: Q557hKbtsRT9yf6

@@ -12,3 +12,7 @@ services:
     build: ./google-login-poc-app
     ports:
       - "3000:3000"
+  jira:
+    build: ./jira
+    ports:
+      - "8081:8080"
