@@ -8,12 +8,16 @@ import cz.cvut.fit.timetracking.jira.exception.JiraUserException;
 import cz.cvut.fit.timetracking.jira.service.JiraIssueService;
 import cz.cvut.fit.timetracking.jira.service.JiraUserService;
 import cz.cvut.fit.timetracking.jira.service.JiraWorklogService;
+import cz.cvut.fit.timetracking.jira.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -31,51 +35,45 @@ public class JiraWorklogServiceImpl implements JiraWorklogService {
     private JiraIssueService jiraIssueService;
 
     @Override
-    public List<Worklog> findWorklogsByUserEmail(String email) {
+    public Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email) {
         return findWorklogsByUserEmail(email, null);
     }
 
     @Override
-    public List<Worklog> findWorklogsByUserEmail(String email, LocalDate fromInclusive) {
+    public Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email, LocalDate fromInclusive) {
         return findWorklogsByUserEmail(email, fromInclusive, null);
     }
 
     @Override
-    public List<Worklog> findWorklogsByUserEmail(String email, LocalDate fromInclusive, LocalDate toExclusive) {
+    public Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email, LocalDate fromInclusive, LocalDate toExclusive) {
         return findWorklogsByUserEmailInternal(email, fromInclusive, toExclusive);
     }
 
-    private List<Worklog> findWorklogsByUserEmailInternal(String email, LocalDate fromInclusive, LocalDate toExclusive) {
+    private Map<Issue, List<Worklog>> findWorklogsByUserEmailInternal(String email, LocalDate fromInclusive, LocalDate toExclusive) {
         User user = jiraUserService.findUserByEmail(email).orElseThrow(() -> new JiraUserException("JIRA user with email " + email + " not found."));
         List<Issue> issues = jiraIssueService.findAllIssuesWithJQLQuery(buildJqlQuery(user, fromInclusive, toExclusive));
-        List<Worklog> worklogs = fetchIssuesWorklogs(issues).stream().filter(w -> isBetween(w, fromInclusive, toExclusive)).collect(Collectors.toList());
-        return worklogs;
+        //issues data from search rest api are not fully fetched
+        Map<Issue, List<Worklog>> worklogs = fetchIssuesWorklogs(issues);
+        Map<Issue, List<Worklog>> filteredWorklogs = filterIssuesAndWorklogs(worklogs, fromInclusive, toExclusive);
+        return filteredWorklogs;
     }
 
-    private boolean isBetween(Worklog worklog, LocalDate fromInclusive, LocalDate toExclusive) {
-        LocalDate worklogStartDate = LocalDate.of(worklog.getStartDate().getYear(), worklog.getStartDate().getMonthOfYear(), worklog.getStartDate().getDayOfMonth());
-        if (fromInclusive != null && toExclusive != null) {
-            return (worklogStartDate.isEqual(fromInclusive) || worklogStartDate.isAfter(fromInclusive)) && worklogStartDate.isBefore(toExclusive);
-        } else if (fromInclusive != null) {
-            return (worklogStartDate.isEqual(fromInclusive) || worklogStartDate.isAfter(fromInclusive));
-        } else if (toExclusive != null) {
-            return worklogStartDate.isBefore(toExclusive);
-        }
-        return true;
-    }
-
-    private List<Worklog> fetchIssuesWorklogs(List<Issue> issues) {
+    private Map<Issue, List<Worklog>> fetchIssuesWorklogs(List<Issue> issues) {
         List<String> issuesKeys = issues.stream().map(BasicIssue::getKey).collect(Collectors.toList());
         return fetchIssuesWorklogsByIssueKeys(issuesKeys);
     }
 
-    private List<Worklog> fetchIssuesWorklogsByIssueKeys(List<String> issuesKeys) {
-        List<Worklog> worklogs = issuesKeys.stream().map(this::fetchWorklogsForIssue).flatMap(List::stream).collect(Collectors.toList());
+    private Map<Issue, List<Worklog>> fetchIssuesWorklogsByIssueKeys(List<String> issuesKeys) {
+        Map<Issue, List<Worklog>> worklogs = issuesKeys.stream().map(this::fetchWorklogsForIssue).collect(Collectors.toMap(Function.identity(), this::getWorklogs));
         return worklogs;
     }
 
-    private List<Worklog> fetchWorklogsForIssue(String issueKey) {
+    private Issue fetchWorklogsForIssue(String issueKey) {
         Issue issue = jiraIssueService.findIssueByKey(issueKey);
+        return issue;
+    }
+
+    private List<Worklog> getWorklogs(Issue issue) {
         List<Worklog> worklogs = StreamSupport.stream(issue.getWorklogs().spliterator(), false).collect(Collectors.toList());
         return worklogs;
     }
@@ -93,5 +91,21 @@ public class JiraWorklogServiceImpl implements JiraWorklogService {
             jqlQuery = String.format(JQL_WORKLOG_AUTHOR_DATE_FROM_TO_FORMAT, user.getName(), fromInclusive.toString(), toExclusive.toString());
         }
         return jqlQuery;
+    }
+
+    private Map<Issue, List<Worklog>> filterIssuesAndWorklogs(Map<Issue, List<Worklog>> worklogs, LocalDate fromInclusive, LocalDate toExclusive) {
+        Map<Issue, List<Worklog>> result = new HashMap<>();
+        for (Map.Entry<Issue, List<Worklog>> entry : worklogs.entrySet()) {
+            List<Worklog> issueWorklogs = entry.getValue().stream().filter(w -> isBetween(w, fromInclusive, toExclusive)).collect(Collectors.toList());
+            if (!issueWorklogs.isEmpty()) {
+                result.put(entry.getKey(), issueWorklogs);
+            }
+        }
+        return result;
+    }
+
+    private boolean isBetween(Worklog worklog, LocalDate fromInclusive, LocalDate toExclusive) {
+        LocalDate worklogStartDate = LocalDate.of(worklog.getStartDate().getYear(), worklog.getStartDate().getMonthOfYear(), worklog.getStartDate().getDayOfMonth());
+        return DateUtils.isBetween(worklogStartDate, fromInclusive, toExclusive);
     }
 }
