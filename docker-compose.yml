@@ -16,3 +16,11 @@ services:
     build: ./jira
     ports:
       - "8081:8080"
+  elasticsearch:
+    build: ./elasticsearch
+    environment:
+      - cluster.name=time-tracking-cluster
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
