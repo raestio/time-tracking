@@ -1,7 +1,9 @@
 package cz.cvut.fit.timetracking.configuration;
 
+import com.atlassian.jira.rest.client.api.IssueRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
+import com.atlassian.jira.rest.client.api.SearchRestClient;
 import com.atlassian.jira.rest.client.api.UserRestClient;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import cz.cvut.fit.timetracking.jira.constants.PackageNames;
@@ -35,5 +37,15 @@ public class JiraConfiguration {
     @Bean
     public UserRestClient userRestClient() {
         return jiraRestClient().getUserClient();
+    }
+
+    @Bean
+    public SearchRestClient searchRestClient() {
+        return jiraRestClient().getSearchClient();
+    }
+
+    @Bean
+    public IssueRestClient issueRestClient() {
+        return jiraRestClient().getIssueClient();
     }
 }

@@ -5,8 +5,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-context'
-    runtimeOnly 'io.atlassian.fugue:fugue:4.7.2'
+    api 'com.atlassian.jira:jira-rest-java-client-api:5.1.0'
     implementation 'com.atlassian.jira:jira-rest-java-client-core:5.1.0'
+    runtimeOnly 'io.atlassian.fugue:fugue:4.7.2'
+    implementation 'org.springframework:spring-context'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
