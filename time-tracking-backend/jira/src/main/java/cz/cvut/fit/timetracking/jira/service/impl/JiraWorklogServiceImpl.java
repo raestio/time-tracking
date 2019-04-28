@@ -48,7 +48,20 @@ public class JiraWorklogServiceImpl implements JiraWorklogService {
     private List<Worklog> findWorklogsByUserEmailInternal(String email, LocalDate fromInclusive, LocalDate toExclusive) {
         User user = jiraUserService.findUserByEmail(email).orElseThrow(() -> new JiraUserException("JIRA user with email " + email + " not found."));
         List<Issue> issues = jiraIssueService.findAllIssuesWithJQLQuery(buildJqlQuery(user, fromInclusive, toExclusive));
-        return fetchIssuesWorklogs(issues);
+        List<Worklog> worklogs = fetchIssuesWorklogs(issues).stream().filter(w -> isBetween(w, fromInclusive, toExclusive)).collect(Collectors.toList());
+        return worklogs;
+    }
+
+    private boolean isBetween(Worklog worklog, LocalDate fromInclusive, LocalDate toExclusive) {
+        LocalDate worklogStartDate = LocalDate.of(worklog.getStartDate().getYear(), worklog.getStartDate().getMonthOfYear(), worklog.getStartDate().getDayOfMonth());
+        if (fromInclusive != null && toExclusive != null) {
+            return (worklogStartDate.isEqual(fromInclusive) || worklogStartDate.isAfter(fromInclusive)) && worklogStartDate.isBefore(toExclusive);
+        } else if (fromInclusive != null) {
+            return (worklogStartDate.isEqual(fromInclusive) || worklogStartDate.isAfter(fromInclusive));
+        } else if (toExclusive != null) {
+            return worklogStartDate.isBefore(toExclusive);
+        }
+        return true;
     }
 
     private List<Worklog> fetchIssuesWorklogs(List<Issue> issues) {
