@@ -71,7 +71,7 @@ CREATE TABLE time_tracking_schema.project_roles_assignment (
 CREATE TABLE time_tracking_schema.work_record (
 	id SERIAL PRIMARY KEY,
 	date_from TIMESTAMP NOT NULL,
-	date_to TIMESTAMP NOT NULL,
+	date_to TIMESTAMP NOT NULL CHECK (date_to > date_from),
 	description VARCHAR(255) NOT NULL,
 	date_created TIMESTAMP NOT NULL,
 	date_updated TIMESTAMP NULL,
