@@ -27,6 +27,10 @@ time-tracking:
       authentication:
         username: time.tracking
         password: Q557hKbtsRT9yf6
+  search:
+    elasticsearch:
+      clusterName: time-tracking-cluster
+      hosts: localhost:9300
 
 server:
   port: 8080
