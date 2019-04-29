@@ -31,6 +31,10 @@ time-tracking:
     elasticsearch:
       clusterName: time-tracking-cluster
       hosts: localhost:9300
+      indexName:
+        projects: projects
+        users: users
+        workRecords: work_records
 
 server:
   port: 8080
