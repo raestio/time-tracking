@@ -1,4 +1,6 @@
 dependencies {
     implementation 'org.springframework:spring-context'
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation "org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}"
+    implementation "org.elasticsearch:elasticsearch:${elasticsearchVersion}"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

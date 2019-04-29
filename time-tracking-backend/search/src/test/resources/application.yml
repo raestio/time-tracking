@@ -1,0 +1,5 @@
+time-tracking:
+  search:
+    elasticsearch:
+      clusterName: time-tracking-cluster
+      hosts: localhost:9200

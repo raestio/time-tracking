@@ -10,6 +10,7 @@ allprojects {
 		springfoxSwaggerUIVersion = "2.9.2"
 		jsonWebTokenVersion = "0.10.5"
 		apacheCommonsLangVersion = "3.0"
+		elasticsearchVersion = "7.0.0"
 		timeTrackingAppName="time-tracking-app"
 		timeTrackingAppVersion="1.0-SNAPSHOT"
 	}
