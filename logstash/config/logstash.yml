@@ -93,7 +93,7 @@
 # ------------ Module Settings ---------------
 # Define modules here.  Modules definitions must be defined as an array.
 # The simple way to see this is to prepend each `name` with a `-`, and keep
-# all associated variables under the `name` they are associated with, and 
+# all associated variables under the `name` they are associated with, and
 # above the next, like this:
 #
 # modules:
@@ -103,7 +103,7 @@
 #     var.PLUGINTYPE2.PLUGINNAME1.KEY1: VALUE
 #     var.PLUGINTYPE3.PLUGINNAME3.KEY1: VALUE
 #
-# Module variable names must be in the format of 
+# Module variable names must be in the format of
 #
 # var.PLUGIN_TYPE.PLUGIN_NAME.KEY
 #
@@ -187,7 +187,7 @@
 #
 # Bind address for the metrics REST endpoint
 #
-http.host: "0.0.0.0"
+# http.host: "127.0.0.1"
 #
 # Bind port for the metrics REST endpoint, this option also accept a range
 # (9600-9700) and logstash will pick up the first available ports.
@@ -219,8 +219,8 @@ http.host: "0.0.0.0"
 #xpack.monitoring.enabled: false
 #xpack.monitoring.elasticsearch.username: logstash_system
 #xpack.monitoring.elasticsearch.password: password
-#xpack.monitoring.elasticsearch.url: ["https://es1:9200", "https://es2:9200"]
-#xpack.monitoring.elasticsearch.ssl.ca: [ "/path/to/ca.crt" ]
+#xpack.monitoring.elasticsearch.hosts: ["https://es1:9200", "https://es2:9200"]
+#xpack.monitoring.elasticsearch.ssl.certificate_authority: [ "/path/to/ca.crt" ]
 #xpack.monitoring.elasticsearch.ssl.truststore.path: path/to/file
 #xpack.monitoring.elasticsearch.ssl.truststore.password: password
 #xpack.monitoring.elasticsearch.ssl.keystore.path: /path/to/file
@@ -236,8 +236,8 @@ http.host: "0.0.0.0"
 #xpack.management.pipeline.id: ["main", "apache_logs"]
 #xpack.management.elasticsearch.username: logstash_admin_user
 #xpack.management.elasticsearch.password: password
-#xpack.management.elasticsearch.url: ["https://es1:9200", "https://es2:9200"]
-#xpack.management.elasticsearch.ssl.ca: [ "/path/to/ca.crt" ]
+#xpack.management.elasticsearch.hosts: ["https://es1:9200", "https://es2:9200"]
+#xpack.management.elasticsearch.ssl.certificate_authority: [ "/path/to/ca.crt" ]
 #xpack.management.elasticsearch.ssl.truststore.path: /path/to/file
 #xpack.management.elasticsearch.ssl.truststore.password: password
 #xpack.management.elasticsearch.ssl.keystore.path: /path/to/file
@@ -245,6 +245,3 @@ http.host: "0.0.0.0"
 #xpack.management.elasticsearch.ssl.verification_mode: certificate
 #xpack.management.elasticsearch.sniffing: false
 #xpack.management.logstash.poll_interval: 5s
-
-
-#xpack.monitoring.elasticsearch.url: http://elasticsearch:9200
