@@ -76,11 +76,20 @@
 #
 #   path.dead_letter_queue:
 
-- pipeline.id: users_pipeline
-  path.config: "/usr/share/logstash/pipeline/users.conf"
+- pipeline.id: users_pipeline_upsert
+  path.config: "/usr/share/logstash/pipeline/users_upsert.conf"
 
-- pipeline.id: projects_pipeline
-  path.config: "/usr/share/logstash/pipeline/projects.conf"
+- pipeline.id: projects_pipeline_upsert
+  path.config: "/usr/share/logstash/pipeline/projects_upsert.conf"
 
-- pipeline.id: work_records_pipeline
-  path.config: "/usr/share/logstash/pipeline/work_records.conf"
+- pipeline.id: work_records_pipeline_upsert
+  path.config: "/usr/share/logstash/pipeline/work_records_upsert.conf"
+
+- pipeline.id: users_pipeline_delete
+  path.config: "/usr/share/logstash/pipeline/users_delete.conf"
+
+- pipeline.id: projects_pipeline_delete
+  path.config: "/usr/share/logstash/pipeline/projects_delete.conf"
+
+- pipeline.id: work_records_pipeline_delete
+  path.config: "/usr/share/logstash/pipeline/work_records_delete.conf"
