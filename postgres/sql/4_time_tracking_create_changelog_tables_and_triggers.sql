@@ -6,7 +6,7 @@ CREATE TABLE time_tracking_changelog_schema.changelog (
 	id_row_changed INTEGER NOT NULL,
 	"table" VARCHAR(50) NOT NULL,
 	action VARCHAR(50) NOT NULL,
-	stamp timestamp
+	stamp timestamptz
 );
 
 CREATE OR REPLACE FUNCTION process_changelog() RETURNS TRIGGER AS $process_changelog$
