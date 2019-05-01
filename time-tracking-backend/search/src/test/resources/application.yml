@@ -3,3 +3,7 @@ time-tracking:
     elasticsearch:
       clusterName: time-tracking-cluster
       hosts: localhost:9200
+      indexName:
+        projects: test_index_projects
+        users: test_index_users
+        workRecords: test_index_work_records

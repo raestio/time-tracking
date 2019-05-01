@@ -3,4 +3,5 @@ dependencies {
     implementation "org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}"
     implementation "org.elasticsearch:elasticsearch:${elasticsearchVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.awaitility:awaitility:3.0.0'
 }

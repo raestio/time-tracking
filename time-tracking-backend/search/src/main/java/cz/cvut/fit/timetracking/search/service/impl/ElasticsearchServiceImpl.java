@@ -32,7 +32,7 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(queryBuilder);
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.source(searchSourceBuilder);
-        SearchResponse searchResponse = null;
+        SearchResponse searchResponse;
         try {
             searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
         } catch (IOException e) {

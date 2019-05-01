@@ -18,15 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cz.cvut.fit.timetracking.search.constants.ElasticsearchUserFieldNames.EMAIL;
 import static cz.cvut.fit.timetracking.search.constants.ElasticsearchUserFieldNames.NAME;
 import static cz.cvut.fit.timetracking.search.constants.ElasticsearchUserFieldNames.SURNAME;
 
 @Service
 public class UserSearchServiceImpl implements UserSearchService {
-    public static final float NAME_BOOST = 3.0f;
-    public static final float SURNAME_BOOST = 3.0f;
-    public static final float EMAIL_BOOST = 1.0f;
+    private static final float NAME_BOOST = 3.0f;
+    private static final float SURNAME_BOOST = 3.0f;
 
     @Autowired
     private ElasticsearchDocumentsMapper elasticsearchDocumentsMapper;
@@ -50,7 +48,6 @@ public class UserSearchServiceImpl implements UserSearchService {
         Map<String, Float> userFields = new HashMap<>();
         userFields.put(NAME, NAME_BOOST);
         userFields.put(SURNAME, SURNAME_BOOST);
-        userFields.put(EMAIL, EMAIL_BOOST);
         return userFields;
     }
 }
