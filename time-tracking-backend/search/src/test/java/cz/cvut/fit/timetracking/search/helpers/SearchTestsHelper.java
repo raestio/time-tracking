@@ -1,6 +1,8 @@
 package cz.cvut.fit.timetracking.search.helpers;
 
+import cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames;
 import cz.cvut.fit.timetracking.search.constants.ElasticsearchUserFieldNames;
+import cz.cvut.fit.timetracking.search.dto.ProjectDocument;
 import cz.cvut.fit.timetracking.search.dto.UserDocument;
 import cz.cvut.fit.timetracking.search.utils.StringUtils;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -24,6 +26,10 @@ import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,28 +46,43 @@ public class SearchTestsHelper {
     }
 
     public static void indexTestUser(String index, RestHighLevelClient restHighLevelClient) {
-        IndexRequest indexRequest = new IndexRequest(index);
-        indexRequest.id(String.valueOf(createUserDocument().getId()));
+        indexDocument(index, restHighLevelClient, createUserDocument().getId(), buildUser(createUserDocument()));
+    }
+
+    private static XContentBuilder buildUser(UserDocument userDocument) {
         try {
-            indexRequest.source(buildUser(createUserDocument()));
-            Assert.isTrue(restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT).status().getStatus() == RestStatus.CREATED.getStatus(), "document cannot be indexed in " + index);
+            XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
+            xContentBuilder.startObject();
+            {
+                xContentBuilder.field(ElasticsearchUserFieldNames.ID, userDocument.getId());
+                xContentBuilder.field(ElasticsearchUserFieldNames.NAME, userDocument.getName());
+                xContentBuilder.field(ElasticsearchUserFieldNames.SURNAME, userDocument.getSurname());
+                xContentBuilder.field(ElasticsearchUserFieldNames.EMAIL, userDocument.getEmail());
+                xContentBuilder.field(ElasticsearchUserFieldNames.PICTURE_URL, userDocument.getPictureUrl());
+            }
+            xContentBuilder.endObject();
+            return xContentBuilder;
         } catch (IOException e) {
             throw new RuntimeException();
         }
     }
 
-    private static XContentBuilder buildUser(UserDocument userDocument) throws IOException {
-        XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
-        xContentBuilder.startObject();
-        {
-            xContentBuilder.field(ElasticsearchUserFieldNames.ID, userDocument.getId());
-            xContentBuilder.field(ElasticsearchUserFieldNames.NAME, userDocument.getName());
-            xContentBuilder.field(ElasticsearchUserFieldNames.SURNAME, userDocument.getSurname());
-            xContentBuilder.field(ElasticsearchUserFieldNames.EMAIL, userDocument.getEmail());
-            xContentBuilder.field(ElasticsearchUserFieldNames.PICTURE_URL, userDocument.getPictureUrl());
+    private static XContentBuilder buildProject(ProjectDocument projectDocument) {
+        try {
+            XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
+            xContentBuilder.startObject();
+            {
+                xContentBuilder.field(ElasticsearchProjectFieldNames.ID, projectDocument.getId());
+                xContentBuilder.field(ElasticsearchProjectFieldNames.NAME, projectDocument.getName());
+                xContentBuilder.field(ElasticsearchProjectFieldNames.DESCRIPTION, projectDocument.getDescription());
+                xContentBuilder.field(ElasticsearchProjectFieldNames.START, ZonedDateTime.of(projectDocument.getStart(), LocalTime.MIN, ZoneId.of("UTC")));
+                xContentBuilder.field(ElasticsearchProjectFieldNames.END, projectDocument.getEnd() == null ? null : ZonedDateTime.of(projectDocument.getEnd(), LocalTime.MIN, ZoneId.of("UTC")));
+            }
+            xContentBuilder.endObject();
+            return xContentBuilder;
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
-        xContentBuilder.endObject();
-        return xContentBuilder;
     }
 
     public static UserDocument createUserDocument() {
@@ -92,5 +113,30 @@ public class SearchTestsHelper {
         } catch (IOException  e) {
             throw new RuntimeException();
         }
+    }
+
+    public static void indexTestProject(String index, RestHighLevelClient restHighLevelClient) {
+        indexDocument(index, restHighLevelClient, createProjectDocument().getId(), buildProject(createProjectDocument()));
+    }
+
+    private static void indexDocument(String index, RestHighLevelClient restHighLevelClient, Integer id, XContentBuilder xContentBuilder) {
+        IndexRequest indexRequest = new IndexRequest(index);
+        indexRequest.id(String.valueOf(id));
+        try {
+            indexRequest.source(xContentBuilder);
+            Assert.isTrue(restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT).status().getStatus() == RestStatus.CREATED.getStatus(), "document cannot be indexed in " + index);
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public static ProjectDocument createProjectDocument() {
+        ProjectDocument projectDocument = new ProjectDocument();
+        projectDocument.setId(1);
+        projectDocument.setName("Google API");
+        projectDocument.setDescription("Vývoj Google API pre google analytics");
+        projectDocument.setStart(LocalDate.parse("2019-04-25"));
+        projectDocument.setEnd(null);
+        return projectDocument;
     }
 }
