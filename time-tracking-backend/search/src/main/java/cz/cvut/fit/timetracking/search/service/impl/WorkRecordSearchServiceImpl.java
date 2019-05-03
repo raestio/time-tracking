@@ -2,8 +2,10 @@ package cz.cvut.fit.timetracking.search.service.impl;
 
 import cz.cvut.fit.timetracking.search.component.ElasticsearchDocumentsMapper;
 import cz.cvut.fit.timetracking.search.dto.WorkRecordDocument;
+import static cz.cvut.fit.timetracking.search.helper.ElasticsearchQueryHelper.addDayRound;
 import cz.cvut.fit.timetracking.search.service.ElasticsearchService;
 import cz.cvut.fit.timetracking.search.service.WorkRecordSearchService;
+import cz.cvut.fit.timetracking.search.utils.DateUtils;
 import cz.cvut.fit.timetracking.search.utils.StringUtils;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -11,6 +13,7 @@ import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,8 +31,7 @@ import static cz.cvut.fit.timetracking.search.constants.ElasticsearchWorkRecordF
 @Service
 public class WorkRecordSearchServiceImpl implements WorkRecordSearchService {
     private static final float DESCRIPTION_BOOST = 1.0f;
-    private static final float FROM_BOOST = 1.0f;
-    private static final float TO_BOOST = 1.0f;
+    private static final String RANGE_QUERY_FORMAT = "dd.MM.yyyy||dd.M.yyyy||d.MM.yyyy||d.M.yyyy||yyyy-MM-dd";
 
     @Autowired
     private ElasticsearchService elasticsearchService;
@@ -51,7 +53,7 @@ public class WorkRecordSearchServiceImpl implements WorkRecordSearchService {
     public List<WorkRecordDocument> searchWorkRecords(String keyword, Integer userId) {
         Assert.notNull(keyword, "keyword cannot be null");
         Assert.notNull(userId, "userId cannot be null");
-        QueryBuilder queryBuilder = createQueryForSearchByKeyword(keyword).filter(QueryBuilders.termQuery(ID_USER, userId));
+        QueryBuilder queryBuilder = createQueryForSearchByKeyword(keyword).filter(QueryBuilders.termQuery(ID_USER, userId)).minimumShouldMatch(1);
         return executeWorkRecordQuery(queryBuilder);
     }
 
@@ -61,16 +63,24 @@ public class WorkRecordSearchServiceImpl implements WorkRecordSearchService {
     }
 
     private BoolQueryBuilder createQueryForSearchByKeyword(String keyword) {
-        return QueryBuilders.boolQuery()
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
                 .should(new MultiMatchQueryBuilder(keyword).fields(getWorkRecordFieldsForSearchByKeyword()).fuzziness(Fuzziness.AUTO))
                 .should(new QueryStringQueryBuilder(StringUtils.wrapWordsInAsterisks(keyword)).fields(getWorkRecordFieldsForSearchByKeyword()));
+        if (DateUtils.canBeParsed(keyword, RANGE_QUERY_FORMAT)) {
+            addInRangeQuery(boolQueryBuilder, keyword);
+        }
+        return boolQueryBuilder;
+    }
+
+    private void addInRangeQuery(BoolQueryBuilder boolQueryBuilder, String keyword) {
+        boolQueryBuilder
+                .should(new RangeQueryBuilder(DATE_FROM).format(RANGE_QUERY_FORMAT).gte(addDayRound(keyword)).lte(addDayRound(keyword)))
+                .should(new RangeQueryBuilder(DATE_TO).format(RANGE_QUERY_FORMAT).gte(addDayRound(keyword)).lte(addDayRound(keyword)));
     }
 
     private Map<String, Float> getWorkRecordFieldsForSearchByKeyword() {
         Map<String, Float> workRecordFields = new HashMap<>();
         workRecordFields.put(DESCRIPTION, DESCRIPTION_BOOST);
-        workRecordFields.put(DATE_FROM, FROM_BOOST);
-        workRecordFields.put(DATE_TO, TO_BOOST);
         return workRecordFields;
     }
 }

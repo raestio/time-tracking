@@ -2,8 +2,10 @@ package cz.cvut.fit.timetracking.search.helpers;
 
 import cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames;
 import cz.cvut.fit.timetracking.search.constants.ElasticsearchUserFieldNames;
+import cz.cvut.fit.timetracking.search.constants.ElasticsearchWorkRecordFieldNames;
 import cz.cvut.fit.timetracking.search.dto.ProjectDocument;
 import cz.cvut.fit.timetracking.search.dto.UserDocument;
+import cz.cvut.fit.timetracking.search.dto.WorkRecordDocument;
 import cz.cvut.fit.timetracking.search.utils.StringUtils;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.get.GetRequest;
@@ -27,6 +29,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -138,5 +141,46 @@ public class SearchTestsHelper {
         projectDocument.setStart(LocalDate.parse("2019-04-25"));
         projectDocument.setEnd(null);
         return projectDocument;
+    }
+
+    public static void indexTestWorkRecords(String workRecordsIndex, RestHighLevelClient restHighLevelClient) {
+        var rec1 = createWorkRecordDocument();
+        var rec2 = createWorkRecordDocument(2, 1, LocalDateTime.parse("2019-04-25T16:00"), LocalDateTime.parse("2019-04-25T17:00"), "analyza");
+        var rec3 = createWorkRecordDocument(3, 2, LocalDateTime.parse("2019-04-25T16:00"), LocalDateTime.parse("2019-04-25T17:00"), "analyza");
+        indexDocument(workRecordsIndex, restHighLevelClient, rec1.getId(), buildWorkRecord(rec1));
+        indexDocument(workRecordsIndex, restHighLevelClient, rec2.getId(), buildWorkRecord(rec2));
+        indexDocument(workRecordsIndex, restHighLevelClient, rec3.getId(), buildWorkRecord(rec3));
+    }
+
+    private static XContentBuilder buildWorkRecord(WorkRecordDocument workRecordDocument) {
+        try {
+            XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
+            xContentBuilder.startObject();
+            {
+                xContentBuilder.field(ElasticsearchWorkRecordFieldNames.ID, workRecordDocument.getId());
+                xContentBuilder.field(ElasticsearchWorkRecordFieldNames.DESCRIPTION, workRecordDocument.getDescription());
+                xContentBuilder.field(ElasticsearchWorkRecordFieldNames.DATE_FROM, workRecordDocument.getDateFrom());
+                xContentBuilder.field(ElasticsearchWorkRecordFieldNames.DATE_TO, workRecordDocument.getDateTo());
+                xContentBuilder.field(ElasticsearchWorkRecordFieldNames.ID_USER, workRecordDocument.getIdUser());
+            }
+            xContentBuilder.endObject();
+            return xContentBuilder;
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public static WorkRecordDocument createWorkRecordDocument() {
+        return createWorkRecordDocument(1, 1, LocalDateTime.parse("2019-04-25T14:00"), LocalDateTime.parse("2019-04-25T15:00"), "vývoj");
+    }
+
+    private static WorkRecordDocument createWorkRecordDocument(Integer id, Integer idUser, LocalDateTime from, LocalDateTime to, String description) {
+        WorkRecordDocument workRecordDocument = new WorkRecordDocument();
+        workRecordDocument.setId(id);
+        workRecordDocument.setIdUser(idUser);
+        workRecordDocument.setDateFrom(from);
+        workRecordDocument.setDateTo(to);
+        workRecordDocument.setDescription(description);
+        return workRecordDocument;
     }
 }

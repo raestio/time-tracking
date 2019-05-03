@@ -63,8 +63,8 @@ public class ProjectSearchServiceImpl implements ProjectSearchService {
 
     private void addRangeQueries(BoolQueryBuilder queryBuilder, String keyword) {
         queryBuilder
-                .should(new RangeQueryBuilder(START).format(RANGE_QUERY_FORMAT).from(keyword).to(keyword))
-                .should(new RangeQueryBuilder(END).format(RANGE_QUERY_FORMAT).from(keyword).to(keyword));
+                .should(new RangeQueryBuilder(START).format(RANGE_QUERY_FORMAT).gte(keyword).lte(keyword))
+                .should(new RangeQueryBuilder(END).format(RANGE_QUERY_FORMAT).gte(keyword).lte(keyword));
     }
 
     private Map<String, Float> getProjectFieldsForSearchByKeyword() {
