@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -42,6 +43,7 @@ public class ReportServiceImpl implements ReportService {
                 (workRecords ->  workRecordGroupingService.groupByDate(workRecords)),
                 ((day, workRecords) -> reportItemsHelper.createDayReportItem(day, workRecords))
         );
+        dayReportItems.sort(Comparator.comparing(DayReportItem::getDay));
         return dayReportItems;
     }
 
@@ -52,6 +54,7 @@ public class ReportServiceImpl implements ReportService {
                 (workRecords -> workRecordGroupingService.groupByMonth(workRecords)),
                 ((month, workRecords) -> reportItemsHelper.createMonthReportItem(month, workRecords))
         );
+        monthReportItems.sort(Comparator.comparing(MonthReportItem::getMonth));
         return monthReportItems;
     }
 
@@ -62,6 +65,7 @@ public class ReportServiceImpl implements ReportService {
                 (workRecords -> workRecordGroupingService.groupByYear(workRecords)),
                 ((year, workRecords) -> reportItemsHelper.createYearReportItem(year, workRecords))
         );
+        yearReportItems.sort(Comparator.comparing(YearReportItem::getYear));
         return yearReportItems;
     }
 
@@ -87,13 +91,16 @@ public class ReportServiceImpl implements ReportService {
                 (workRecords -> workRecordGroupingService.groupByUser(workRecords)),
                 ((user, workRecords) -> reportItemsHelper.createUserReportItem(user, workRecords))
         );
+        userReportItems.sort(Comparator.comparing(userReportItem -> userReportItem.getUser().getName()));
         return userReportItems;
     }
 
     @Override
     public List<ProjectReportItem> createProjectsReports(LocalDate fromInclusive, LocalDate toExclusive) {
         List<WorkRecord> workRecords = findWorkRecordsBetween(fromInclusive, toExclusive);
-        return reportItemsHelper.createProjectReportItems(workRecords);
+        List<ProjectReportItem> projectReportItems = reportItemsHelper.createProjectReportItems(workRecords);
+        projectReportItems.sort(Comparator.comparing(projectReportItem -> projectReportItem.getProject().getName()));
+        return projectReportItems;
     }
 
     private List<WorkRecord> findWorkRecordsBetween(LocalDate fromInclusive, LocalDate toExclusive) {
@@ -102,9 +109,9 @@ public class ReportServiceImpl implements ReportService {
 
     private List<WorkRecord> findWorkRecordsBetween(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
         if (userId != null) {
-            return workRecordService.findAllBetweenByUserId(LocalDateTime.of(fromInclusive, LocalTime.MIN), LocalDateTime.of(toExclusive, LocalTime.MIN), userId);
+            return workRecordService.findAllBetweenByUserId(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay(), userId);
         }
-        return workRecordService.findAllBetween(LocalDateTime.of(fromInclusive, LocalTime.MIN), LocalDateTime.of(toExclusive, LocalTime.MIN));
+        return workRecordService.findAllBetween(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay());
     }
 
     private <REPORT_ITEM, GROUPED_BY_TYPE> List<REPORT_ITEM> createReportsByTemplate(Supplier<List<WorkRecord>> workRecordsSupplier, Function<List<WorkRecord>, Map<GROUPED_BY_TYPE, List<WorkRecord>>> groupedByTypeFunction, BiFunction<GROUPED_BY_TYPE, List<WorkRecord>, REPORT_ITEM> reportItemCreationFunction) {

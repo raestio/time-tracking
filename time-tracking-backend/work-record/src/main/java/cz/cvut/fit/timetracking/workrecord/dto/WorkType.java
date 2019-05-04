@@ -8,6 +8,21 @@ public class WorkType {
     private String name;
     private String description;
 
+    public WorkType(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public WorkType(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public WorkType() {
+
+    }
+
     public Integer getId() {
         return id;
     }

@@ -9,6 +9,23 @@ public class User {
     private String surname;
     private String pictureUrl;
 
+    public User(Integer id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public User(Integer id, String name, String surname, String pictureUrl) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.pictureUrl = pictureUrl;
+    }
+
+    public User() {
+
+    }
+
     public Integer getId() {
         return id;
     }

@@ -12,6 +12,19 @@ public class WorkRecord {
     private WorkType workType;
     private User user;
 
+    public WorkRecord(Integer id, LocalDateTime dateFrom, LocalDateTime dateTo, String description, Project project, WorkType workType, User user) {
+        this.id = id;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.description = description;
+        this.project = project;
+        this.workType = workType;
+        this.user = user;
+    }
+
+    public WorkRecord() {
+    }
+
     public Integer getId() {
         return id;
     }

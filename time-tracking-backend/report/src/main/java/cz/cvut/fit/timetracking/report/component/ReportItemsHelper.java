@@ -42,7 +42,7 @@ public class ReportItemsHelper {
         MonthReportItem monthReportItem = new MonthReportItem();
         monthReportItem.setMonth(month);
         monthReportItem.setProjectReportItems(createProjectReportItems(workRecords));
-        return null;
+        return monthReportItem;
     }
 
     public YearReportItem createYearReportItem(Year year, List<WorkRecord> workRecords) {
