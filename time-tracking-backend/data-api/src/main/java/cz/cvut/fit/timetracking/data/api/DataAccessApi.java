@@ -36,4 +36,6 @@ public interface DataAccessApi {
     WorkRecordDTO createOrUpdateWorkRecord(WorkRecordDTO workRecordDTO);
     void deleteWorkRecordById(Integer id);
     Optional<WorkRecordDTO> findWorkRecordById(Integer id);
+    List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
+    List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
 }

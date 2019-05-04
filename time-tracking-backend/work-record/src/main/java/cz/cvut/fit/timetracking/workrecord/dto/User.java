@@ -2,11 +2,12 @@ package cz.cvut.fit.timetracking.workrecord.dto;
 
 import java.util.Objects;
 
-public class WorkType {
+public class User {
 
     private Integer id;
     private String name;
-    private String description;
+    private String surname;
+    private String pictureUrl;
 
     public Integer getId() {
         return id;
@@ -24,20 +25,28 @@ public class WorkType {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkType workType = (WorkType) o;
-        return Objects.equals(id, workType.id);
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package cz.cvut.fit.timetracking.workrecord.dto;
-
-import cz.cvut.fit.timetracking.project.dto.Project;
-
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class WorkRecord {
 
@@ -12,6 +10,7 @@ public class WorkRecord {
     private String description;
     private Project project;
     private WorkType workType;
+    private User user;
 
     public Integer getId() {
         return id;
@@ -59,5 +58,26 @@ public class WorkRecord {
 
     public void setWorkType(WorkType workType) {
         this.workType = workType;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkRecord that = (WorkRecord) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

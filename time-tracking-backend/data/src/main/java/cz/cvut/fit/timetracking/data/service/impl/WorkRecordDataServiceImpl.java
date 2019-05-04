@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkRecordDataServiceImpl implements WorkRecordDataService {
@@ -39,18 +40,36 @@ public class WorkRecordDataServiceImpl implements WorkRecordDataService {
     public WorkRecordDTO createOrUpdate(WorkRecordDTO workRecordDTO) {
         WorkRecord workRecord = dataModelMapper.map(workRecordDTO, WorkRecord.class);
         workRecord = workRecordRepository.save(workRecord);
-        return dataModelMapper.map(workRecord, WorkRecordDTO.class);
+        return map(workRecord);
     }
 
     @Override
     public Optional<WorkRecordDTO> findById(Integer id) {
         Optional<WorkRecord> workRecordOptional = workRecordRepository.findById(id);
-        return workRecordOptional.map(w -> dataModelMapper.map(w, WorkRecordDTO.class));
+        return workRecordOptional.map(this::map);
+    }
+
+    @Override
+    public List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive) {
+        List<WorkRecord> workRecords = workRecordRepository.findAllBetween(fromInclusive, toExclusive);
+        List<WorkRecordDTO> workRecordDTOs = workRecords.stream().map(this::map).collect(Collectors.toList());
+        return workRecordDTOs;
+    }
+
+    @Override
+    public List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
+        List<WorkRecord> workRecords = workRecordRepository.findAllBetweenByUserId(fromInclusive, toExclusive, userId);
+        List<WorkRecordDTO> workRecordDTOs = workRecords.stream().map(this::map).collect(Collectors.toList());
+        return workRecordDTOs;
     }
 
     @Override
     public void deleteById(Integer id) {
         workRecordRepository.deleteById(id);
+    }
+
+    private WorkRecordDTO map(WorkRecord w) {
+        return dataModelMapper.map(w, WorkRecordDTO.class);
     }
 
 }
