@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.rest.controller;
 import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
+import cz.cvut.fit.timetracking.project.service.ProjectAssignmentService;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectRoleDTO;
@@ -34,6 +35,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private ProjectAssignmentService projectAssignmentService;
 
     @Autowired
     private RestModelMapper restModelMapper;
@@ -76,7 +80,7 @@ public class ProjectController {
 
     @GetMapping("/{id}/project-assignments")
     public ResponseEntity<ProjectAssignmentsResponse> getProjectAssignments(@PathVariable("id") Integer projectId) {
-        List<ProjectAssignment> projectAssignments = projectService.findProjectAssignmentsByProjectId(projectId);
+        List<ProjectAssignment> projectAssignments = projectAssignmentService.findByProjectId(projectId);
         ProjectAssignmentsResponse projectAssignmentsResponse = new ProjectAssignmentsResponse();
         List<ProjectAssignmentDTO> projectAssignmentDTOs = projectAssignments.stream().map(a -> restModelMapper.map(a, ProjectAssignmentDTO.class)).collect(Collectors.toList());
         projectAssignmentsResponse.setProjectAssignments(projectAssignmentDTOs);

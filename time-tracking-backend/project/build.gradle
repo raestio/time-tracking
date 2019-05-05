@@ -2,5 +2,6 @@ dependencies {
     implementation project(':data-api')
     implementation project(':user')
     implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
 }

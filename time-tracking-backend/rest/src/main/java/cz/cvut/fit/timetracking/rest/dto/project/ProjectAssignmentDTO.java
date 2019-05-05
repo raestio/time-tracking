@@ -12,6 +12,9 @@ public class ProjectAssignmentDTO {
     @JsonProperty("id")
     private Integer id;
 
+    @JsonProperty("project")
+    private ProjectDTO project;
+
     @JsonProperty("validFrom")
     private LocalDate validFrom;
 
@@ -30,6 +33,14 @@ public class ProjectAssignmentDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ProjectDTO getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectDTO project) {
+        this.project = project;
     }
 
     public LocalDate getValidFrom() {

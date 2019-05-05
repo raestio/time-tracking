@@ -8,7 +8,7 @@ import java.util.List;
 public class ProjectAssignment {
 
     private Integer id;
-    private Integer projectId;
+    private Project project;
     private LocalDate validFrom;
     private LocalDate validTo;
     private User user;
@@ -26,12 +26,12 @@ public class ProjectAssignment {
         this.user = user;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public void setId(Integer id) {

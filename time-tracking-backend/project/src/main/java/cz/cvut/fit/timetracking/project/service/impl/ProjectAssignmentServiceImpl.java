@@ -12,6 +12,8 @@ import cz.cvut.fit.timetracking.project.mapper.ProjectModelMapper;
 import cz.cvut.fit.timetracking.project.service.ProjectAssignmentService;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import cz.cvut.fit.timetracking.user.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Autowired
     private DataAccessApi dataAccessApi;
@@ -36,7 +39,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
     private UserService userService;
 
     @Override
-    public List<ProjectAssignment> findProjectAssignmentsByProjectId(Integer projectId) {
+    public List<ProjectAssignment> findByProjectId(Integer projectId) {
         Assert.notNull(projectId, "project id cannot be null");
         List<ProjectAssignmentDTO> projectAssignmentDTOs = dataAccessApi.findProjectAssignmentsByProjectId(projectId);
         List<ProjectAssignment> projectAssignments = projectAssignmentDTOs.stream().map(this::map).collect(Collectors.toList());
@@ -44,26 +47,30 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
     }
 
     @Override
-    public Optional<ProjectAssignment> findProjectAssignmentById(Integer id) {
+    public Optional<ProjectAssignment> findById(Integer id) {
         Assert.notNull(id, "project assignment id cannot be null");
         Optional<ProjectAssignmentDTO> projectAssignmentDTO = dataAccessApi.findProjectAssignmentById(id);
         return projectAssignmentDTO.map(this::map);
     }
 
     @Override
-    public ProjectAssignment createProjectAssignment(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo) {
-        return createProjectAssignment(projectId, userId, validFrom, validTo, List.of(ProjectRoleName.MEMBER));
+    public ProjectAssignment create(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo) {
+        return create(projectId, userId, validFrom, validTo, List.of(ProjectRoleName.MEMBER));
     }
 
     @Override
-    public ProjectAssignment createProjectAssignment(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
-        return updateProjectAssignment(null, projectId, userId, validFrom, validTo, projectRoleNames);
+    public ProjectAssignment create(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
+        if (projectRoleNames.stream().noneMatch(role -> role.equals(ProjectRoleName.MEMBER))) {
+            LOGGER.info("Project assignment creation - missing MEMBER project role... MEMBER project role added as default");
+            projectRoleNames.add(ProjectRoleName.MEMBER);
+        }
+        return createOrUpdate(null, projectId, userId, validFrom, validTo, projectRoleNames);
     }
 
     @Override
-    public ProjectAssignment updateProjectAssignment(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
-        findProjectAssignmentById(projectAssignmentId).orElseThrow(() -> new ProjectAssignmentNotFoundException(projectAssignmentId));
-        return createOrUpdateProjectAssignment(projectAssignmentId, projectId, userId, validFrom, validTo, projectRoleNames);
+    public ProjectAssignment update(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
+        findById(projectAssignmentId).orElseThrow(() -> new ProjectAssignmentNotFoundException(projectAssignmentId));
+        return createOrUpdate(projectAssignmentId, projectId, userId, validFrom, validTo, projectRoleNames);
     }
 
     @Override
@@ -73,9 +80,9 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
         projectAssignmentDTO.ifPresentOrElse(p -> dataAccessApi.deleteProjectAssignmentById(id), () -> { throw new ProjectAssignmentNotFoundException(id); });
     }
 
-    private ProjectAssignment createOrUpdateProjectAssignment(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
-        checkConstraintsForProjectAssignment(projectId, userId, validFrom, validTo, projectRoleNames);
-        List<ProjectRoleDTO> projectRoleDTOs = dataAccessApi.findAllProjectRolesIn(projectRoleNames.stream().map(this::map).collect(Collectors.toList()));;
+    private ProjectAssignment createOrUpdate(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
+        checkConstraintsForCreateOrUpdate(projectId, userId, validFrom, validTo, projectRoleNames);
+        List<ProjectRoleDTO> projectRoleDTOs = dataAccessApi.findAllProjectRolesIn(projectRoleNames.stream().map(this::map).collect(Collectors.toList()));
         Assert.isTrue(projectRoleDTOs.size() == projectRoleNames.size(), "All project roles must be persisted in DB");
         ProjectAssignmentDTOLight projectAssignmentDTO = new ProjectAssignmentDTOLight();
         if (projectAssignmentId != null) {
@@ -87,17 +94,17 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
         projectAssignmentDTO.setValidTo(validTo);
         projectAssignmentDTO.setProjectRoles(new HashSet<>(projectRoleDTOs));
         ProjectAssignmentDTOLight updatedProjectAssignmentDTO = dataAccessApi.createOrUpdateProjectAssignment(projectAssignmentDTO);
-        return findProjectAssignmentById(updatedProjectAssignmentDTO.getId()).get();
+        return findById(updatedProjectAssignmentDTO.getId()).get();
     }
 
-    private void checkConstraintsForProjectAssignment(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
+    private void checkConstraintsForCreateOrUpdate(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
         Assert.notNull(projectId, "project id cannot be null");
         Assert.notNull(userId, "user id cannot be null");
         Assert.notNull(validFrom, "valid from cannot be null");
         if (validTo != null) {
             Assert.isTrue(validTo.isAfter(validFrom), "validTo must be after validFrom");
         }
-        Assert.isTrue(projectRoleNames.stream().anyMatch(name -> name.equals(ProjectRoleName.MEMBER)), "MEMBER project role must exist in the projectRoleNames param");
+        Assert.isTrue(projectRoleNames.stream().anyMatch(name -> name.equals(ProjectRoleName.MEMBER)), "MEMBER project role in project assignment must exist and cannot be removed");
         userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         if (assignmentWithProjectAndUserAtGivenDateAlreadyExists(projectId, userId, validFrom, validTo)) {
             throw new ProjectAssignmentException("Project assignment with user = " + userId + " and project = " + projectId + " already exists in given time from = " + validFrom.toString() + " and to = " + (validTo == null ? "[null]" : validTo.toString()));

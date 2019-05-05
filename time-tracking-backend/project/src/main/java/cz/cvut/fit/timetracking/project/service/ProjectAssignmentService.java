@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface ProjectAssignmentService {
 
-    List<ProjectAssignment> findProjectAssignmentsByProjectId(Integer projectId);
-    Optional<ProjectAssignment> findProjectAssignmentById(Integer id);
-    ProjectAssignment createProjectAssignment(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo);
-    ProjectAssignment createProjectAssignment(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames);
-    ProjectAssignment updateProjectAssignment(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames);
+    List<ProjectAssignment> findByProjectId(Integer projectId);
+    Optional<ProjectAssignment> findById(Integer id);
+    ProjectAssignment create(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo);
+    ProjectAssignment create(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames);
+    ProjectAssignment update(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames);
     void deleteProjectAssignmentById(Integer id);
 }
