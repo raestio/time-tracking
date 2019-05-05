@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +31,7 @@ public class ProjectAssignmentController {
     private RestModelMapper restModelMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectAssignmentDTO> getById(@PathParam("id") Integer id) {
+    public ResponseEntity<ProjectAssignmentDTO> getById(@PathVariable("id") Integer id) {
         Optional<ProjectAssignment> projectAssignmentOptional = projectAssignmentService.findById(id);
         ProjectAssignmentDTO projectAssignmentDTO = projectAssignmentOptional.map(p -> restModelMapper.map(p, ProjectAssignmentDTO.class)).orElseThrow(() -> new ProjectAssignmentNotFoundException(id));
         return ResponseEntity.ok(projectAssignmentDTO);
@@ -53,7 +52,7 @@ public class ProjectAssignmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathParam("id") Integer id) {
+    public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         projectAssignmentService.deleteProjectAssignmentById(id);
         return ResponseEntity.ok().build();
     }
