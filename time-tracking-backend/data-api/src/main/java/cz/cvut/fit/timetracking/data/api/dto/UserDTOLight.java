@@ -1,5 +1,7 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
+import java.util.Objects;
+
 public class UserDTOLight {
 
     private Integer id;
@@ -57,4 +59,16 @@ public class UserDTOLight {
         this.pictureUrl = pictureUrl;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTOLight that = (UserDTOLight) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

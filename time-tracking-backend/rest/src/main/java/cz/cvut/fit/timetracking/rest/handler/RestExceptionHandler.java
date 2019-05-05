@@ -1,5 +1,7 @@
 package cz.cvut.fit.timetracking.rest.handler;
 
+import cz.cvut.fit.timetracking.project.exception.ProjectAssignmentException;
+import cz.cvut.fit.timetracking.project.exception.ProjectAssignmentNotFoundException;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiObjectError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiError;
@@ -36,10 +38,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ProjectNotFoundException.class, WorkRecordNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ProjectNotFoundException.class, WorkRecordNotFoundException.class, ProjectAssignmentNotFoundException.class})
     public ResponseEntity<Object> handleNotFound(Throwable ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return buildResponseEntity(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({ProjectAssignmentException.class})
+    public ResponseEntity<Object> handleBadRequest(Throwable ex) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
     private ApiSubError mapGlobalError(ObjectError objectError) {

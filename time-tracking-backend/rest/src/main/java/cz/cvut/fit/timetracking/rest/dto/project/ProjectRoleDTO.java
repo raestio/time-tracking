@@ -7,23 +7,11 @@ import javax.validation.constraints.NotNull;
 public class ProjectRoleDTO {
 
     @NotNull
-    @JsonProperty("id")
-    private Integer id;
-
-    @NotNull
     @JsonProperty("name")
     private ProjectRoleName name;
 
     @JsonProperty("description")
     private String description;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public ProjectRoleName getName() {
         return name;

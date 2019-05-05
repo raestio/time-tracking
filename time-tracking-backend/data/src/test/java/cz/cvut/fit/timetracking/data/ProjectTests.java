@@ -30,7 +30,7 @@ public class ProjectTests extends DataTestsConfiguration {
         Project project = projectRepository.findWithAssignmentsAndProjectRolesFetchedById(-1).get();
         project.getProjectAssignments().forEach(a -> assertThat(a.getValidFrom()).isEqualTo("2019-04-24"));
         assertThat(project.getProjectAssignments().size()).isEqualTo(1);
-        project.getProjectAssignments().forEach(a -> a.getProjectRoles().forEach(r -> assertThat(r.getName().toString()).isEqualTo("DEVELOPER")));
+        project.getProjectAssignments().forEach(a -> a.getProjectRoles().forEach(r -> assertThat(r.getName().toString()).isEqualTo("MEMBER")));
     }
 
     @Test
@@ -41,6 +41,6 @@ public class ProjectTests extends DataTestsConfiguration {
         assertThat(projectAssignmentDTOList.get(0).getUser().getEmail()).isEqualTo("tmp@ahoj.cau");
         assertThat(projectAssignmentDTOList.get(0).getUser().getAuthProvider()).isEqualTo(AuthProvider.GOOGLE);
         assertThat(projectAssignmentDTOList.get(0).getValidFrom()).isEqualTo("2019-04-24");
-        projectAssignmentDTOList.get(0).getProjectRoles().forEach(role -> assertThat(role.getName()).isEqualTo(ProjectRoleName.DEVELOPER));
+        projectAssignmentDTOList.get(0).getProjectRoles().forEach(role -> assertThat(role.getName()).isEqualTo(ProjectRoleName.MEMBER));
     }
 }

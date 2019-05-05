@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -16,6 +19,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@NamedEntityGraph(
+        name = "ProjectAssignment.projectRoles",
+        attributeNodes = @NamedAttributeNode(value = "projectRoles")
+)
 @Entity
 @Table(name = "project_assignment", schema = "time_tracking_schema")
 public class ProjectAssignment {

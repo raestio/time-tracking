@@ -1,6 +1,6 @@
 package cz.cvut.fit.timetracking.project.dto;
 
 public enum ProjectRoleName {
-    DEVELOPER,
+    MEMBER,
     PROJECT_MANAGER
 }

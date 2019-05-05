@@ -2,8 +2,10 @@ package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
@@ -96,8 +98,38 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
+    public Optional<ProjectRoleDTO> findProjectRoleByName(ProjectRoleName projectRoleName) {
+        return projectRoleDataService.findByName(projectRoleName);
+    }
+
+    @Override
+    public List<ProjectRoleDTO> findAllProjectRolesIn(List<ProjectRoleName> roleNames) {
+        return projectRoleDataService.findByNameIn(roleNames);
+    }
+
+    @Override
     public List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId) {
         return projectDataService.findProjectAssignmentsByProjectId(projectId);
+    }
+
+    @Override
+    public Optional<ProjectAssignmentDTO> findProjectAssignmentById(Integer id) {
+        return projectDataService.findProjectAssignmentById(id);
+    }
+
+    @Override
+    public void deleteProjectAssignmentById(Integer id) {
+        projectDataService.deleteProjectAssignmentById(id);
+    }
+
+    @Override
+    public List<ProjectAssignmentDTO> findProjectAssignmentsByProjectIdAndUserId(Integer projectId, Integer userId) {
+        return projectDataService.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
+    }
+
+    @Override
+    public ProjectAssignmentDTOLight createOrUpdateProjectAssignment(ProjectAssignmentDTOLight projectAssignmentDTO) {
+        return projectDataService.createOrUpdateProjectAssignment(projectAssignmentDTO);
     }
 
     @Override

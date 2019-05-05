@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.data.api.dto;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class ProjectDTO {
@@ -50,5 +51,18 @@ public class ProjectDTO {
 
     public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProjectDTO that = (ProjectDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

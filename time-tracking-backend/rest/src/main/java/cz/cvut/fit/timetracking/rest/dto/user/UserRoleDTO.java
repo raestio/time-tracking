@@ -8,10 +8,6 @@ import javax.validation.constraints.NotNull;
 public class UserRoleDTO {
 
     @NotNull
-    @JsonProperty("id")
-    private Integer id;
-
-    @NotNull
     @JsonProperty("name")
     private UserRoleName name;
 

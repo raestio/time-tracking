@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.data.api.dto;
 
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class WorkRecordDTOLight {
 
@@ -85,5 +86,18 @@ public class WorkRecordDTOLight {
 
     public void setWorkTypeId(Integer workTypeId) {
         this.workTypeId = workTypeId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkRecordDTOLight that = (WorkRecordDTOLight) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

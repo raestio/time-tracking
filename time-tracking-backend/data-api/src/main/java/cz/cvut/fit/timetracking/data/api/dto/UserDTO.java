@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.data.api.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserDTO {
 
@@ -67,5 +68,18 @@ public class UserDTO {
 
     public void setUserRoles(List<UserRoleDTO> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

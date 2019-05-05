@@ -1,30 +1,22 @@
 package cz.cvut.fit.timetracking.configuration;
 
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 import cz.cvut.fit.timetracking.data.constants.PackageNames;
 import cz.cvut.fit.timetracking.data.entity.Project;
+import cz.cvut.fit.timetracking.data.entity.ProjectAssignment;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.entity.WorkRecord;
 import cz.cvut.fit.timetracking.data.entity.WorkType;
 import cz.cvut.fit.timetracking.data.mapper.DataModelMapper;
 import org.modelmapper.Converter;
-import org.modelmapper.ExpressionMap;
 import org.modelmapper.TypeMap;
-import org.modelmapper.builder.ConfigurableMapExpression;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.DestinationSetter;
-import org.modelmapper.spi.MappingContext;
-import org.modelmapper.spi.SourceGetter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Configuration
 @Import(DatabaseConfiguration.class)
@@ -44,6 +36,23 @@ public class DataConfiguration {
     private void addTypeMaps(DataModelMapper dataModelMapper) {
         typeMapWorkRecordDTOLightToWorkRecord(dataModelMapper);
         typeMapWorkRecordToWorkRecordDTOLight(dataModelMapper);
+        typeMapProjectAssignmentDTOLightToProjectAssignment(dataModelMapper);
+        typeMapProjectAssignmentToProjectAssignmentDTOLight(dataModelMapper);
+    }
+
+    private void typeMapProjectAssignmentToProjectAssignmentDTOLight(DataModelMapper dataModelMapper) {
+        TypeMap<ProjectAssignment, ProjectAssignmentDTOLight> typeMap = dataModelMapper.createTypeMap(ProjectAssignment.class, ProjectAssignmentDTOLight.class);
+        typeMap.addMapping(source -> source.getProject().getId(), ProjectAssignmentDTOLight::setProjectId);
+        typeMap.addMapping(source -> source.getUser().getId(), ProjectAssignmentDTOLight::setUserId);
+    }
+
+    private void typeMapProjectAssignmentDTOLightToProjectAssignment(DataModelMapper dataModelMapper) {
+        TypeMap<ProjectAssignmentDTOLight, ProjectAssignment> typeMap = dataModelMapper.typeMap(ProjectAssignmentDTOLight.class, ProjectAssignment.class);
+        Converter<Integer, Project> projectConverter = context -> new Project(context.getSource());
+        typeMap.addMappings(mapping -> mapping.using(projectConverter).map(ProjectAssignmentDTOLight::getProjectId, ProjectAssignment::setProject));
+
+        Converter<Integer, User> userConverter = context -> new User(context.getSource());
+        typeMap.addMappings(mapping -> mapping.using(userConverter).map(ProjectAssignmentDTOLight::getUserId, ProjectAssignment::setUser));
     }
 
     private void typeMapWorkRecordToWorkRecordDTOLight(DataModelMapper dataModelMapper) {

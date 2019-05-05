@@ -3,18 +3,8 @@ package cz.cvut.fit.timetracking.project.dto;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleName;
 
 public class ProjectRole {
-
-    private Integer id;
     private ProjectRoleName name;
     private String description;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public ProjectRoleName getName() {
         return name;

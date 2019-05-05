@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.data.service;
 
 import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 
 import java.util.List;
@@ -13,4 +14,9 @@ public interface ProjectDataService {
     void deleteById(Integer id);
 
     List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId);
+    Optional<ProjectAssignmentDTO> findProjectAssignmentById(Integer id);
+    List<ProjectAssignmentDTO> findProjectAssignmentsByProjectIdAndUserId(Integer projectId, Integer userId);
+    ProjectAssignmentDTOLight createOrUpdateProjectAssignment(ProjectAssignmentDTOLight projectAssignmentDTOLight);
+
+    void deleteProjectAssignmentById(Integer id);
 }

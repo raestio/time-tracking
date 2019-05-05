@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class WorkRecordDTO {
 
@@ -84,5 +85,18 @@ public class WorkRecordDTO {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkRecordDTO that = (WorkRecordDTO) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
