@@ -11,6 +11,7 @@ import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public interface DataAccessApi {
     List<ProjectDTO> findAllProjects();
     Optional<ProjectDTO> findProjectById(Integer id);
     void deleteProjectById(Integer id);
+    List<ProjectDTO> findAllAssignedProjectsWhereValidTimeOverlapsByUserId(LocalDate date, Integer userId);
 
     //project roles
     List<ProjectRoleDTO> findAllProjectRoles();
@@ -51,7 +53,6 @@ public interface DataAccessApi {
     WorkRecordDTO createOrUpdateWorkRecord(WorkRecordDTO workRecordDTO);
     void deleteWorkRecordById(Integer id);
     Optional<WorkRecordDTO> findWorkRecordById(Integer id);
-    List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
-    List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
-
+    List<WorkRecordDTO> findAllWorkRecordsBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
+    List<WorkRecordDTO> findAllWorkRecordsBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
 }

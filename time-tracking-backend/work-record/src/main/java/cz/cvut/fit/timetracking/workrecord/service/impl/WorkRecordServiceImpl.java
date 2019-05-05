@@ -3,7 +3,6 @@ package cz.cvut.fit.timetracking.workrecord.service.impl;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
-import cz.cvut.fit.timetracking.jira.service.JiraUserService;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
@@ -72,7 +71,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     public List<WorkRecord> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive) {
         Assert.notNull(fromInclusive, "fromInclusive cannot be null");
         Assert.notNull(toExclusive, "toExclusive cannot be null");
-        List<WorkRecordDTO> workRecordDTOs = dataAccessApi.findAllBetween(fromInclusive, toExclusive);
+        List<WorkRecordDTO> workRecordDTOs = dataAccessApi.findAllWorkRecordsBetween(fromInclusive, toExclusive);
         List<WorkRecord> workRecords = workRecordDTOs.stream().map(this::map).collect(Collectors.toList());
         return workRecords;
     }
@@ -82,7 +81,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
         Assert.notNull(userId, "userId cannot be null");
         Assert.notNull(fromInclusive, "fromInclusive cannot be null");
         Assert.notNull(toExclusive, "toExclusive cannot be null");
-        List<WorkRecordDTO> workRecordDTOs = dataAccessApi.findAllBetweenByUserId(fromInclusive, toExclusive, userId);
+        List<WorkRecordDTO> workRecordDTOs = dataAccessApi.findAllWorkRecordsBetweenByUserId(fromInclusive, toExclusive, userId);
         List<WorkRecord> workRecords = workRecordDTOs.stream().map(this::map).collect(Collectors.toList());
         return workRecords;
     }

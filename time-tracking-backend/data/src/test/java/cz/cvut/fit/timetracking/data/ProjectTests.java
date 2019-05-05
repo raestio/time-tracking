@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.data;
 import cz.cvut.fit.timetracking.configuration.DataTestsConfiguration;
 import cz.cvut.fit.timetracking.data.api.dto.AuthProvider;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.data.entity.Project;
 import cz.cvut.fit.timetracking.data.repository.ProjectRepository;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,5 +44,13 @@ public class ProjectTests extends DataTestsConfiguration {
         assertThat(projectAssignmentDTOList.get(0).getUser().getAuthProvider()).isEqualTo(AuthProvider.GOOGLE);
         assertThat(projectAssignmentDTOList.get(0).getValidFrom()).isEqualTo("2019-04-24");
         projectAssignmentDTOList.get(0).getProjectRoles().forEach(role -> assertThat(role.getName()).isEqualTo(ProjectRoleName.MEMBER));
+    }
+
+    @Test
+    public void testfindAllAssignedProjectsWhereValidTimeOverlapsByUserId() {
+        List<ProjectDTO> projectDTOs = projectDataService.findAllAssignedProjectsWhereValidTimeOverlapsByUserId(LocalDate.parse("2019-05-25"), -1);
+        assertThat(projectDTOs).hasSize(1);
+        assertThat(projectDTOs.get(0).getName()).isEqualTo("test project");
+        assertThat(projectDTOs.get(0).getWorkTypes().get(0).getName()).isEqualTo("test work type");
     }
 }

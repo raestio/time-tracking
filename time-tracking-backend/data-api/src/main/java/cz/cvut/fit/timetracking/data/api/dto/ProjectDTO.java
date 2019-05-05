@@ -1,7 +1,9 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ public class ProjectDTO {
     private String description;
     private LocalDate start;
     private LocalDate end;
+    private List<WorkTypeDTO> workTypes = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -51,6 +54,14 @@ public class ProjectDTO {
 
     public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    public List<WorkTypeDTO> getWorkTypes() {
+        return workTypes;
+    }
+
+    public void setWorkTypes(List<WorkTypeDTO> workTypes) {
+        this.workTypes = workTypes;
     }
 
     @Override

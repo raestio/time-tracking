@@ -1,6 +1,8 @@
 package cz.cvut.fit.timetracking.project.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Project {
 
@@ -9,6 +11,7 @@ public class Project {
     private String description;
     private LocalDate start;
     private LocalDate end;
+    private List<WorkType> workTypes = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -16,6 +19,14 @@ public class Project {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<WorkType> getWorkTypes() {
+        return workTypes;
+    }
+
+    public void setWorkTypes(List<WorkType> workTypes) {
+        this.workTypes = workTypes;
     }
 
     public String getName() {

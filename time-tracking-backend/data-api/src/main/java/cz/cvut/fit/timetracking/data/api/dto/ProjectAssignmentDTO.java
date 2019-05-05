@@ -7,7 +7,7 @@ import java.util.Set;
 public class ProjectAssignmentDTO {
 
     private Integer id;
-    private ProjectDTO project;
+    private ProjectDTOLight project;
     private LocalDate validFrom;
     private LocalDate validTo;
     private UserDTOLight user;
@@ -17,11 +17,11 @@ public class ProjectAssignmentDTO {
         return id;
     }
 
-    public ProjectDTO getProject() {
+    public ProjectDTOLight getProject() {
         return project;
     }
 
-    public void setProject(ProjectDTO project) {
+    public void setProject(ProjectDTOLight project) {
         this.project = project;
     }
 

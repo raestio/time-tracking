@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,11 +22,17 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@NamedEntityGraph(
+@NamedEntityGraphs(value = {
+    @NamedEntityGraph(
         name = "Project.projectAssignmentsWithProjectRoles",
         attributeNodes = @NamedAttributeNode(value = "projectAssignments", subgraph = "ProjectAssignment.projectRoles"),
         subgraphs = @NamedSubgraph(name = "ProjectAssignment.projectRoles", attributeNodes = @NamedAttributeNode(value = "projectRoles"))
-)
+    ),
+    @NamedEntityGraph(
+        name = "Project.workTypes",
+        attributeNodes = @NamedAttributeNode(value = "workTypes")
+    )
+})
 @Entity
 @Table(name = "project", schema = "time_tracking_schema")
 public class Project {

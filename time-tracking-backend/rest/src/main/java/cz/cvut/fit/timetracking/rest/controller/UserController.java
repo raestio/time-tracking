@@ -1,11 +1,16 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
-import cz.cvut.fit.timetracking.rest.dto.user.UpdateUserRequest;
+import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.service.ProjectService;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
+import cz.cvut.fit.timetracking.rest.dto.user.UpdateUserRolesRequest;
 import cz.cvut.fit.timetracking.rest.dto.user.UserDTO;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.user.dto.User;
+import cz.cvut.fit.timetracking.user.dto.UserRoleName;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import cz.cvut.fit.timetracking.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -18,14 +23,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -37,6 +43,8 @@ public class UserController {
     @Autowired
     private RestModelMapper restModelMapper;
 
+    @Autowired
+    private ProjectService projectService;
 
     @ApiOperation(value = "Get an user by ID", response = UserDTO.class)
     @ApiResponses(value = {
@@ -51,8 +59,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        //TODO
+    public ResponseEntity<UserDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateUserRolesRequest request) {
+        User user = userService.updateUserRoles(id, request.getUserRoles().stream().map(role -> restModelMapper.map(role, UserRoleName.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok(restModelMapper.map(user, UserDTO.class));
     }
 
     @GetMapping("/me")
@@ -63,8 +72,11 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/projects")
-    public ResponseEntity<UserDTO> getProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
-        //todo
+    public ResponseEntity<ProjectsResponse> getCurrentlyAssignedProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
+        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
+        ProjectsResponse projectsResponse = new ProjectsResponse();
+        projectsResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok(projectsResponse);
     }
 
     @GetMapping("/me/projects")

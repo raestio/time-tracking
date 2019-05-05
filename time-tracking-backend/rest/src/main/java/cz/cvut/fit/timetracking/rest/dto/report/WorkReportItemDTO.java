@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.rest.dto.report;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 
 public class WorkReportItemDTO {
 

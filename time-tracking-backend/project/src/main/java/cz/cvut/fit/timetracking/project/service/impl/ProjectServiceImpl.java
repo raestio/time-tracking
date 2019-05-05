@@ -1,28 +1,19 @@
 package cz.cvut.fit.timetracking.project.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
-import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
-import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTOLight;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.project.dto.Project;
-import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
 import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
-import cz.cvut.fit.timetracking.project.exception.ProjectAssignmentException;
-import cz.cvut.fit.timetracking.project.exception.ProjectAssignmentNotFoundException;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.project.mapper.ProjectModelMapper;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
-import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
-import cz.cvut.fit.timetracking.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,6 +70,14 @@ public class ProjectServiceImpl implements ProjectService {
         Optional<ProjectDTO> optionalProjectDTO = dataAccessApi.findProjectById(id);
         Optional<Project> result = optionalProjectDTO.map(this::map);
         return result;
+    }
+
+    @Override
+    public List<Project> findAllCurrentlyAssignedProjectsByUserId(Integer userId) {
+        Assert.notNull(userId, "user id cannot be null");
+        List<ProjectDTO> projectDTOs = dataAccessApi.findAllAssignedProjectsWhereValidTimeOverlapsByUserId(LocalDate.now(), userId);
+        List<Project> projects = projectDTOs.stream().map(this::map).collect(Collectors.toList());
+        return projects;
     }
 
     @Override

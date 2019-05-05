@@ -12,6 +12,7 @@ import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,21 +34,32 @@ public class ProjectDataServiceImpl implements ProjectDataService {
     public ProjectDTO createOrUpdate(ProjectDTO project) {
         Project projectEntity = dataModelMapper.map(project, Project.class);
         projectEntity = projectRepository.save(projectEntity);
-        ProjectDTO result = dataModelMapper.map(projectEntity, ProjectDTO.class);
+        ProjectDTO result = map(projectEntity);
         return result;
     }
 
     @Override
     public List<ProjectDTO> findAll() {
-        List<Project> projects = projectRepository.findAll();
-        List<ProjectDTO> result = projects.stream().map(p -> dataModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList());
+        List<Project> projects = projectRepository.findAllWithWorkTypesFetched();
+        List<ProjectDTO> result = projects.stream().map(this::map).collect(Collectors.toList());
         return result;
+    }
+
+    private ProjectDTO map(Project p) {
+        return dataModelMapper.map(p, ProjectDTO.class);
     }
 
     @Override
     public Optional<ProjectDTO> findById(Integer id) {
-        Optional<Project> optionalProjectDTO = projectRepository.findById(id);
-        Optional<ProjectDTO> result = optionalProjectDTO.map(p -> dataModelMapper.map(p, ProjectDTO.class));
+        Optional<Project> optionalProjectDTO = projectRepository.findWithWorkTypesFetchedById(id);
+        Optional<ProjectDTO> result = optionalProjectDTO.map(this::map);
+        return result;
+    }
+
+    @Override
+    public List<ProjectDTO> findAllAssignedProjectsWhereValidTimeOverlapsByUserId(LocalDate date, Integer userId) {
+        List<Project> projects = projectRepository.findAllAssignedProjectsWhereValidTimeOverlapsByUserId(date, userId);
+        List<ProjectDTO> result = projects.stream().map(this::map).collect(Collectors.toList());
         return result;
     }
 

@@ -29,6 +29,7 @@ public class DataConfiguration {
         DataModelMapper dataModelMapper = new DataModelMapper();
         dataModelMapper.getConfiguration().setAmbiguityIgnored(false);
         dataModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        dataModelMapper.getConfiguration().setSkipNullEnabled(true);
         addTypeMaps(dataModelMapper);
         return dataModelMapper;
     }

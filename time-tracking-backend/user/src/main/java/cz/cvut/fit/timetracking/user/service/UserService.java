@@ -18,7 +18,7 @@ public interface UserService {
     Optional<User> findByEmail(String email);
 
     //update
-    User update(User user);
+    User updateUserRoles(Integer userId, List<UserRoleName> userRoles);
 
     //delete
     void deleteById(Integer id);

@@ -19,6 +19,7 @@ import cz.cvut.fit.timetracking.data.service.WorkRecordDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +94,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
+    public List<ProjectDTO> findAllAssignedProjectsWhereValidTimeOverlapsByUserId(LocalDate date, Integer userId) {
+        return projectDataService.findAllAssignedProjectsWhereValidTimeOverlapsByUserId(date, userId);
+    }
+
+    @Override
     public List<ProjectRoleDTO> findAllProjectRoles() {
         return projectRoleDataService.findAll();
     }
@@ -158,12 +164,12 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
-    public List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive) {
+    public List<WorkRecordDTO> findAllWorkRecordsBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive) {
         return workRecordDataService.findAllBetween(fromInclusive, toExclusive);
     }
 
     @Override
-    public List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
+    public List<WorkRecordDTO> findAllWorkRecordsBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
         return workRecordDataService.findAllBetweenByUserId(fromInclusive, toExclusive, userId);
     }
 

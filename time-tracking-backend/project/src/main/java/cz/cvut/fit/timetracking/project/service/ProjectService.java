@@ -15,6 +15,7 @@ public interface ProjectService {
     Project update(Integer projectId, String name, String description, LocalDate start, LocalDate end);
     List<Project> findAll();
     Optional<Project> findById(Integer id);
+    List<Project> findAllCurrentlyAssignedProjectsByUserId(Integer userId);
     void deleteById(Integer id);
     Optional<ProjectRole> findProjectRoleByName(ProjectRoleName projectRoleName);
     List<ProjectRole> findAllProjectRoles();

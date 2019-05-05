@@ -43,17 +43,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
-        checkBeforeUpdateOrThrow(user);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setSurname(user.getSurname());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAuthProvider(mapAuthProvider(user.getAuthProvider()));
-        userDTO.setPictureUrl(user.getPictureUrl());
-        userDTO.setUserRoles(findUserRolesByNameIn(user.getUserRoles().stream().map(UserRole::getName).collect(Collectors.toList())));
-        userDTO = dataAccessApi.createOrUpdateUser(userDTO);
+    public User updateUserRoles(Integer userId, List<UserRoleName> userRoles) {
+        Assert.notNull(userId, "user id cannot be null");
+        UserDTO user = dataAccessApi.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        user.setUserRoles(findUserRolesByNameIn(userRoles));
+        if (!hasUserRole(user)) {
+            throw new UpdateUserException("User role USER can't be removed.");
+        }
+        UserDTO userDTO = dataAccessApi.createOrUpdateUser(user);
         return map(userDTO);
     }
 
@@ -69,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Integer id) {
+        Assert.notNull(id, "user id cannot be null");
         Optional<User> user = findById(id);
         user.ifPresentOrElse(u -> dataAccessApi.deleteUserById(id), () -> {
             throw new UserNotFoundException(id);
@@ -101,29 +99,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private cz.cvut.fit.timetracking.data.api.dto.AuthProvider mapAuthProvider(AuthProvider authProvider) {
-        return userModelMapper.map(authProvider, cz.cvut.fit.timetracking.data.api.dto.AuthProvider.class);
-    }
-
     private cz.cvut.fit.timetracking.data.api.dto.UserRoleName mapUserRoleName(UserRoleName r) {
         return userModelMapper.map(r, cz.cvut.fit.timetracking.data.api.dto.UserRoleName.class);
     }
 
-    private boolean hasUserRole(User user) {
-        return user.getUserRoles().stream().anyMatch(r -> UserRoleName.USER.equals(r.getName()));
-    }
-
-    private void checkBeforeUpdateOrThrow(User user) {
-        Assert.notNull(user.getId(), "User update ID cannot be null");
-
-        if (!hasUserRole(user)) {
-            throw new UpdateUserException("User role USER can't be removed.");
-        }
-
-        Optional<User> optionalUser = findById(user.getId());
-        User u = optionalUser.orElseThrow(() -> new UserNotFoundException(user.getId()));
-        if (!u.getEmail().equals(user.getEmail())) {
-            throw new UpdateUserException("Email address cannot be changed.");
-        }
+    private boolean hasUserRole(UserDTO user) {
+        return user.getUserRoles().stream().anyMatch(r -> cz.cvut.fit.timetracking.data.api.dto.UserRoleName.USER.equals(r.getName()));
     }
 }
