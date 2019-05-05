@@ -32,10 +32,8 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     @Autowired
     private ProjectService projectService;
 
-    private JiraUserService
-
     @Override
-    public WorkRecord create(LocalDateTime from, LocalDateTime to, String description, int projectId, int workTypeId, int userId) {
+    public WorkRecord create(LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId, Integer userId) {
         checkWorkRecordConstraintsOrThrow(from, to, userId, projectId);
         WorkRecordDTOLight workRecordDTOLight = new WorkRecordDTOLight();
         workRecordDTOLight.setDateFrom(from);
@@ -51,7 +49,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     }
 
     @Override
-    public WorkRecord update(int workRecordId, LocalDateTime from, LocalDateTime to, String description, int projectId, int workTypeId) {
+    public WorkRecord update(Integer workRecordId, LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId) {
         WorkRecordDTO workRecord = dataAccessApi.findWorkRecordById(workRecordId).orElseThrow(() -> new WorkRecordNotFoundException(workRecordId));
         checkWorkRecordConstraintsOrThrow(from, to, workRecord.getUser().getId(), projectId);
         workRecord.setDateFrom(from);
@@ -65,7 +63,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     }
 
     @Override
-    public Optional<WorkRecord> findById(int id) {
+    public Optional<WorkRecord> findById(Integer id) {
         Optional<WorkRecord> result = dataAccessApi.findWorkRecordById(id).map(this::map);
         return result;
     }
@@ -90,12 +88,14 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         findById(id).orElseThrow(() -> new WorkRecordNotFoundException(id));
         dataAccessApi.deleteWorkRecordById(id);
     }
 
-    private void checkWorkRecordConstraintsOrThrow(LocalDateTime from, LocalDateTime to, Integer userId, int projectId) {
+    private void checkWorkRecordConstraintsOrThrow(LocalDateTime from, LocalDateTime to, Integer userId, Integer projectId) {
+        Assert.notNull(userId, "user id cannot be null");
+        Assert.notNull(projectId, "project id cannot be null");
         Assert.isTrue(to.isAfter(from), "Work record time parameter 'to' must go after time parameter 'from'.");
         boolean overlap = dataAccessApi.workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
         if (overlap) {

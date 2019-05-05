@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WorkRecordService {
-    WorkRecord create(LocalDateTime from, LocalDateTime to, String description, int projectId, int workTypeId, int userId);
+    WorkRecord create(LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId, Integer userId);
 
-    WorkRecord update(int workRecordId, LocalDateTime from, LocalDateTime to, String description, int projectId, int workTypeId);
+    WorkRecord update(Integer workRecordId, LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId);
 
-    Optional<WorkRecord> findById(int id);
+    Optional<WorkRecord> findById(Integer id);
     List<WorkRecord> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
     List<WorkRecord> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 }
