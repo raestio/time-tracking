@@ -74,10 +74,6 @@ public class ProjectController {
         return ResponseEntity.ok(result);
     }
 
-    private List<WorkType> map(List<WorkTypeDTO> workTypes) {
-        return workTypes.stream().map(w -> restModelMapper.map(w, WorkType.class)).collect(Collectors.toList());
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         projectService.deleteById(id);
@@ -99,5 +95,9 @@ public class ProjectController {
         ProjectRolesResponse projectRolesResponse = new ProjectRolesResponse();
         projectRolesResponse.setProjectRoles(projectRoles.stream().map(role -> restModelMapper.map(role, ProjectRoleDTO.class)).collect(Collectors.toList()));
         return ResponseEntity.ok(projectRolesResponse);
+    }
+
+    private List<WorkType> map(List<WorkTypeDTO> workTypes) {
+        return workTypes.stream().map(w -> restModelMapper.map(w, WorkType.class)).collect(Collectors.toList());
     }
 }
