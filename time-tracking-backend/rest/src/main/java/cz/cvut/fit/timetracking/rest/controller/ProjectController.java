@@ -1,10 +1,13 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
 import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectAssignmentDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectAssignmentsResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
-import cz.cvut.fit.timetracking.rest.dto.project.ProjectsResponse;
-import cz.cvut.fit.timetracking.rest.dto.project.CreateOrUpdateProjectRequest;
+import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
+import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectRequest;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,9 +72,12 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}/assignments")
-    public ResponseEntity<ProjectDTO> getProjectUserAssignments(@PathVariable("id") Integer projectId) {
-        List<ProjectAss> projectService.findProjectAssignmentsByProjectId(projectId);
-        return null;
+    public ResponseEntity<ProjectAssignmentsResponse> getProjectUserAssignments(@PathVariable("id") Integer projectId) {
+        List<ProjectAssignment> projectAssignments = projectService.findProjectAssignmentsByProjectId(projectId);
+        ProjectAssignmentsResponse projectAssignmentsResponse = new ProjectAssignmentsResponse();
+        List<ProjectAssignmentDTO> projectAssignmentDTOs = projectAssignments.stream().map(a -> restModelMapper.map(a, ProjectAssignmentDTO.class)).collect(Collectors.toList());
+        projectAssignmentsResponse.setProjectAssignments(projectAssignmentDTOs);
+        return ResponseEntity.ok(projectAssignmentsResponse);
     }
 
     @GetMapping("/{projectId}/assignments/{userId}")

@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping("/roles")
-    public ResponseEntity<UserDTO> getUserRoles(@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<UserDTO> getAllUserRoles(@CurrentUser UserPrincipal userPrincipal) {
         //TODO
     }
 }

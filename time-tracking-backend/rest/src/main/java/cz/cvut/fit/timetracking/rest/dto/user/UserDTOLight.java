@@ -1,15 +1,11 @@
 package cz.cvut.fit.timetracking.rest.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import cz.cvut.fit.timetracking.user.dto.UserRole;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class UserDTO implements Serializable {
+public class UserDTOLight {
 
     @JsonProperty("id")
     private Integer id;
@@ -28,17 +24,6 @@ public class UserDTO implements Serializable {
 
     @JsonProperty("pictureUrl")
     private String pictureUrl;
-
-    @JsonProperty("userRoles")
-    private List<UserRoleDTO> userRoles = new ArrayList<>();
-
-    public List<UserRoleDTO> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(List<UserRoleDTO> userRoles) {
-        this.userRoles = userRoles;
-    }
 
     public Integer getId() {
         return id;

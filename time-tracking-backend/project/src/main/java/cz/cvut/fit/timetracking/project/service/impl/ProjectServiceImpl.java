@@ -1,8 +1,10 @@
 package cz.cvut.fit.timetracking.project.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.project.mapper.ProjectModelMapper;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
@@ -67,6 +69,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectAssignment> findProjectAssignmentsByProjectId(Integer projectId) {
+        Assert.notNull(projectId, "project id cannot be null");
+        List<ProjectAssignmentDTO> projectAssignmentDTOs = dataAccessApi.findProjectAssignmentsByProjectId(projectId);
+        List<ProjectAssignment> projectAssignments = projectAssignmentDTOs.stream().map(this::map).collect(Collectors.toList());
+        return projectAssignments;
+    }
+
+    @Override
     public void deleteById(Integer id) {
         Optional<ProjectDTO> optionalProjectDTO = dataAccessApi.findProjectById(id);
         optionalProjectDTO.ifPresentOrElse(p -> dataAccessApi.deleteProjectById(id), () -> { throw new ProjectNotFoundException(id); });
@@ -75,5 +85,10 @@ public class ProjectServiceImpl implements ProjectService {
     private Project map(ProjectDTO projectDTO) {
         Project project = projectModelMapper.map(projectDTO, Project.class);
         return project;
+    }
+
+    private ProjectAssignment map(ProjectAssignmentDTO projectAssignmentDTO) {
+        ProjectAssignment projectAssignment = projectModelMapper.map(projectAssignmentDTO, ProjectAssignment.class);
+        return projectAssignment;
     }
 }

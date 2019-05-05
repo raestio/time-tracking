@@ -1,6 +1,7 @@
-package cz.cvut.fit.timetracking.rest.dto.project;
+package cz.cvut.fit.timetracking.rest.dto.project.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 
 import java.util.ArrayList;
 import java.util.List;

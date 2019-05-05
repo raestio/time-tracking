@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.project.service;
 
 import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,5 +14,7 @@ public interface ProjectService {
 
     List<Project> findAll();
     Optional<Project> findById(Integer id);
+    List<ProjectAssignment> findProjectAssignmentsByProjectId(Integer projectId);
+
     void deleteById(Integer id);
 }
