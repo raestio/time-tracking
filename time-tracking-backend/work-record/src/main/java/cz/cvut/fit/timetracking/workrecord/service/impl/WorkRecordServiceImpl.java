@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.workrecord.service.impl;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
+import cz.cvut.fit.timetracking.jira.service.JiraUserService;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
@@ -30,6 +31,8 @@ public class WorkRecordServiceImpl implements WorkRecordService {
 
     @Autowired
     private ProjectService projectService;
+
+    private JiraUserService
 
     @Override
     public WorkRecord create(LocalDateTime from, LocalDateTime to, String description, int projectId, int workTypeId, int userId) {

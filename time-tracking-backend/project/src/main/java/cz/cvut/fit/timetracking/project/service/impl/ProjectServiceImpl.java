@@ -8,7 +8,9 @@ import cz.cvut.fit.timetracking.project.mapper.ProjectModelMapper;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,8 +25,28 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectModelMapper projectModelMapper;
 
     @Override
-    public Project createOrUpdate(Project project) {
-        ProjectDTO projectDTO = projectModelMapper.map(project, ProjectDTO.class);
+    public Project create(String name, String description, LocalDate start, LocalDate end) {
+        Assert.isTrue(!name.isBlank(), "name of a project cannot be blank");
+        Assert.notNull(start, "start of a project cannot be null");
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setName(name);
+        projectDTO.setDescription(description);
+        projectDTO.setStart(start);
+        projectDTO.setEnd(end);
+        projectDTO = dataAccessApi.createOrUpdateProject(projectDTO);
+        Project result = map(projectDTO);
+        return result;
+    }
+
+    @Override
+    public Project update(int projectId, String name, String description, LocalDate start, LocalDate end) {
+        Assert.isTrue(!name.isBlank(), "name of a project cannot be blank");
+        Assert.notNull(start, "start of a project cannot be null");
+        ProjectDTO projectDTO = dataAccessApi.findProjectById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+        projectDTO.setName(name);
+        projectDTO.setDescription(description);
+        projectDTO.setStart(start);
+        projectDTO.setEnd(end);
         projectDTO = dataAccessApi.createOrUpdateProject(projectDTO);
         Project result = map(projectDTO);
         return result;
@@ -47,9 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteById(Integer id) {
         Optional<ProjectDTO> optionalProjectDTO = dataAccessApi.findProjectById(id);
-        optionalProjectDTO.ifPresentOrElse(p -> dataAccessApi.deleteProjectById(id), () -> {
-            throw new ProjectNotFoundException(id);
-        });
+        optionalProjectDTO.ifPresentOrElse(p -> dataAccessApi.deleteProjectById(id), () -> { throw new ProjectNotFoundException(id); });
     }
 
     private Project map(ProjectDTO projectDTO) {

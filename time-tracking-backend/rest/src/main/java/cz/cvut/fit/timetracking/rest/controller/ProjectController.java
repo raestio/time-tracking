@@ -4,10 +4,8 @@ import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectsResponse;
-import cz.cvut.fit.timetracking.rest.dto.project.UpdateProjectRequest;
-import cz.cvut.fit.timetracking.rest.dto.user.UserDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.CreateOrUpdateProjectRequest;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
-import cz.cvut.fit.timetracking.user.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,9 +33,8 @@ public class ProjectController {
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> createOrUpdate(@Valid @RequestBody ProjectDTO projectDTO) {
-        Project project = restModelMapper.map(projectDTO, Project.class);
-        project = projectService.createOrUpdate(project);
+    public ResponseEntity<ProjectDTO> create(@Valid @RequestBody CreateOrUpdateProjectRequest createOrUpdateProjectRequest) {
+        Project project = projectService.create(createOrUpdateProjectRequest.getName(), createOrUpdateProjectRequest.getDescription(), createOrUpdateProjectRequest.getStart(), createOrUpdateProjectRequest.getEnd());
         ProjectDTO result = restModelMapper.map(project, ProjectDTO.class);
         return ResponseEntity.ok(result);
     }
@@ -59,22 +56,51 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateProjectRequest updateProjectRequest) {
-        Optional<Project> project = projectService.findById(id);
-        ResponseEntity<ProjectDTO> response = project.map(p -> {
-            p.setName(updateProjectRequest.getName());
-            p.setDescription(updateProjectRequest.getDescription());
-            p.setStart(updateProjectRequest.getStart());
-            p.setEnd(updateProjectRequest.getEnd());
-            Project updatedProject = projectService.createOrUpdate(p);
-            return ResponseEntity.ok(restModelMapper.map(updatedProject, ProjectDTO.class));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
-        return response;
+    public ResponseEntity<ProjectDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateProjectRequest updateProjectRequest) {
+        Project updatedProject = projectService.update(id, updateProjectRequest.getName(), updateProjectRequest.getDescription(), updateProjectRequest.getStart(), updateProjectRequest.getEnd());
+        ProjectDTO result = restModelMapper.map(updatedProject, ProjectDTO.class);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         projectService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/assignments")
+    public ResponseEntity<ProjectDTO> getProjectUserAssignments(@PathVariable("id") Integer projectId) {
+        List<ProjectAss> projectService.findProjectAssignmentsByProjectId(projectId);
+        return null;
+    }
+
+    @GetMapping("/{projectId}/assignments/{userId}")
+    public ResponseEntity<ProjectDTO> getProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
+        //TODO
+        return null;
+    }
+
+    @PostMapping("/{projectId}/assignments")
+    public ResponseEntity<ProjectDTO> createProjectUserAssignment(@PathVariable("projectId") Integer projectId,  Integer userId) {
+        //TODO
+        return null;
+    }
+
+    @PutMapping("/{projectId}/assignments/{userId}")
+    public ResponseEntity<ProjectDTO> updateProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
+        //TODO
+        return null;
+    }
+
+    @DeleteMapping("/{projectId}/assignments/{userId}")
+    public ResponseEntity<ProjectDTO> deleteProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
+        //TODO
+        return null;
+    }
+
+    @GetMapping("/{projectId}/roles")
+    public ResponseEntity<ProjectDTO> getProjectRoles(@PathVariable("projectId") Integer projectId) {
+        //TODO
+        return null;
     }
 }

@@ -1,6 +1,5 @@
 package cz.cvut.fit.timetracking.rest.filter;
 
-import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.security.oauth2.service.UserPrincipalService;
 import cz.cvut.fit.timetracking.security.token.service.TokenService;
 import cz.cvut.fit.timetracking.user.dto.User;

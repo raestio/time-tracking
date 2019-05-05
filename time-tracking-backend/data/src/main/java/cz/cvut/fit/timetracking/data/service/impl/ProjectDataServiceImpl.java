@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.data.service.impl;
 
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.entity.Project;
 import cz.cvut.fit.timetracking.data.mapper.DataModelMapper;
@@ -46,5 +47,11 @@ public class ProjectDataServiceImpl implements ProjectDataService {
     @Override
     public void deleteById(Integer id) {
         projectRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId) {
+        projectRepository.findWithAssignmentsAndProjectRolesFetchedById(projectId);
+        return null;
     }
 }

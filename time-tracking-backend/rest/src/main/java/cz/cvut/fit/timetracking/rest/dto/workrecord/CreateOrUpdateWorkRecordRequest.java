@@ -30,6 +30,17 @@ public class CreateOrUpdateWorkRecordRequest {
     @JsonProperty("workTypeId")
     private Integer workTypeId;
 
+    @JsonProperty("userId")
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public LocalDateTime getDateFrom() {
         return dateFrom;
     }

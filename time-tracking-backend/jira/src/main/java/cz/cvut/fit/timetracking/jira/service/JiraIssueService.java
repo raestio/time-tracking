@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface JiraIssueService {
     List<Issue> findAllIssuesWithJQLQuery(String jqlQuery);
-
     Issue findIssueByKey(String issueKey);
 }

@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.data;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
@@ -82,6 +83,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public void deleteProjectById(Integer id) {
         projectDataService.deleteById(id);
+    }
+
+    @Override
+    public List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId) {
+        return projectDataService.findProjectAssignmentsByProjectId(projectId);
     }
 
     @Override

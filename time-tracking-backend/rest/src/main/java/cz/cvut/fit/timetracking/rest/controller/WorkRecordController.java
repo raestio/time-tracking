@@ -33,8 +33,7 @@ public class WorkRecordController {
 
     @PostMapping
     public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
-        WorkRecord workRecord = workRecordService.create(request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId(), user.getId());
-        WorkRecordDTO result = map(workRecord);
+        WorkRecordDTO result = create(request, user.getId());
         return ResponseEntity.ok(result);
     }
 
@@ -57,8 +56,24 @@ public class WorkRecordController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping
+    public ResponseEntity<WorkRecordDTO> getWorkRecords() {
+        //todo
+    }
+
+    @GetMapping("/jira")
+    public ResponseEntity<Object> s() {
+
+    }
+
     private WorkRecordDTO map(WorkRecord workRecord) {
         WorkRecordDTO result = restModelMapper.map(workRecord, WorkRecordDTO.class);
+        return result;
+    }
+
+    private WorkRecordDTO create(CreateOrUpdateWorkRecordRequest request, Integer userId) {
+        WorkRecord workRecord = workRecordService.create(request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId(), userId);
+        WorkRecordDTO result = map(workRecord);
         return result;
     }
 }

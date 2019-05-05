@@ -9,8 +9,6 @@ import java.util.Map;
 
 public interface JiraWorklogService {
     Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email);
-
     Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email, LocalDate fromInclusive);
-
-    Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email, LocalDate fromInclusive, LocalDate toInclusive);
+    Map<Issue, List<Worklog>> findWorklogsByUserEmail(String email, LocalDate fromInclusive, LocalDate toExclusive);
 }

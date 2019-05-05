@@ -28,6 +28,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -41,26 +42,18 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
     }
-/*
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        Optional<User> user = userService.findById(id);
-        ResponseEntity<UserDTO> response = user.map(u -> {
-            u.setName(updateUserRequest.getName());
-            u.setEmail(updateUserRequest.getEmail());
-            u.setSurname(updateUserRequest.getSurname());
-            User updatedUser = userService.createOrUpdate(u);
-            return ResponseEntity.ok(restModelMapper.map(updatedUser, UserDTO.class));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
-        return response;
-    }*/
+        //TODO
+    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
@@ -69,9 +62,24 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @DeleteMapping("/users/{id}")
+    @GetMapping("/{userID}/projects")
+    public ResponseEntity<UserDTO> getProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
+        //todo
+    }
+
+    @GetMapping("/me/projects")
+    public ResponseEntity<UserDTO> getMyAssignedProjects(@CurrentUser UserPrincipal userPrincipal) {
+        //todo
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<UserDTO> getUserRoles(@CurrentUser UserPrincipal userPrincipal) {
+        //TODO
     }
 }

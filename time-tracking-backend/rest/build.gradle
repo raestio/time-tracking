@@ -2,6 +2,8 @@ dependencies {
     implementation project(":user")
     implementation project(":project")
     implementation project(":work-record")
+    implementation project(":report")
+    implementation project(":search")
     implementation project(":security")
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
     implementation 'org.springframework.boot:spring-boot-starter-web'

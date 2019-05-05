@@ -10,7 +10,6 @@ public class ProjectAssignmentDTO {
     private LocalDate validFrom;
     private LocalDate validTo;
     private UserDTOLight user;
-    private ProjectDTO project;
     private Set<ProjectRoleDTO> projectRoles = new HashSet<>();
 
     public Integer getId() {
@@ -27,14 +26,6 @@ public class ProjectAssignmentDTO {
 
     public void setUser(UserDTOLight user) {
         this.user = user;
-    }
-
-    public ProjectDTO getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectDTO project) {
-        this.project = project;
     }
 
     public Set<ProjectRoleDTO> getProjectRoles() {

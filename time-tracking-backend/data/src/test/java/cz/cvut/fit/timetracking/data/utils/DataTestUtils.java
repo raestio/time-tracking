@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.data.utils;
 import cz.cvut.fit.timetracking.data.api.dto.AuthProvider;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.entity.Project;
+import cz.cvut.fit.timetracking.data.entity.ProjectAssignment;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.entity.UserRole;
 import cz.cvut.fit.timetracking.data.entity.WorkRecord;

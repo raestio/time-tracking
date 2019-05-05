@@ -1,5 +1,6 @@
 package cz.cvut.fit.timetracking.data.api;
 
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
@@ -27,8 +28,10 @@ public interface DataAccessApi {
     ProjectDTO createOrUpdateProject(ProjectDTO project);
     List<ProjectDTO> findAllProjects();
     Optional<ProjectDTO> findProjectById(Integer id);
-
     void deleteProjectById(Integer id);
+
+    //project assignments
+    List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId);
 
     //work records
     boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId);
