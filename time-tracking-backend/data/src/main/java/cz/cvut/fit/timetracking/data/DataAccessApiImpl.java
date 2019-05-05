@@ -11,11 +11,13 @@ import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.WorkTypeDTO;
 import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import cz.cvut.fit.timetracking.data.service.ProjectRoleDataService;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
 import cz.cvut.fit.timetracking.data.service.WorkRecordDataService;
+import cz.cvut.fit.timetracking.data.service.WorkTypeDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,9 @@ public class DataAccessApiImpl implements DataAccessApi {
 
     @Autowired
     private WorkRecordDataService workRecordDataService;
+
+    @Autowired
+    private WorkTypeDataService workTypeDataService;
 
     @Override
     public Optional<UserDTO> findUserById(Integer id) {
@@ -176,6 +181,26 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public List<WorkRecordDTO> findAllWorkRecordsBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
         return workRecordDataService.findAllBetweenByUserId(fromInclusive, toExclusive, userId);
+    }
+
+    @Override
+    public List<WorkTypeDTO> findAllWorkTypes() {
+        return workTypeDataService.findAll();
+    }
+
+    @Override
+    public WorkTypeDTO createOrUpdateWorkType(WorkTypeDTO workTypeDTO) {
+        return workTypeDataService.createOrUpdate(workTypeDTO);
+    }
+
+    @Override
+    public void deleteWorkTypeById(Integer id) {
+        workTypeDataService.deleteById(id);
+    }
+
+    @Override
+    public Optional<WorkTypeDTO> findWorkTypeById(Integer workTypeId) {
+        return workTypeDataService.findById(workTypeId);
     }
 
 

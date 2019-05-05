@@ -10,6 +10,7 @@ import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
+import cz.cvut.fit.timetracking.data.api.dto.WorkTypeDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,4 +57,10 @@ public interface DataAccessApi {
     Optional<WorkRecordDTO> findWorkRecordById(Integer id);
     List<WorkRecordDTO> findAllWorkRecordsBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
     List<WorkRecordDTO> findAllWorkRecordsBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
+
+    //work types
+    List<WorkTypeDTO> findAllWorkTypes();
+    WorkTypeDTO createOrUpdateWorkType(WorkTypeDTO workTypeDTO);
+    void deleteWorkTypeById(Integer id);
+    Optional<WorkTypeDTO> findWorkTypeById(Integer workTypeId);
 }

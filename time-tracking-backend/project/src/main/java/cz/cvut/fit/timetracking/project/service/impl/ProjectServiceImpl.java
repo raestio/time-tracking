@@ -3,9 +3,11 @@ package cz.cvut.fit.timetracking.project.service.impl;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
+import cz.cvut.fit.timetracking.data.api.dto.WorkTypeDTO;
 import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
 import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
+import cz.cvut.fit.timetracking.project.dto.WorkType;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
 import cz.cvut.fit.timetracking.project.mapper.ProjectModelMapper;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
@@ -28,24 +30,24 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectModelMapper projectModelMapper;
 
     @Override
-    public Project create(String name, String description, LocalDate start, LocalDate end) {
+    public Project create(String name, String description, LocalDate start, LocalDate end, List<WorkType> workTypes) {
         Assert.isTrue(!name.isBlank(), "name of a project cannot be blank");
         Assert.notNull(start, "start of a project cannot be null");
-        Project result = createOrUpdateProject(null, name, description, start, end);
+        Project result = createOrUpdateProject(null, name, description, start, end, workTypes);
         return result;
     }
 
     @Override
-    public Project update(Integer projectId, String name, String description, LocalDate start, LocalDate end) {
+    public Project update(Integer projectId, String name, String description, LocalDate start, LocalDate end, List<WorkType> workTypes) {
         Assert.isTrue(!name.isBlank(), "name of a project cannot be blank");
         Assert.notNull(start, "start of a project cannot be null");
         Assert.notNull(projectId, "project id cannot be null");
         dataAccessApi.findProjectById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
-        Project result = createOrUpdateProject(projectId, name, description, start, end);
+        Project result = createOrUpdateProject(projectId, name, description, start, end, workTypes);
         return result;
     }
 
-    private Project createOrUpdateProject(Integer projectId, String name, String description, LocalDate start, LocalDate end) {
+    private Project createOrUpdateProject(Integer projectId, String name, String description, LocalDate start, LocalDate end, List<WorkType> workTypes) {
         ProjectDTO projectDTO = new ProjectDTO();
         if (projectId != null) {
             projectDTO.setId(projectId);
@@ -54,6 +56,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectDTO.setDescription(description);
         projectDTO.setStart(start);
         projectDTO.setEnd(end);
+        projectDTO.setWorkTypes(map(workTypes));
         projectDTO = dataAccessApi.createOrUpdateProject(projectDTO);
         return map(projectDTO);
     }
@@ -97,6 +100,10 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectRoleDTO> projectRoleDTOs = dataAccessApi.findAllProjectRoles();
         List<ProjectRole> projectRoles = projectRoleDTOs.stream().map(this::map).collect(Collectors.toList());
         return projectRoles;
+    }
+
+    private List<WorkTypeDTO> map(List<WorkType> workTypes) {
+        return workTypes.stream().map(w -> projectModelMapper.map(w, WorkTypeDTO.class)).collect(Collectors.toList());
     }
 
     private cz.cvut.fit.timetracking.data.api.dto.ProjectRoleName map(ProjectRoleName projectRoleName) {

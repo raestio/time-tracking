@@ -3,15 +3,20 @@ package cz.cvut.fit.timetracking.rest.controller;
 import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
+import cz.cvut.fit.timetracking.project.dto.WorkType;
 import cz.cvut.fit.timetracking.project.service.ProjectAssignmentService;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
+import cz.cvut.fit.timetracking.project.service.WorkTypeService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectRoleDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateWorkTypeRequest;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectAssignmentsResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectRolesResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectRequest;
+import cz.cvut.fit.timetracking.rest.dto.project.response.WorkTypesResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +45,14 @@ public class ProjectController {
     private ProjectAssignmentService projectAssignmentService;
 
     @Autowired
+    private WorkTypeService workTypeService;
+
+    @Autowired
     private RestModelMapper restModelMapper;
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> create(@Valid @RequestBody CreateOrUpdateProjectRequest createOrUpdateProjectRequest) {
-        Project project = projectService.create(createOrUpdateProjectRequest.getName(), createOrUpdateProjectRequest.getDescription(), createOrUpdateProjectRequest.getStart(), createOrUpdateProjectRequest.getEnd());
+    public ResponseEntity<ProjectDTO> create(@Valid @RequestBody CreateOrUpdateProjectRequest request) {
+        Project project = projectService.create(request.getName(), request.getDescription(), request.getStart(), request.getEnd(), map(request.getWorkTypes()));
         ProjectDTO result = restModelMapper.map(project, ProjectDTO.class);
         return ResponseEntity.ok(result);
     }
@@ -66,10 +74,14 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateProjectRequest updateProjectRequest) {
-        Project updatedProject = projectService.update(id, updateProjectRequest.getName(), updateProjectRequest.getDescription(), updateProjectRequest.getStart(), updateProjectRequest.getEnd());
+    public ResponseEntity<ProjectDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateProjectRequest request) {
+        Project updatedProject = projectService.update(id, request.getName(), request.getDescription(), request.getStart(), request.getEnd(), map(request.getWorkTypes()));
         ProjectDTO result = restModelMapper.map(updatedProject, ProjectDTO.class);
         return ResponseEntity.ok(result);
+    }
+
+    private List<WorkType> map(List<WorkTypeDTO> workTypes) {
+        return workTypes.stream().map(w -> restModelMapper.map(w, WorkType.class)).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
@@ -93,5 +105,35 @@ public class ProjectController {
         ProjectRolesResponse projectRolesResponse = new ProjectRolesResponse();
         projectRolesResponse.setProjectRoles(projectRoles.stream().map(role -> restModelMapper.map(role, ProjectRoleDTO.class)).collect(Collectors.toList()));
         return ResponseEntity.ok(projectRolesResponse);
+    }
+
+    @GetMapping("/work-types")
+    public ResponseEntity<WorkTypesResponse> getWorkTypes() {
+        List<WorkType> projectRoles = workTypeService.findAll();
+        WorkTypesResponse workTypesResponse = new WorkTypesResponse();
+        workTypesResponse.setWorkTypes(projectRoles.stream().map(this::map).collect(Collectors.toList()));
+        return ResponseEntity.ok(workTypesResponse);
+    }
+
+    @PostMapping("/work-types")
+    public ResponseEntity<WorkTypeDTO> createWorkType(@RequestBody @Valid CreateOrUpdateWorkTypeRequest request) {
+        WorkType workType = workTypeService.create(request.getName(), request.getDescription());
+        return ResponseEntity.ok(map(workType));
+    }
+
+    @PostMapping("/work-types/{workTypeId}")
+    public ResponseEntity<WorkTypeDTO> updateWorkType(@PathVariable("workTypeId") Integer workTypeId, @RequestBody @Valid CreateOrUpdateWorkTypeRequest request) {
+        WorkType workType = workTypeService.update(workTypeId, request.getName(), request.getDescription());
+        return ResponseEntity.ok(map(workType));
+    }
+
+    @DeleteMapping("/work-types/{workTypeId}")
+    public ResponseEntity deleteWorkType(@PathVariable("workTypeId") Integer workTypeId) {
+        workTypeService.deleteById(workTypeId);
+        return ResponseEntity.ok().build();
+    }
+
+    private WorkTypeDTO map(WorkType workType) {
+        return restModelMapper.map(workType, WorkTypeDTO.class);
     }
 }

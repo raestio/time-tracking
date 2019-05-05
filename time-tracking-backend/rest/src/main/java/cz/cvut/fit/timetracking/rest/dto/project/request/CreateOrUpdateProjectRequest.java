@@ -1,10 +1,13 @@
 package cz.cvut.fit.timetracking.rest.dto.project.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateOrUpdateProjectRequest {
 
@@ -21,6 +24,17 @@ public class CreateOrUpdateProjectRequest {
 
     @JsonProperty("end")
     private LocalDate end;
+
+    @JsonProperty("workTypes")
+    private List<WorkTypeDTO> workTypes = new ArrayList<>();
+
+    public List<WorkTypeDTO> getWorkTypes() {
+        return workTypes;
+    }
+
+    public void setWorkTypes(List<WorkTypeDTO> workTypes) {
+        this.workTypes = workTypes;
+    }
 
     public String getName() {
         return name;
