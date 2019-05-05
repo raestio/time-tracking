@@ -2,10 +2,13 @@ package cz.cvut.fit.timetracking.rest.controller;
 
 import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
+import cz.cvut.fit.timetracking.project.dto.ProjectRole;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectAssignmentDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectRoleDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectAssignmentsResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectRolesResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectRequest;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
@@ -71,8 +74,8 @@ public class ProjectController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/assignments")
-    public ResponseEntity<ProjectAssignmentsResponse> getProjectUserAssignments(@PathVariable("id") Integer projectId) {
+    @GetMapping("/{id}/project-assignments")
+    public ResponseEntity<ProjectAssignmentsResponse> getProjectAssignments(@PathVariable("id") Integer projectId) {
         List<ProjectAssignment> projectAssignments = projectService.findProjectAssignmentsByProjectId(projectId);
         ProjectAssignmentsResponse projectAssignmentsResponse = new ProjectAssignmentsResponse();
         List<ProjectAssignmentDTO> projectAssignmentDTOs = projectAssignments.stream().map(a -> restModelMapper.map(a, ProjectAssignmentDTO.class)).collect(Collectors.toList());
@@ -80,33 +83,11 @@ public class ProjectController {
         return ResponseEntity.ok(projectAssignmentsResponse);
     }
 
-    @GetMapping("/{projectId}/assignments/{userId}")
-    public ResponseEntity<ProjectDTO> getProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
-        //TODO
-        return null;
-    }
-
-    @PostMapping("/{projectId}/assignments")
-    public ResponseEntity<ProjectDTO> createProjectUserAssignment(@PathVariable("projectId") Integer projectId,  Integer userId) {
-        //TODO
-        return null;
-    }
-
-    @PutMapping("/{projectId}/assignments/{userId}")
-    public ResponseEntity<ProjectDTO> updateProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
-        //TODO
-        return null;
-    }
-
-    @DeleteMapping("/{projectId}/assignments/{userId}")
-    public ResponseEntity<ProjectDTO> deleteProjectUserAssignment(@PathVariable("projectId") Integer projectId, @PathVariable("userId") Integer userId) {
-        //TODO
-        return null;
-    }
-
-    @GetMapping("/{projectId}/roles")
-    public ResponseEntity<ProjectDTO> getProjectRoles(@PathVariable("projectId") Integer projectId) {
-        //TODO
-        return null;
+    @GetMapping("/roles")
+    public ResponseEntity<ProjectRolesResponse> getProjectRoles() {
+        List<ProjectRole> projectRoles = projectService.findAllProjectRoles();
+        ProjectRolesResponse projectRolesResponse = new ProjectRolesResponse();
+        projectRolesResponse.setProjectRoles(projectRoles.stream().map(role -> restModelMapper.map(role, ProjectRoleDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok(projectRolesResponse);
     }
 }

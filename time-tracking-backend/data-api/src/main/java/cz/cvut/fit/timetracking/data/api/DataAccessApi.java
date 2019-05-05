@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.data.api;
 
 import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
@@ -29,6 +30,7 @@ public interface DataAccessApi {
     List<ProjectDTO> findAllProjects();
     Optional<ProjectDTO> findProjectById(Integer id);
     void deleteProjectById(Integer id);
+    List<ProjectRoleDTO> findAllProjectRoles();
 
     //project assignments
     List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId);

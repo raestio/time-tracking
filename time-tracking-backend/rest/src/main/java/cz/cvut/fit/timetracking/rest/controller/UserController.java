@@ -62,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @GetMapping("/{userID}/projects")
+    @GetMapping("/{userId}/projects")
     public ResponseEntity<UserDTO> getProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
         //todo
     }

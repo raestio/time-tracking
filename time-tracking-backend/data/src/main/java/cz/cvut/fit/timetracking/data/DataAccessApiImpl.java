@@ -3,12 +3,14 @@ package cz.cvut.fit.timetracking.data;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.UserRoleName;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
 import cz.cvut.fit.timetracking.data.service.ProjectDataService;
+import cz.cvut.fit.timetracking.data.service.ProjectRoleDataService;
 import cz.cvut.fit.timetracking.data.service.UserDataService;
 import cz.cvut.fit.timetracking.data.service.UserRoleDataService;
 import cz.cvut.fit.timetracking.data.service.WorkRecordDataService;
@@ -30,6 +32,9 @@ public class DataAccessApiImpl implements DataAccessApi {
 
     @Autowired
     private ProjectDataService projectDataService;
+
+    @Autowired
+    private ProjectRoleDataService projectRoleDataService;
 
     @Autowired
     private WorkRecordDataService workRecordDataService;
@@ -83,6 +88,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     @Override
     public void deleteProjectById(Integer id) {
         projectDataService.deleteById(id);
+    }
+
+    @Override
+    public List<ProjectRoleDTO> findAllProjectRoles() {
+        return projectRoleDataService.findAll();
     }
 
     @Override
