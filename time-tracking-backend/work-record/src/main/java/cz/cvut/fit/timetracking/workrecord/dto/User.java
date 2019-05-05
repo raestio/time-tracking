@@ -7,6 +7,7 @@ public class User {
     private Integer id;
     private String name;
     private String surname;
+    private String email;
     private String pictureUrl;
 
     public User(Integer id, String name, String surname) {
@@ -24,6 +25,14 @@ public class User {
 
     public User() {
 
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getId() {

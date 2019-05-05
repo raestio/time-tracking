@@ -35,10 +35,10 @@ public class ReportServiceTests extends ReportTestsConfiguration {
     public void init() {
         given(workRecordService.findAllBetween(from.atStartOfDay(), to.atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
         given(workRecordService.findAllBetween(from.atStartOfDay(), to.atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
-        given(workRecordService.findAllBetween(from.withDayOfMonth(1).atStartOfDay(), to.plusMonths(1).withDayOfMonth(1).atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
-        given(workRecordService.findAllBetweenByUserId(from.withDayOfMonth(1).atStartOfDay(), to.plusMonths(1).withDayOfMonth(1).atStartOfDay(), 1)).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCaseUserId1());
-        given(workRecordService.findAllBetweenByUserId(from.withDayOfMonth(1).atStartOfDay(), to.plusMonths(1).withDayOfMonth(1).atStartOfDay(), 2)).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCaseUserId2());
-        given(workRecordService.findAllBetween(from.withDayOfYear(1).atStartOfDay(), to.plusYears(1).withDayOfYear(1).atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
+        given(workRecordService.findAllBetween(from.withDayOfMonth(1).atStartOfDay(), to.withDayOfMonth(1).atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
+        given(workRecordService.findAllBetweenByUserId(from.withDayOfMonth(1).atStartOfDay(), to.withDayOfMonth(1).atStartOfDay(), 1)).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCaseUserId1());
+        given(workRecordService.findAllBetweenByUserId(from.withDayOfMonth(1).atStartOfDay(), to.withDayOfMonth(1).atStartOfDay(), 2)).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCaseUserId2());
+        given(workRecordService.findAllBetween(from.withDayOfYear(1).atStartOfDay(), to.withDayOfYear(1).atStartOfDay())).willReturn(ReportServiceTestsHelper.createWorkRecordsTestCase());
     }
 
     @Test

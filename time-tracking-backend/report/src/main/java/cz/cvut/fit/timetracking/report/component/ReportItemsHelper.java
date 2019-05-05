@@ -128,6 +128,7 @@ public class ReportItemsHelper {
         reportUser.setId(user.getId());
         reportUser.setName(user.getName());
         reportUser.setSurname(user.getSurname());
+        reportUser.setEmail(user.getEmail());
         reportUser.setPictureUrl(user.getPictureUrl());
         return reportUser;
     }

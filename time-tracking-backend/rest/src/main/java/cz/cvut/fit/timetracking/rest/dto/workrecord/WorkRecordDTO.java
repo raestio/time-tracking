@@ -18,12 +18,6 @@ public class WorkRecordDTO {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("dateCreated")
-    private LocalDateTime dateCreated;
-
-    @JsonProperty("dateUpdated")
-    private LocalDateTime dateUpdated;
-
     public Integer getId() {
         return id;
     }
@@ -56,19 +50,4 @@ public class WorkRecordDTO {
         this.description = description;
     }
 
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public LocalDateTime getDateUpdated() {
-        return dateUpdated;
-    }
-
-    public void setDateUpdated(LocalDateTime dateUpdated) {
-        this.dateUpdated = dateUpdated;
-    }
 }

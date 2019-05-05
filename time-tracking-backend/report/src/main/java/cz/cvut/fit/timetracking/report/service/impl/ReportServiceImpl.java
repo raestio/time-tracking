@@ -48,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
         List<MonthReportItem> monthReportItems = createReportsByTemplate(
-                () -> findWorkRecordsBetween(fromInclusive.withDayOfMonth(1), toExclusive.plusMonths(1).withDayOfMonth(1), userId),
+                () -> findWorkRecordsBetween(fromInclusive.withDayOfMonth(1), toExclusive.withDayOfMonth(1), userId),
                 (workRecords -> workRecordGroupingService.groupByMonth(workRecords)),
                 ((month, workRecords) -> reportItemsHelper.createMonthReportItem(month, workRecords))
         );
@@ -59,7 +59,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<YearReportItem> createYearlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
         List<YearReportItem> yearReportItems = createReportsByTemplate(
-                () -> findWorkRecordsBetween(fromInclusive.withDayOfYear(1), toExclusive.plusYears(1).withDayOfYear(1), userId),
+                () -> findWorkRecordsBetween(fromInclusive.withDayOfYear(1), toExclusive.withDayOfYear(1), userId),
                 (workRecords -> workRecordGroupingService.groupByYear(workRecords)),
                 ((year, workRecords) -> reportItemsHelper.createYearReportItem(year, workRecords))
         );
