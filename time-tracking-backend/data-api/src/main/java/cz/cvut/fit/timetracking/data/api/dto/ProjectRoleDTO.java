@@ -1,14 +1,10 @@
 package cz.cvut.fit.timetracking.data.api.dto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class ProjectRoleDTO {
 
     private Integer id;
     private ProjectRoleName name;
     private String description;
-    private Set<ProjectAssignmentDTO> projectAssignments = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -16,14 +12,6 @@ public class ProjectRoleDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Set<ProjectAssignmentDTO> getProjectAssignments() {
-        return projectAssignments;
-    }
-
-    public void setProjectAssignments(Set<ProjectAssignmentDTO> projectAssignments) {
-        this.projectAssignments = projectAssignments;
     }
 
     public ProjectRoleName getName() {

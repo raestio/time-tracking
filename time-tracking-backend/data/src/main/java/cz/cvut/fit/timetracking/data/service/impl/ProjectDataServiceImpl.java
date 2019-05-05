@@ -9,6 +9,7 @@ import cz.cvut.fit.timetracking.data.service.ProjectDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,7 +52,13 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 
     @Override
     public List<ProjectAssignmentDTO> findProjectAssignmentsByProjectId(Integer projectId) {
-        projectRepository.findWithAssignmentsAndProjectRolesFetchedById(projectId);
-        return null;
+        Optional<Project> project = projectRepository.findWithAssignmentsAndProjectRolesFetchedById(projectId);
+        List<ProjectAssignmentDTO> projectAssignmentDTOs = project.map(this::mapProjectAssignments).orElse(new ArrayList<>());
+        return projectAssignmentDTOs;
+    }
+
+    private List<ProjectAssignmentDTO> mapProjectAssignments(Project project) {
+        List<ProjectAssignmentDTO> projectAssignmentDTOs = project.getProjectAssignments().stream().map(a -> dataModelMapper.map(a, ProjectAssignmentDTO.class)).collect(Collectors.toList());
+        return projectAssignmentDTOs;
     }
 }
