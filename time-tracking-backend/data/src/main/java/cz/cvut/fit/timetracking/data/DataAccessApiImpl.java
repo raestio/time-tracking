@@ -74,6 +74,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
+    public List<UserRoleDTO> findAllUserRoles() {
+        return userRoleDataService.findAll();
+    }
+
+    @Override
     public ProjectDTO createOrUpdateProject(ProjectDTO project) {
         return projectDataService.createOrUpdate(project);
     }

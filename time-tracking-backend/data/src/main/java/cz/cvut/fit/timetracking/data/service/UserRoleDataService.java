@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserRoleDataService {
     List<UserRoleDTO> findAllByUserId(Integer id);
     List<UserRoleDTO> findAllByNameIn(List<UserRoleName> roleNames);
+    List<UserRoleDTO> findAll();
 }

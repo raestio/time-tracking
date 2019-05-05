@@ -4,12 +4,15 @@ import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
-import cz.cvut.fit.timetracking.rest.dto.user.UpdateUserRolesRequest;
+import cz.cvut.fit.timetracking.rest.dto.user.UserRoleDTO;
+import cz.cvut.fit.timetracking.rest.dto.user.request.UpdateUserRolesRequest;
 import cz.cvut.fit.timetracking.rest.dto.user.UserDTO;
+import cz.cvut.fit.timetracking.rest.dto.user.response.UserRolesResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.user.dto.User;
+import cz.cvut.fit.timetracking.user.dto.UserRole;
 import cz.cvut.fit.timetracking.user.dto.UserRoleName;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import cz.cvut.fit.timetracking.user.service.UserService;
@@ -73,15 +76,21 @@ public class UserController {
 
     @GetMapping("/{userId}/projects")
     public ResponseEntity<ProjectsResponse> getCurrentlyAssignedProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
-        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
-        ProjectsResponse projectsResponse = new ProjectsResponse();
-        projectsResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
+        ProjectsResponse projectsResponse = getCurrentlyAssignedProjects(userId);
         return ResponseEntity.ok(projectsResponse);
     }
 
     @GetMapping("/me/projects")
-    public ResponseEntity<UserDTO> getMyAssignedProjects(@CurrentUser UserPrincipal userPrincipal) {
-        //todo
+    public ResponseEntity<ProjectsResponse> getMyCurrentlyAssignedProjects(@CurrentUser UserPrincipal userPrincipal) {
+        ProjectsResponse projectsResponse = getCurrentlyAssignedProjects(userPrincipal.getId());
+        return ResponseEntity.ok(projectsResponse);
+    }
+
+    private ProjectsResponse getCurrentlyAssignedProjects(Integer userId) {
+        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
+        ProjectsResponse projectsResponse = new ProjectsResponse();
+        projectsResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
+        return projectsResponse;
     }
 
     @DeleteMapping("/{id}")
@@ -91,7 +100,10 @@ public class UserController {
     }
 
     @GetMapping("/roles")
-    public ResponseEntity<UserDTO> getAllUserRoles(@CurrentUser UserPrincipal userPrincipal) {
-        //TODO
+    public ResponseEntity<UserRolesResponse> getAllUserRoles(@CurrentUser UserPrincipal userPrincipal) {
+        List<UserRole> userRoles = userService.findAllUserRoles();
+        UserRolesResponse userRolesResponse = new UserRolesResponse();
+        userRolesResponse.setUserRoles(userRoles.stream().map(r -> restModelMapper.map(r, UserRoleDTO.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok(userRolesResponse);
     }
 }

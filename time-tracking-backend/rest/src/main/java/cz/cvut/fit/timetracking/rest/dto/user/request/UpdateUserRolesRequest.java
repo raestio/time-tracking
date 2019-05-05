@@ -1,6 +1,7 @@
-package cz.cvut.fit.timetracking.rest.dto.user;
+package cz.cvut.fit.timetracking.rest.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.dto.user.UserRoleName;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

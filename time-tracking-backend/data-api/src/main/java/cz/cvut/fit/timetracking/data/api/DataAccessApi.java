@@ -27,6 +27,7 @@ public interface DataAccessApi {
     //user roles
     List<UserRoleDTO> findAllUserRolesByUserId(Integer id);
     List<UserRoleDTO> findUserRolesByNameIn(List<UserRoleName> roleNames);
+    List<UserRoleDTO> findAllUserRoles();
 
     //project
     ProjectDTO createOrUpdateProject(ProjectDTO project);

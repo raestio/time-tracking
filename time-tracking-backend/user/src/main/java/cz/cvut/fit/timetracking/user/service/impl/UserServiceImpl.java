@@ -73,6 +73,12 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    @Override
+    public List<UserRole> findAllUserRoles() {
+        List<UserRoleDTO> userRoleDTOs = dataAccessApi.findAllUserRoles();
+        return userRoleDTOs.stream().map(this::map).collect(Collectors.toList());
+    }
+
     private User create(String name, String surname, String email, AuthProvider authProvider, String pictureUrl, UserRoleName... userRoleNames) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(name);
@@ -92,6 +98,10 @@ public class UserServiceImpl implements UserService {
         List<UserRoleDTO> userRoleDTOS = dataAccessApi.findUserRolesByNameIn(roleNames);
         Assert.isTrue(userRoleDTOS.size() == userRoleNames.size(), "All user roles must be persisted in DB: " + userRoleNames);
         return userRoleDTOS;
+    }
+
+    private UserRole map(UserRoleDTO r) {
+        return userModelMapper.map(r, UserRole.class);
     }
 
     private User map(UserDTO u) {

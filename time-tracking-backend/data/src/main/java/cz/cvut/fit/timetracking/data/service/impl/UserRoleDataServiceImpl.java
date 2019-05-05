@@ -24,13 +24,23 @@ public class UserRoleDataServiceImpl implements UserRoleDataService {
     @Override
     public List<UserRoleDTO> findAllByUserId(Integer id) {
         List<UserRole> userRoles = userRoleRepository.findAllByUserId(id);
-        List<UserRoleDTO> userRoleDTOs = userRoles.stream().map(this::map).collect(Collectors.toList());
-        return userRoleDTOs;
+        return map(userRoles);
     }
 
     @Override
     public List<UserRoleDTO> findAllByNameIn(List<UserRoleName> roleNames) {
         List<UserRole> userRoles = userRoleRepository.findAllByNameIn(roleNames.stream().map(this::mapRoleName).collect(Collectors.toList()));
+        return map(userRoles);
+    }
+
+    @Override
+    public List<UserRoleDTO> findAll() {
+        List<UserRole> userRoles = userRoleRepository.findAll();
+        List<UserRoleDTO> userRoleDTOs = map(userRoles);
+        return userRoleDTOs;
+    }
+
+    private List<UserRoleDTO> map(List<UserRole> userRoles) {
         List<UserRoleDTO> userRoleDTOs = userRoles.stream().map(this::map).collect(Collectors.toList());
         return userRoleDTOs;
     }

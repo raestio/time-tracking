@@ -22,4 +22,6 @@ public interface UserService {
 
     //delete
     void deleteById(Integer id);
+
+    List<UserRole> findAllUserRoles();
 }
