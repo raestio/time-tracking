@@ -5,6 +5,7 @@ import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateOrUpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateWorkRecordsBulkRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.response.JiraAvailabilityResponse;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.response.WorkRecordsJiraImportResponse;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.response.WorkRecordsResponse;
@@ -14,6 +15,7 @@ import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecordConflictInfo;
+import cz.cvut.fit.timetracking.workrecord.dto.input.WorkRecordInput;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordJiraService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,12 @@ public class WorkRecordController {
 
     @Autowired
     private ProjectService projectService;
+
+    @PostMapping("/bulk")
+    public ResponseEntity create(@Valid @RequestBody CreateWorkRecordsBulkRequest request, @CurrentUser UserPrincipal user) {
+        workRecordService.create(request.getRequests().stream().map(r -> restModelMapper.map(r, WorkRecordInput.class)).collect(Collectors.toList()));
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping
     public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
@@ -104,7 +112,6 @@ public class WorkRecordController {
     public ResponseEntity<WorkRecordsJiraImportResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                                         @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
                                                                                         @RequestParam(value = "userId") Integer userId) {
-
         WorkRecordsJiraImportResponse workRecordsJiraImportResponse = getWorkRecordsFromJiraToImportInternal(fromInclusive, toExclusive, userId);
         return ResponseEntity.ok(workRecordsJiraImportResponse);
     }

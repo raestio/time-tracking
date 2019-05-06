@@ -3,9 +3,12 @@ package cz.cvut.fit.timetracking.workrecord.service.impl;
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkRecordDTOLight;
+import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.exception.ProjectNotFoundException;
+import cz.cvut.fit.timetracking.project.exception.WorkTypeNotFoundException;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
+import cz.cvut.fit.timetracking.workrecord.dto.input.WorkRecordInput;
 import cz.cvut.fit.timetracking.workrecord.exception.WorkRecordNotFoundException;
 import cz.cvut.fit.timetracking.workrecord.exception.WorkRecordServiceException;
 import cz.cvut.fit.timetracking.workrecord.mapper.WorkRecordModelMapper;
@@ -33,7 +36,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
 
     @Override
     public WorkRecord create(LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId, Integer userId) {
-        checkWorkRecordConstraintsOrThrow(from, to, userId, projectId);
+        checkWorkRecordConstraintsOrThrow(from, to, userId, projectId, workTypeId);
         WorkRecordDTOLight workRecordDTOLight = new WorkRecordDTOLight();
         workRecordDTOLight.setDateFrom(from);
         workRecordDTOLight.setDateTo(to);
@@ -48,9 +51,15 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     }
 
     @Override
+    public void create(List<WorkRecordInput> workRecordInputs) {
+        workRecordInputs.forEach(input -> checkWorkRecordConstraintsOrThrow(input.getDateFrom(), input.getDateTo(), input.getUserId(), input.getProjectId(), input.getWorkTypeId()));
+        workRecordInputs.forEach(input -> create(input.getDateFrom(), input.getDateTo(), input.getDescription(), input.getProjectId(), input.getWorkTypeId(), input.getUserId()));
+    }
+
+    @Override
     public WorkRecord update(Integer workRecordId, LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId) {
         WorkRecordDTO workRecord = dataAccessApi.findWorkRecordById(workRecordId).orElseThrow(() -> new WorkRecordNotFoundException(workRecordId));
-        checkWorkRecordConstraintsOrThrow(from, to, workRecord.getUser().getId(), projectId);
+        checkWorkRecordConstraintsOrThrow(from, to, workRecord.getUser().getId(), projectId, workTypeId);
         workRecord.setDateFrom(from);
         workRecord.setDateTo(to);
         workRecord.setDescription(description);
@@ -92,15 +101,26 @@ public class WorkRecordServiceImpl implements WorkRecordService {
         dataAccessApi.deleteWorkRecordById(id);
     }
 
-    private void checkWorkRecordConstraintsOrThrow(LocalDateTime from, LocalDateTime to, Integer userId, Integer projectId) {
+    private void checkWorkRecordConstraintsOrThrow(LocalDateTime from, LocalDateTime to, Integer userId, Integer projectId, Integer workTypeId) {
         Assert.notNull(userId, "user id cannot be null");
         Assert.notNull(projectId, "project id cannot be null");
         Assert.isTrue(to.isAfter(from), "Work record time parameter 'to' must go after time parameter 'from'.");
+
         boolean overlap = workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
         if (overlap) {
             throw new WorkRecordServiceException("Work record times cannot overlap.");
         }
-        projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+
+        boolean isAssigned = projectService.isUserAssignedToProject(userId, projectId);
+        if (!isAssigned) {
+            throw new WorkRecordServiceException("Work record cannot be created. User with id = " + userId + " has no valid project assignment. Project id = " + projectId);
+        }
+
+        Project project = projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+        boolean workTypeExists = project.getWorkTypes().stream().anyMatch(workType -> workType.getId().equals(workTypeId));
+        if (!workTypeExists) {
+            throw new WorkTypeNotFoundException(workTypeId);
+        }
     }
 
     @Override

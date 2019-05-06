@@ -20,4 +20,5 @@ public interface ProjectService {
     void deleteById(Integer id);
     Optional<ProjectRole> findProjectRoleByName(ProjectRoleName projectRoleName);
     List<ProjectRole> findAllProjectRoles();
+    boolean isUserAssignedToProject(Integer userId, Integer projectId);
 }

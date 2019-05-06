@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.workrecord.service;
 
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
+import cz.cvut.fit.timetracking.workrecord.dto.input.WorkRecordInput;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 public interface WorkRecordService {
     WorkRecord create(LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId, Integer userId);
+    void create(List<WorkRecordInput> workRecordInputs);
 
     WorkRecord update(Integer workRecordId, LocalDateTime from, LocalDateTime to, String description, Integer projectId, Integer workTypeId);
 

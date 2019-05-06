@@ -1,10 +1,12 @@
 package cz.cvut.fit.timetracking.project.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.DataAccessApi;
+import cz.cvut.fit.timetracking.data.api.dto.ProjectAssignmentDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectDTO;
 import cz.cvut.fit.timetracking.data.api.dto.ProjectRoleDTO;
 import cz.cvut.fit.timetracking.data.api.dto.WorkTypeDTO;
 import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
 import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.project.dto.WorkType;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -100,6 +103,16 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectRoleDTO> projectRoleDTOs = dataAccessApi.findAllProjectRoles();
         List<ProjectRole> projectRoles = projectRoleDTOs.stream().map(this::map).collect(Collectors.toList());
         return projectRoles;
+    }
+
+    @Override
+    public boolean isUserAssignedToProject(Integer userId, Integer projectId) {
+        List<ProjectAssignmentDTO> projectAssignments = dataAccessApi.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
+        var isAssigned = projectAssignments.stream().anyMatch(projectAssignmentDTO -> {
+            var now = LocalDate.now();
+            return !now.isBefore(projectAssignmentDTO.getValidFrom()) && (projectAssignmentDTO.getValidTo() == null || !now.isAfter(projectAssignmentDTO.getValidTo()));
+        });
+        return isAssigned;
     }
 
     private List<WorkTypeDTO> map(List<WorkType> workTypes) {
