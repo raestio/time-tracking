@@ -93,7 +93,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<UserRoleDTO> findUserRolesByNameIn(List<UserRoleName> userRoleNames) {
-        Assert.notEmpty(userRoleNames, "Role names cannot be empty");
         List<cz.cvut.fit.timetracking.data.api.dto.UserRoleName> roleNames = userRoleNames.stream().map(this::mapUserRoleName).collect(Collectors.toList());
         List<UserRoleDTO> userRoleDTOS = dataAccessApi.findUserRolesByNameIn(roleNames);
         Assert.isTrue(userRoleDTOS.size() == userRoleNames.size(), "All user roles must be persisted in DB: " + userRoleNames);

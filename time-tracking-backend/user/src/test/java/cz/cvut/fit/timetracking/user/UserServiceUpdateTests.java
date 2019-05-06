@@ -1,6 +1,8 @@
 package cz.cvut.fit.timetracking.user;
 
 import cz.cvut.fit.timetracking.configuration.UserTestsConfiguration;
+import cz.cvut.fit.timetracking.data.entity.UserRole;
+import cz.cvut.fit.timetracking.data.entity.enums.UserRoleName;
 import cz.cvut.fit.timetracking.data.repository.UserRoleRepository;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
@@ -32,34 +34,23 @@ public class UserServiceUpdateTests extends UserTestsConfiguration {
         createUser();
     }
 
+    private void createUserRole(UserRoleName user) {
+        UserRole userRole = new UserRole();
+        userRole.setName(user);
+        userRoleRepository.save(userRole);
+    }
+
     @After
     public void cleanUp() {
         userService.deleteById(userService.findByEmail(email).get().getId());
         userRoleRepository.deleteAll();
     }
 
-    @Test
-    public void test_whenNameIsChanged_updateUser() {
-        String name = "Nove";
-        User user = userService.findByEmail(email).get();
-        user.setName(name);
-        user = userService.update(user);
-        assertThat(user.getName()).isEqualTo(userService.findByEmail(email).get().getName());
-        assertThat(user.getName()).isEqualTo(name);
-    }
-
-    @Test(expected = UpdateUserException.class)
-    public void test_whenEmailIsChanged_throwException() {
-        User user = userService.findByEmail(email).get();
-        user.setEmail("new@tmp.com");
-        userService.update(user);
-    }
-
     @Test(expected = UpdateUserException.class)
     public void test_whenRolesAreRemoved_throwException() {
         User user = userService.findByEmail(email).get();
         user.getUserRoles().clear();
-        userService.update(user);
+        userService.updateUserRoles(user.getId(), user.getUserRoles().stream().map(u -> u.getName()).collect(Collectors.toList()));
     }
 
     @Test
@@ -72,7 +63,7 @@ public class UserServiceUpdateTests extends UserTestsConfiguration {
         findAndAddAdminRole();
         User user = userService.findByEmail(email).get();
         user.setUserRoles(user.getUserRoles().stream().filter(r -> !r.getName().equals(cz.cvut.fit.timetracking.user.dto.UserRoleName.ADMIN)).collect(Collectors.toList()));
-        User updatedUser = userService.update(user);
+        User updatedUser = userService.updateUserRoles(user.getId(), user.getUserRoles().stream().map(u -> u.getName()).collect(Collectors.toList()));
         assertThat(updatedUser.getUserRoles()).hasSize(1);
         assertThat(updatedUser.getUserRoles().get(0).getName()).isEqualTo(cz.cvut.fit.timetracking.user.dto.UserRoleName.USER);
     }
@@ -82,7 +73,7 @@ public class UserServiceUpdateTests extends UserTestsConfiguration {
         findAndAddAdminRole();
         User user = userService.findByEmail(email).get();
         user.setUserRoles(user.getUserRoles().stream().filter(r -> !r.getName().equals(cz.cvut.fit.timetracking.user.dto.UserRoleName.USER)).collect(Collectors.toList()));
-        userService.update(user);
+        userService.updateUserRoles(user.getId(), user.getUserRoles().stream().map(u -> u.getName()).collect(Collectors.toList()));
     }
 
     private void findAndAddAdminRole() {
@@ -90,7 +81,7 @@ public class UserServiceUpdateTests extends UserTestsConfiguration {
         cz.cvut.fit.timetracking.user.dto.UserRole userRole = new cz.cvut.fit.timetracking.user.dto.UserRole();
         userRole.setName(cz.cvut.fit.timetracking.user.dto.UserRoleName.ADMIN);
         user.getUserRoles().add(userRole);
-        User updatedUser = userService.update(user);
+        User updatedUser = userService.updateUserRoles(user.getId(), user.getUserRoles().stream().map(u -> u.getName()).collect(Collectors.toList()));
         assertThat(updatedUser.getUserRoles()).hasSize(2);
         assertThat(updatedUser.getUserRoles().stream().map(cz.cvut.fit.timetracking.user.dto.UserRole::getName).collect(Collectors.toList())).contains(cz.cvut.fit.timetracking.user.dto.UserRoleName.USER, cz.cvut.fit.timetracking.user.dto.UserRoleName.ADMIN);
     }

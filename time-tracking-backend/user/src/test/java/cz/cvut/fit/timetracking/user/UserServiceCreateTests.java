@@ -1,7 +1,8 @@
 package cz.cvut.fit.timetracking.user;
 
 import cz.cvut.fit.timetracking.configuration.UserTestsConfiguration;
-
+import cz.cvut.fit.timetracking.data.entity.UserRole;
+import cz.cvut.fit.timetracking.data.repository.UserRoleRepository;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.dto.UserRoleName;

@@ -11,7 +11,7 @@ public class WorkRecordDTO {
     private String description;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
-    private ProjectDTO project;
+    private ProjectDTOLight project;
     private WorkTypeDTO workType;
     private UserDTOLight user;
 
@@ -31,11 +31,11 @@ public class WorkRecordDTO {
         this.user = user;
     }
 
-    public ProjectDTO getProject() {
+    public ProjectDTOLight getProject() {
         return project;
     }
 
-    public void setProject(ProjectDTO project) {
+    public void setProject(ProjectDTOLight project) {
         this.project = project;
     }
 
