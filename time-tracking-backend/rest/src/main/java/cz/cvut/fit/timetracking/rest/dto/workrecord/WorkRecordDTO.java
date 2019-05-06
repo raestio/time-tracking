@@ -1,6 +1,8 @@
 package cz.cvut.fit.timetracking.rest.dto.workrecord;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +19,12 @@ public class WorkRecordDTO {
 
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("project")
+    private ProjectDTO project;
+
+    @JsonProperty("workType")
+    private WorkTypeDTO workType;
 
     public Integer getId() {
         return id;
@@ -50,4 +58,19 @@ public class WorkRecordDTO {
         this.description = description;
     }
 
+    public ProjectDTO getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectDTO project) {
+        this.project = project;
+    }
+
+    public WorkTypeDTO getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(WorkTypeDTO workType) {
+        this.workType = workType;
+    }
 }

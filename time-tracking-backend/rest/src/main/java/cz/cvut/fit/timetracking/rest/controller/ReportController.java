@@ -17,6 +17,7 @@ import cz.cvut.fit.timetracking.rest.dto.report.response.ProjectsReportsResponse
 import cz.cvut.fit.timetracking.rest.dto.report.response.UsersReportsResponse;
 import cz.cvut.fit.timetracking.rest.dto.report.response.YearlyReportsResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
+import cz.cvut.fit.timetracking.rest.utils.TimeUtils;
 import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,8 +76,8 @@ public class ReportController {
                                                                       @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive) {
 
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalDate from = getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
-        LocalDate to = getTo(toExclusive, tomorrow);
+        LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
+        LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
         List<ProjectReportItem> projectReportItems = reportService.createProjectsReports(from, to);
         ProjectsReportsResponse projectsReportsResponse = new ProjectsReportsResponse();
         projectsReportsResponse.setProjectReportItems(projectReportItems.stream().map(p -> restModelMapper.map(p, ProjectReportItemDTO.class)).collect(Collectors.toList()));
@@ -91,8 +88,8 @@ public class ReportController {
     public ResponseEntity<UsersReportsResponse> getUsersReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                 @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive) {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalDate from = getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
-        LocalDate to = getTo(toExclusive, tomorrow);
+        LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
+        LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
         List<UserReportItem> userReportItems = reportService.createUsersReports(from, to);
         UsersReportsResponse usersReportsResponse = new UsersReportsResponse();
         usersReportsResponse.setUserReportItems(userReportItems.stream().map(u -> restModelMapper.map(u, UserReportItemDTO.class)).collect(Collectors.toList()));
@@ -122,8 +119,8 @@ public class ReportController {
 
     private MonthlyReportsResponse createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
         LocalDate nextMonth = LocalDate.now().plusMonths(1);
-        LocalDate from = getFrom(fromInclusive, toExclusive, nextMonth.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS), date -> date.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS));
-        LocalDate to = getTo(toExclusive, nextMonth);
+        LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, nextMonth.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS), date -> date.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS));
+        LocalDate to = TimeUtils.getTo(toExclusive, nextMonth);
         List<MonthReportItem> monthReportItems = reportService.createMonthlyReports(from, to, userId);
         MonthlyReportsResponse monthlyReportsResponse = new MonthlyReportsResponse();
         monthlyReportsResponse.setMonthlyReportItems(monthReportItems.stream().map(r -> restModelMapper.map(r, MonthReportItemDTO.class)).collect(Collectors.toList()));
@@ -132,8 +129,8 @@ public class ReportController {
 
     private DailyReportsResponse createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalDate from = getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
-        LocalDate to = getTo(toExclusive, tomorrow);
+        LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
+        LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
         List<DayReportItem> dayReportItems = reportService.createDailyReports(from, to, userId);
         DailyReportsResponse dailyReportsResponse = new DailyReportsResponse();
         dailyReportsResponse.setDailyReportItems(dayReportItems.stream().map(r -> restModelMapper.map(r, DayReportItemDTO.class)).collect(Collectors.toList()));
@@ -144,29 +141,14 @@ public class ReportController {
         LocalDate nextYear = LocalDate.now().plusYears(1);
         LocalDate from = fromInclusive == null ? null : LocalDate.ofYearDay(fromInclusive, 1);
         LocalDate to = toExclusive == null ? null : LocalDate.ofYearDay(toExclusive, 1);
-        from = getFrom(from, to, nextYear.minusDays(YEARLY_REPORTS_DEFAULT_YEARS), date -> date.minusYears(YEARLY_REPORTS_DEFAULT_YEARS));
-        to = getTo(to, nextYear);
+        from = TimeUtils.getFrom(from, to, nextYear.minusDays(YEARLY_REPORTS_DEFAULT_YEARS), date -> date.minusYears(YEARLY_REPORTS_DEFAULT_YEARS));
+        to = TimeUtils.getTo(to, nextYear);
         List<YearReportItem> yearReportItems = reportService.createYearlyReports(from, to, userId);
         YearlyReportsResponse yearlyReportsResponse = new YearlyReportsResponse();
         yearlyReportsResponse.setYearlyReportItems(yearReportItems.stream().map(r -> restModelMapper.map(r, YearReportItemDTO.class)).collect(Collectors.toList()));
         return yearlyReportsResponse;
     }
 
-    private LocalDate getFrom(LocalDate fromInclusive, LocalDate toExclusive, LocalDate defaultIfValuseNull, UnaryOperator<LocalDate> ifToExclusiveNotNull) {
-        if (fromInclusive == null && toExclusive == null) {
-            return defaultIfValuseNull;
-        } else if (fromInclusive == null) {
-            return ifToExclusiveNotNull.apply(toExclusive);
-        } else {
-            return fromInclusive;
-        }
-    }
 
-    private LocalDate getTo(LocalDate toExclusive, LocalDate defaultIfToExclusiveNull) {
-        if (toExclusive == null) {
-            return defaultIfToExclusiveNull;
-        }
-        return toExclusive;
-    }
 
 }

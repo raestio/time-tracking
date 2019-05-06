@@ -1,4 +1,4 @@
-package cz.cvut.fit.timetracking.rest.dto.workrecord;
+package cz.cvut.fit.timetracking.rest.dto.workrecord.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.cvut.fit.timetracking.rest.validation.constraints.ConsistentDateParameters;
