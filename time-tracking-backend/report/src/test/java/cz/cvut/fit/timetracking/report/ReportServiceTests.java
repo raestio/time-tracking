@@ -1,7 +1,6 @@
 package cz.cvut.fit.timetracking.report;
 
 import cz.cvut.fit.timetracking.configuration.ReportTestsConfiguration;
-import cz.cvut.fit.timetracking.jira.service.JiraWorklogService;
 import cz.cvut.fit.timetracking.report.dto.DayReportItem;
 import cz.cvut.fit.timetracking.report.dto.MonthReportItem;
 import cz.cvut.fit.timetracking.report.dto.ProjectReportItem;
