@@ -1,13 +1,20 @@
 package cz.cvut.fit.timetracking.rest.controller;
 
+import cz.cvut.fit.timetracking.project.dto.Project;
+import cz.cvut.fit.timetracking.project.service.ProjectService;
+import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateOrUpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.response.JiraAvailabilityResponse;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.response.WorkRecordsJiraImportResponse;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.response.WorkRecordsResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import cz.cvut.fit.timetracking.rest.utils.TimeUtils;
 import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
+import cz.cvut.fit.timetracking.workrecord.dto.WorkRecordConflictInfo;
+import cz.cvut.fit.timetracking.workrecord.service.WorkRecordJiraService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,6 +45,12 @@ public class WorkRecordController {
 
     @Autowired
     private RestModelMapper restModelMapper;
+
+    @Autowired
+    private WorkRecordJiraService workRecordJiraService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @PostMapping
     public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
@@ -78,9 +91,40 @@ public class WorkRecordController {
         return ResponseEntity.ok(workRecordsResponse);
     }
 
-    @GetMapping("/jira")
-    public ResponseEntity<Object> s() {
+    @GetMapping("/jira/availability")
+    public ResponseEntity<JiraAvailabilityResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "userId", required = false) Integer userId,
+                                                                                   @CurrentUser UserPrincipal userPrincipal) {
+        boolean isAvailable = workRecordJiraService.isUserAvailableInJira(userId == null ? userPrincipal.getId() : userId);
+        JiraAvailabilityResponse jiraAvailabilityResponse = new JiraAvailabilityResponse();
+        jiraAvailabilityResponse.setUserAvailable(isAvailable);
+        return ResponseEntity.ok(jiraAvailabilityResponse);
+    }
 
+    @GetMapping("/jira")
+    public ResponseEntity<WorkRecordsJiraImportResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
+                                                                                        @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
+                                                                                        @RequestParam(value = "userId") Integer userId) {
+
+        WorkRecordsJiraImportResponse workRecordsJiraImportResponse = getWorkRecordsFromJiraToImportInternal(fromInclusive, toExclusive, userId);
+        return ResponseEntity.ok(workRecordsJiraImportResponse);
+    }
+
+    @GetMapping("/jira/me")
+    public ResponseEntity<WorkRecordsJiraImportResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
+                                                                 @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
+                                                                 @CurrentUser UserPrincipal userPrincipal) {
+        WorkRecordsJiraImportResponse workRecordsJiraImportResponse = getWorkRecordsFromJiraToImportInternal(fromInclusive, toExclusive, userPrincipal.getId());
+        return ResponseEntity.ok(workRecordsJiraImportResponse);
+    }
+
+    private WorkRecordsJiraImportResponse getWorkRecordsFromJiraToImportInternal(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        List<WorkRecordConflictInfo> workRecordConflictInfos = workRecordJiraService.findWorkRecordsToImport(fromInclusive, toExclusive, userId);
+        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
+
+        WorkRecordsJiraImportResponse workRecordsJiraImportResponse = new WorkRecordsJiraImportResponse();
+        workRecordsJiraImportResponse.setWorkRecordConflictInfos(workRecordConflictInfos);
+        workRecordsJiraImportResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
+        return workRecordsJiraImportResponse;
     }
 
     private WorkRecordDTO map(WorkRecord workRecord) {

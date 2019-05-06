@@ -9,6 +9,7 @@ import cz.cvut.fit.timetracking.rest.handler.error.ApiError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiSubError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiValidationError;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
+import cz.cvut.fit.timetracking.workrecord.exception.JiraUserNotFoundException;
 import cz.cvut.fit.timetracking.workrecord.exception.WorkRecordNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -39,7 +40,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ProjectNotFoundException.class, WorkRecordNotFoundException.class, ProjectAssignmentNotFoundException.class, WorkTypeNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ProjectNotFoundException.class, WorkRecordNotFoundException.class,
+                        ProjectAssignmentNotFoundException.class, WorkTypeNotFoundException.class, JiraUserNotFoundException.class})
     public ResponseEntity<Object> handleNotFound(Throwable ex) {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return buildResponseEntity(apiError, HttpStatus.NOT_FOUND);
