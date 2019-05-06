@@ -13,6 +13,7 @@ allprojects {
 		elasticsearchVersion = "7.0.0"
 		timeTrackingAppName="time-tracking-app"
 		timeTrackingAppVersion="1.0-SNAPSHOT"
+		jodaTimeVersion="2.10.1"
 	}
 }
 

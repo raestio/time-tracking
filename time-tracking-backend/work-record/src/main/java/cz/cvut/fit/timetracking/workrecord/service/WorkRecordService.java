@@ -17,4 +17,6 @@ public interface WorkRecordService {
     List<WorkRecord> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
 
     void deleteById(Integer id);
+
+    boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId);
 }

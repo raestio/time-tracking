@@ -96,11 +96,16 @@ public class WorkRecordServiceImpl implements WorkRecordService {
         Assert.notNull(userId, "user id cannot be null");
         Assert.notNull(projectId, "project id cannot be null");
         Assert.isTrue(to.isAfter(from), "Work record time parameter 'to' must go after time parameter 'from'.");
-        boolean overlap = dataAccessApi.workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
+        boolean overlap = workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
         if (overlap) {
             throw new WorkRecordServiceException("Work record times cannot overlap.");
         }
         projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
+    }
+
+    @Override
+    public boolean workRecordTimesOverlapWithOtherUserRecords(LocalDateTime from, LocalDateTime to, Integer userId) {
+        return dataAccessApi.workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
     }
 
     private WorkRecord map(WorkRecordDTO workRecordDTO) {

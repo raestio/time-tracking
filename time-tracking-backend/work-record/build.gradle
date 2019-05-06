@@ -4,5 +4,7 @@ dependencies {
     implementation project(':jira')
     implementation project(':data-api')
     implementation 'org.springframework:spring-context'
+    implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
+    implementation "joda-time:joda-time:${jodaTimeVersion}"
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
 }
