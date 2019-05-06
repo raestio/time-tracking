@@ -1,6 +1,7 @@
 package cz.cvut.fit.timetracking.report;
 
 import cz.cvut.fit.timetracking.configuration.ReportTestsConfiguration;
+import cz.cvut.fit.timetracking.jira.service.JiraWorklogService;
 import cz.cvut.fit.timetracking.report.dto.DayReportItem;
 import cz.cvut.fit.timetracking.report.dto.MonthReportItem;
 import cz.cvut.fit.timetracking.report.dto.ProjectReportItem;
@@ -8,6 +9,7 @@ import cz.cvut.fit.timetracking.report.dto.UserReportItem;
 import cz.cvut.fit.timetracking.report.dto.YearReportItem;
 import cz.cvut.fit.timetracking.report.helper.ReportServiceTestsHelper;
 import cz.cvut.fit.timetracking.report.service.ReportService;
+import cz.cvut.fit.timetracking.workrecord.service.WorkRecordJiraService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,9 @@ public class ReportServiceTests extends ReportTestsConfiguration {
 
     @Autowired
     private ReportService reportService;
+
+    @MockBean
+    private WorkRecordJiraService workRecordJiraService;
 
     private final LocalDate from = LocalDate.parse("2019-02-02");
     private final LocalDate to = LocalDate.parse("2019-02-27");
