@@ -54,7 +54,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id) {
+    public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id, @CurrentUser UserPrincipal userPrincipal) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;

@@ -35,3 +35,16 @@ time-tracking:
         projects: projects_test
         users: users_test
         workRecords: work_records_test
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 185475724985-bc71ltf88i5rvfrcnvvp51n2l5u2lfen.apps.googleusercontent.com
+            clientSecret: UfLq1xByllR6SVnJ8dFvJ5XE
+            redirectUriTemplate: "http://localhost:${server.port}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
