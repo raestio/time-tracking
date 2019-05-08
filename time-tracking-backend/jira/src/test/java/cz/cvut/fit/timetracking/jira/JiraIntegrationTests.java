@@ -43,8 +43,8 @@ public class JiraIntegrationTests extends JiraTestsConfiguration {
 
     @Test
     public void testFindWorklogs() {
-        List<Worklog> worklogList = jiraWorklogService.findWorklogsByUserEmail("rastislav.zlacky@inventi.cz");
-        assertThat(worklogList).isNotEmpty();
+        var worklogs = jiraWorklogService.findWorklogsByUserEmail("rastislav.zlacky@inventi.cz");
+        assertThat(worklogs).isNotEmpty();
     }
 
 }

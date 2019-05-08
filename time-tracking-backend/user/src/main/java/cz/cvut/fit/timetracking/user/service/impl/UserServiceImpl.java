@@ -65,6 +65,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createOrUpdate(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAuthProvider(cz.cvut.fit.timetracking.data.api.dto.AuthProvider.valueOf(user.getAuthProvider().toString()));
+        userDTO.setPictureUrl(user.getPictureUrl());
+        userDTO.setUserRoles(findUserRolesByNameIn(user.getUserRoles().stream().map(UserRole::getName).collect(Collectors.toList())));
+        userDTO = dataAccessApi.createOrUpdateUser(userDTO);
+        return userModelMapper.map(userDTO, User.class);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         Assert.notNull(id, "user id cannot be null");
         Optional<User> user = findById(id);

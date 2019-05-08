@@ -12,8 +12,10 @@ public interface UserService {
     //create
     User create(String name, String surname, String email, AuthProvider authProvider);
     User create(String name, String surname, String email, AuthProvider authProvider, String pictureUrl);
+    User createOrUpdate(User user);
 
     //read
+
     Optional<User> findById(Integer id);
     Optional<User> findByEmail(String email);
 
@@ -21,6 +23,7 @@ public interface UserService {
     User updateUserRoles(Integer userId, List<UserRoleName> userRoles);
 
     //delete
+
     void deleteById(Integer id);
 
     List<UserRole> findAllUserRoles();

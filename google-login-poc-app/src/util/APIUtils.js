@@ -29,7 +29,7 @@ export function getCurrentUser() {
     }
 
     return request({
-        url: API_BASE_URL + "/me",
+        url: API_BASE_URL + "/users/me",
         method: 'GET'
     });
 }

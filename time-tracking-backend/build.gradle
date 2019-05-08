@@ -28,5 +28,8 @@ subprojects {
 
 	repositories {
 		mavenCentral()
+		maven {
+			url "https://packages.atlassian.com/maven/repository/public"
+		}
 	}
 }

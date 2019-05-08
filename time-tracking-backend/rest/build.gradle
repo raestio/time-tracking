@@ -6,7 +6,7 @@ dependencies {
     implementation project(":search")
     implementation project(":security")
     implementation "org.modelmapper.extensions:modelmapper-extensions:${modelMapperVersion}"
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-web'
     implementation "io.springfox:springfox-swagger2:${springfoxSwaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${springfoxSwaggerUIVersion}"
     implementation "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}"
