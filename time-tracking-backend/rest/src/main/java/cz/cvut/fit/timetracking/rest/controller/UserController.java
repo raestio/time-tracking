@@ -8,6 +8,7 @@ import cz.cvut.fit.timetracking.rest.dto.user.UserRoleDTO;
 import cz.cvut.fit.timetracking.rest.dto.user.request.UpdateUserRolesRequest;
 import cz.cvut.fit.timetracking.rest.dto.user.UserDTO;
 import cz.cvut.fit.timetracking.rest.dto.user.response.UserRolesResponse;
+import cz.cvut.fit.timetracking.rest.dto.user.response.UsersResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
@@ -54,10 +55,21 @@ public class UserController {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @accessServiceImpl.sameUser(#id, #userPrincipal.id)")
     public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id, @CurrentUser UserPrincipal userPrincipal) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<UsersResponse> getAll() {
+        List<User> users = userService.findAll();
+        List<UserDTO> userDTOs = users.stream().map(u -> restModelMapper.map(u, UserDTO.class)).collect(Collectors.toList());
+        UsersResponse usersResponse = new UsersResponse();
+        usersResponse.setUsers(userDTOs);
+        return ResponseEntity.ok(usersResponse);
     }
 
     @PutMapping("/{id}")

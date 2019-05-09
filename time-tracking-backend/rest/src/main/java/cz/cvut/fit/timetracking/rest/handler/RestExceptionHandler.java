@@ -8,6 +8,7 @@ import cz.cvut.fit.timetracking.rest.handler.error.ApiObjectError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiSubError;
 import cz.cvut.fit.timetracking.rest.handler.error.ApiValidationError;
+import cz.cvut.fit.timetracking.user.exception.UpdateUserException;
 import cz.cvut.fit.timetracking.user.exception.UserNotFoundException;
 import cz.cvut.fit.timetracking.workrecord.exception.JiraUserNotFoundException;
 import cz.cvut.fit.timetracking.workrecord.exception.WorkRecordNotFoundException;
@@ -48,7 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ProjectAssignmentException.class, WorkRecordServiceException.class})
+    @ExceptionHandler({ProjectAssignmentException.class, WorkRecordServiceException.class, UpdateUserException.class})
     public ResponseEntity<Object> handleBadRequest(Throwable ex) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
         return buildResponseEntity(apiError, HttpStatus.BAD_REQUEST);

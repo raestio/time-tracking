@@ -43,6 +43,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAll() {
+        List<UserDTO> userDTOs = dataAccessApi.findAllUsers();
+        List<User> users = userDTOs.stream().map(u -> userModelMapper.map(u, User.class)).collect(Collectors.toList());
+        return users;
+    }
+
+    @Override
     public User updateUserRoles(Integer userId, List<UserRoleName> userRoles) {
         Assert.notNull(userId, "user id cannot be null");
         UserDTO user = dataAccessApi.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));

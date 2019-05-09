@@ -15,15 +15,14 @@ public interface UserService {
     User createOrUpdate(User user);
 
     //read
-
     Optional<User> findById(Integer id);
     Optional<User> findByEmail(String email);
+    List<User> findAll();
 
     //update
     User updateUserRoles(Integer userId, List<UserRoleName> userRoles);
 
     //delete
-
     void deleteById(Integer id);
 
     List<UserRole> findAllUserRoles();

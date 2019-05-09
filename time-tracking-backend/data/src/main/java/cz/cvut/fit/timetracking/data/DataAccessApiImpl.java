@@ -67,6 +67,11 @@ public class DataAccessApiImpl implements DataAccessApi {
         userDataService.deleteById(id);
     }
 
+    @Override
+    public List<UserDTO> findAllUsers() {
+        return userDataService.findAll();
+    }
+
 
     @Override
     public List<UserRoleDTO> findAllUserRolesByUserId(Integer id) {

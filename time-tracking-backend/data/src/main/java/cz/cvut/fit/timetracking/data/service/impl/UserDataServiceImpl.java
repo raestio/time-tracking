@@ -9,7 +9,9 @@ import cz.cvut.fit.timetracking.data.service.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDataServiceImpl implements UserDataService {
@@ -32,6 +34,13 @@ public class UserDataServiceImpl implements UserDataService {
         Optional<User> userDAO = userRepository.findByEmail(email);
         Optional<UserDTO> result = userDAO.map(this::map);
         return result;
+    }
+
+    @Override
+    public List<UserDTO> findAll() {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> userDTOs = users.stream().map(this::map).collect(Collectors.toList());
+        return userDTOs;
     }
 
     @Override

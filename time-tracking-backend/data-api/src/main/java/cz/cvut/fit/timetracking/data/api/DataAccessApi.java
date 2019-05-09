@@ -24,6 +24,7 @@ public interface DataAccessApi {
     Optional<UserDTO> findUserById(Integer id);
     Optional<UserDTO> findUserByEmail(String email);
     void deleteUserById(Integer id);
+    List<UserDTO> findAllUsers();
 
     //user roles
     List<UserRoleDTO> findAllUserRolesByUserId(Integer id);
