@@ -87,6 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/projects")
+    @PreAuthorize("hasAuthority('ADMIN') or @accessServiceImpl.sameUser(#userId, #userPrincipal.id)")
     public ResponseEntity<ProjectsResponse> getCurrentlyAssignedProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
         ProjectsResponse projectsResponse = getCurrentlyAssignedProjects(userId);
         return ResponseEntity.ok(projectsResponse);

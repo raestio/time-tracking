@@ -131,4 +131,23 @@ public class UserControllerTests extends RestApiTestsConfiguration {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -2, authorities = "USER")
+    public void whenMe_shouldReturnUser() throws Exception {
+        mockMvc.perform(get(PATH + "/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("user")))
+                .andExpect(jsonPath("$.id", is(-2)))
+                .andExpect(jsonPath("$.surname", is("test")))
+                .andExpect(jsonPath("$.email", is("user@ahoj2.cau")))
+                .andExpect(jsonPath("$.userRoles[0].name", is("USER")));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -2)
+    public void whenMeWithoutRoles_forbidden() throws Exception {
+        mockMvc.perform(get(PATH + "/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
 }
