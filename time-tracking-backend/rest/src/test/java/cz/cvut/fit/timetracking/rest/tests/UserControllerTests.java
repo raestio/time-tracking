@@ -4,23 +4,14 @@ import cz.cvut.fit.timetracking.configuration.RestApiTestsConfiguration;
 import cz.cvut.fit.timetracking.rest.context.WithMockOAuth2AuthenticationToken;
 import cz.cvut.fit.timetracking.rest.utils.JsonUtils;
 import cz.cvut.fit.timetracking.rest.utils.RequestCreationUtils;
-import cz.cvut.fit.timetracking.user.dto.User;
-import cz.cvut.fit.timetracking.user.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -149,5 +140,65 @@ public class UserControllerTests extends RestApiTestsConfiguration {
     public void whenMeWithoutRoles_forbidden() throws Exception {
         mockMvc.perform(get(PATH + "/me").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER", "ADMIN"})
+    public void whenGetProjectsWithADMIN_shouldReturnUser() throws Exception {
+        mockMvc.perform(get(PATH + "/-4/projects").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.projects", hasSize(2)))
+                .andExpect(jsonPath("$.projects[0].name", is("test project")))
+                .andExpect(jsonPath("$.projects[0].id", is(-1)))
+                .andExpect(jsonPath("$.projects[0].start[0]", is(2019)))
+                .andExpect(jsonPath("$.projects[0].start[1]", is(4)))
+                .andExpect(jsonPath("$.projects[0].start[2]", is(4)))
+                .andExpect(jsonPath("$.projects[0].workTypes", hasSize(2)))
+                .andExpect(jsonPath("$.projects[0].workTypes[1].id", is(-1)))
+                .andExpect(jsonPath("$.projects[0].workTypes[1].name", is("vyvoj")))
+                .andExpect(jsonPath("$.projects[0].workTypes[0].id", is(-2)))
+                .andExpect(jsonPath("$.projects[0].workTypes[0].name", is("analyza")))
+                .andExpect(jsonPath("$.projects[1].name", is("test project 2")))
+                .andExpect(jsonPath("$.projects[1].id", is(-2)))
+                .andExpect(jsonPath("$.projects[1].start[0]", is(2019)))
+                .andExpect(jsonPath("$.projects[1].start[1]", is(4)))
+                .andExpect(jsonPath("$.projects[1].start[2]", is(10)))
+                .andExpect(jsonPath("$.projects[1].workTypes", hasSize(1)))
+                .andExpect(jsonPath("$.projects[1].workTypes[0].id", is(-1)))
+                .andExpect(jsonPath("$.projects[1].workTypes[0].name", is("vyvoj")));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void whenGetMyProjects_shouldReturnUser() throws Exception {
+        mockMvc.perform(get(PATH + "/me/projects").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.projects", hasSize(1)))
+                .andExpect(jsonPath("$.projects[0].name", is("test project")))
+                .andExpect(jsonPath("$.projects[0].id", is(-1)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void whenGetAnotherUserProjects_forbidden() throws Exception {
+        mockMvc.perform(get(PATH + "/-2/projects").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void whenGetAllUserRolesWithUser_forbidden() throws Exception {
+        mockMvc.perform(get(PATH + "/roles").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER", "ADMIN"})
+    public void whenGetAllUserRolesWithAdmin_forbidden() throws Exception {
+        mockMvc.perform(get(PATH + "/roles").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userRoles", hasSize(2)))
+                .andExpect(jsonPath("$.userRoles[0].name", is("USER")))
+                .andExpect(jsonPath("$.userRoles[1].name", is("ADMIN")));
     }
 }

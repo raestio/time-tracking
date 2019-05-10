@@ -99,24 +99,26 @@ public class UserController {
         return ResponseEntity.ok(projectsResponse);
     }
 
-    private ProjectsResponse getCurrentlyAssignedProjects(Integer userId) {
-        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
-        ProjectsResponse projectsResponse = new ProjectsResponse();
-        projectsResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
-        return projectsResponse;
-    }
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/roles")
-    public ResponseEntity<UserRolesResponse> getAllUserRoles(@CurrentUser UserPrincipal userPrincipal) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<UserRolesResponse> getAllUserRoles() {
         List<UserRole> userRoles = userService.findAllUserRoles();
         UserRolesResponse userRolesResponse = new UserRolesResponse();
         userRolesResponse.setUserRoles(userRoles.stream().map(r -> restModelMapper.map(r, UserRoleDTO.class)).collect(Collectors.toList()));
         return ResponseEntity.ok(userRolesResponse);
+    }
+
+    private ProjectsResponse getCurrentlyAssignedProjects(Integer userId) {
+        List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
+        ProjectsResponse projectsResponse = new ProjectsResponse();
+        projectsResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
+        return projectsResponse;
     }
 }

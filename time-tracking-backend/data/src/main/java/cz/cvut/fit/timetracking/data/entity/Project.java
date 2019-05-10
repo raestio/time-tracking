@@ -56,10 +56,10 @@ public class Project {
     @Column(name = "\"end\"")
     private LocalDate end;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project")
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project")
     private Set<WorkRecord> workRecords = new HashSet<>();
 
     @ManyToMany

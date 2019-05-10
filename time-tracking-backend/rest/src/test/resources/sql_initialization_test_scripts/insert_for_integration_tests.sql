@@ -14,6 +14,8 @@ INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-1, 'test 
 INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-1, -1, -1);
 INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-2, -2, -1);
 
+INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-2, 'test project 2', '2019-04-10');
+INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-3, -1, -2);
 
 INSERT INTO time_tracking_schema.user(id, "name", surname, email, auth_provider) VALUES (-1, 'admin', 'testovic', 'admin@ahoj.cau', 'GOOGLE');
 INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role) VALUES (-1, -1, -1);
@@ -35,7 +37,8 @@ INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role
 INSERT INTO time_tracking_schema.project_assignment(id, valid_from, id_project, id_user) VALUES (-2, '2019-04-10', -1, -4);
 INSERT INTO time_tracking_schema.project_roles_assignment(id, id_project_role, id_project_assignment) VALUES (-3, -1, -2);
 
-
+INSERT INTO time_tracking_schema.project_assignment(id, valid_from, id_project, id_user) VALUES (-3, '2019-04-15', -2, -4);
+INSERT INTO time_tracking_schema.project_roles_assignment(id, id_project_role, id_project_assignment) VALUES (-4, -1, -3);
 
 
 

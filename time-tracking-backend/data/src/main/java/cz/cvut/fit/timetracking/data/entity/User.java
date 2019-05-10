@@ -55,10 +55,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AuthProviderEnum authProvider;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private Set<ProjectAssignment> projectAssignments = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private Set<WorkRecord> workRecords = new HashSet<>();
 
     @ManyToMany
