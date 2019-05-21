@@ -1,8 +1,6 @@
 package cz.cvut.fit.timetracking.rest.dto.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

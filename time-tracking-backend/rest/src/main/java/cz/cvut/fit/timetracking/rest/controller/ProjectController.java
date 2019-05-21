@@ -17,6 +17,7 @@ import cz.cvut.fit.timetracking.rest.dto.project.response.ProjectsResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,14 +45,8 @@ public class ProjectController {
     @Autowired
     private RestModelMapper restModelMapper;
 
-    @PostMapping
-    public ResponseEntity<ProjectDTO> create(@Valid @RequestBody CreateOrUpdateProjectRequest request) {
-        Project project = projectService.create(request.getName(), request.getDescription(), request.getStart(), request.getEnd(), map(request.getWorkTypes()));
-        ProjectDTO result = restModelMapper.map(project, ProjectDTO.class);
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectsResponse> getAll() {
         List<Project> projects = projectService.findAll();
         List<ProjectDTO> projectDTOs = projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList());
@@ -61,13 +56,23 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectDTO> getById(@PathVariable("id") Integer id) {
         Optional<Project> projectOptional = projectService.findById(id);
         ResponseEntity<ProjectDTO> response = projectOptional.map(u -> ResponseEntity.ok(restModelMapper.map(u, ProjectDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;
     }
 
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ProjectDTO> create(@Valid @RequestBody CreateOrUpdateProjectRequest request) {
+        Project project = projectService.create(request.getName(), request.getDescription(), request.getStart(), request.getEnd(), map(request.getWorkTypes()));
+        ProjectDTO result = restModelMapper.map(project, ProjectDTO.class);
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateProjectRequest request) {
         Project updatedProject = projectService.update(id, request.getName(), request.getDescription(), request.getStart(), request.getEnd(), map(request.getWorkTypes()));
         ProjectDTO result = restModelMapper.map(updatedProject, ProjectDTO.class);
@@ -81,6 +86,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}/project-assignments")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectAssignmentsResponse> getProjectAssignments(@PathVariable("id") Integer projectId) {
         List<ProjectAssignment> projectAssignments = projectAssignmentService.findByProjectId(projectId);
         ProjectAssignmentsResponse projectAssignmentsResponse = new ProjectAssignmentsResponse();
@@ -90,6 +96,7 @@ public class ProjectController {
     }
 
     @GetMapping("/roles")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectRolesResponse> getProjectRoles() {
         List<ProjectRole> projectRoles = projectService.findAllProjectRoles();
         ProjectRolesResponse projectRolesResponse = new ProjectRolesResponse();

@@ -17,6 +17,8 @@ INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project)
 INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-2, 'test project 2', '2019-04-10');
 INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-3, -1, -2);
 
+INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-3, 'pro pro', '2019-04-15');
+
 INSERT INTO time_tracking_schema.user(id, "name", surname, email, auth_provider) VALUES (-1, 'admin', 'testovic', 'admin@ahoj.cau', 'GOOGLE');
 INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role) VALUES (-1, -1, -1);
 INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role) VALUES (-2, -1, -2);

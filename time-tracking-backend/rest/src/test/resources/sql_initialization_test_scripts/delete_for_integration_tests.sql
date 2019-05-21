@@ -19,6 +19,7 @@ DELETE FROM time_tracking_schema.work_type WHERE id = -1;
 DELETE FROM time_tracking_schema.work_type WHERE id = -2;
 DELETE FROM time_tracking_schema.project WHERE id = -1;
 DELETE FROM time_tracking_schema.project WHERE id = -2;
+DELETE FROM time_tracking_schema.project WHERE id = -3;
 DELETE FROM time_tracking_schema.user WHERE id = -1;
 DELETE FROM time_tracking_schema.user WHERE id = -2;
 DELETE FROM time_tracking_schema.user WHERE id = -3;
