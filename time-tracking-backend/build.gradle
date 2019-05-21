@@ -15,6 +15,11 @@ allprojects {
 		timeTrackingAppVersion="1.0-SNAPSHOT"
 		jodaTimeVersion="2.10.1"
 	}
+	apply plugin: 'jacoco'
+	jacoco {
+		toolVersion = "0.8.3"
+	}
+
 }
 
 subprojects {

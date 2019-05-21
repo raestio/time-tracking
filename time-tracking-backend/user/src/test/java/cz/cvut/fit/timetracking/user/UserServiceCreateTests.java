@@ -1,38 +1,22 @@
 package cz.cvut.fit.timetracking.user;
 
 import cz.cvut.fit.timetracking.configuration.UserTestsConfiguration;
-import cz.cvut.fit.timetracking.data.entity.UserRole;
-import cz.cvut.fit.timetracking.data.repository.UserRoleRepository;
 import cz.cvut.fit.timetracking.user.dto.AuthProvider;
 import cz.cvut.fit.timetracking.user.dto.User;
 import cz.cvut.fit.timetracking.user.dto.UserRoleName;
 import cz.cvut.fit.timetracking.user.service.UserService;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Sql(scripts = "/sql_initialization_test_scripts/insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/sql_initialization_test_scripts/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class UserServiceCreateTests extends UserTestsConfiguration {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-
-    @Before
-    public void init() {
-        UserRole userRole = new UserRole();
-        userRole.setName(cz.cvut.fit.timetracking.data.entity.enums.UserRoleName.USER);
-        userRoleRepository.save(userRole);
-    }
-
-    @After
-    public void cleanUp() {
-        userRoleRepository.deleteAll();
-    }
 
     @Test
     public void testCreateAndDeleteUser() {
