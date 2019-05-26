@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -171,6 +172,38 @@ public class ProjectControllerTests extends RestApiTestsConfiguration {
         mockMvc.perform(delete(PATH + "/-3")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void whenGetProjectAssignments_shouldReturnProjectAssignments() throws Exception {
+        mockMvc.perform(get(PATH + "/-1" + "/project-assignments").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.projectAssignments[0].id", is(-2)))
+                .andExpect(jsonPath("$.projectAssignments[1].id", is(-1)))
+                .andExpect(jsonPath("$.projectAssignments[1].project.id", is(-1)))
+                .andExpect(jsonPath("$.projectAssignments[0].project.id", is(-1)))
+                .andExpect(jsonPath("$.projectAssignments[0].validFrom[0]", is(2019)))
+                .andExpect(jsonPath("$.projectAssignments[0].validFrom[1]", is(4)))
+                .andExpect(jsonPath("$.projectAssignments[0].validFrom[2]", is(10)))
+                .andExpect(jsonPath("$.projectAssignments[0].projectRoles", hasSize(1)))
+                .andExpect(jsonPath("$.projectAssignments[1].projectRoles", hasSize(2)))
+                .andExpect(jsonPath("$.projectAssignments[0].projectRoles[0].name", is("MEMBER")))
+                .andExpect(jsonPath("$.projectAssignments[1].projectRoles[1].name", is("MEMBER")))
+                .andExpect(jsonPath("$.projectAssignments[1].projectRoles[0].name", is("PROJECT_MANAGER")))
+                .andExpect(jsonPath("$.projectAssignments[0].validTo", nullValue()))
+                .andExpect(jsonPath("$.projectAssignments", hasSize(2)));
+    }
+
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void whenGetProjectRoles_shouldReturnProjectRoles() throws Exception {
+        mockMvc.perform(get(PATH + "/roles").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.projectRoles", hasSize(2)))
+                .andExpect(jsonPath("$.projectRoles[0].name", is("MEMBER")))
+                .andExpect(jsonPath("$.projectRoles[1].name", is("PROJECT_MANAGER")));
     }
 
 }
