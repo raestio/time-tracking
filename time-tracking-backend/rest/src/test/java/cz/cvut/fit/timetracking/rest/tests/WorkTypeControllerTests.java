@@ -3,7 +3,6 @@ package cz.cvut.fit.timetracking.rest.tests;
 
 import cz.cvut.fit.timetracking.configuration.RestApiTestsConfiguration;
 import cz.cvut.fit.timetracking.rest.context.WithMockOAuth2AuthenticationToken;
-import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 import cz.cvut.fit.timetracking.rest.utils.JsonUtils;
 import cz.cvut.fit.timetracking.rest.utils.RequestCreationUtils;

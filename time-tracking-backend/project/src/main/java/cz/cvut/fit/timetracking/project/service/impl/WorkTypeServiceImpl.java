@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,12 @@ public class WorkTypeServiceImpl implements WorkTypeService {
     public List<WorkType> findAll() {
         List<WorkTypeDTO> workTypeDTOs = dataAccessApi.findAllWorkTypes();
         return workTypeDTOs.stream().map(w -> projectModelMapper.map(w, WorkType.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<WorkType> findById(Integer workTypeId) {
+        Optional<WorkTypeDTO> workTypeDTO = dataAccessApi.findWorkTypeById(workTypeId);
+        return workTypeDTO.map(this::map);
     }
 
     @Override

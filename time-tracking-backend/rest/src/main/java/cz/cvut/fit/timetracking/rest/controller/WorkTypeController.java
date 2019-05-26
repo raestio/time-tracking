@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.rest.controller;
 
 
 import cz.cvut.fit.timetracking.project.dto.WorkType;
+import cz.cvut.fit.timetracking.project.exception.WorkTypeNotFoundException;
 import cz.cvut.fit.timetracking.project.service.WorkTypeService;
 import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateWorkTypeRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,6 +42,14 @@ public class WorkTypeController {
         WorkTypesResponse workTypesResponse = new WorkTypesResponse();
         workTypesResponse.setWorkTypes(projectRoles.stream().map(this::map).collect(Collectors.toList()));
         return ResponseEntity.ok(workTypesResponse);
+    }
+
+    @GetMapping("/{workTypeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<WorkTypeDTO> getWorkTypeById(@PathVariable("workTypeId") Integer workTypeId) {
+        Optional<WorkType> workType = workTypeService.findById(workTypeId);
+        WorkTypeDTO workTypeDTO = map(workType.orElseThrow(() -> new WorkTypeNotFoundException(workTypeId)));
+        return ResponseEntity.ok(workTypeDTO);
     }
 
     @PostMapping
