@@ -116,4 +116,13 @@ public class WorkTypeControllerTests extends RestApiTestsConfiguration {
                 .andExpect(jsonPath("$.name", is("vyvoj")))
                 .andExpect(jsonPath("$.description", nullValue()));
     }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void updateNonExistingWorkType_expectNotFound() throws Exception {
+        mockMvc.perform(put(PATH + "/-199999")
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workType()))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }
