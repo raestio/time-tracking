@@ -2,6 +2,7 @@ package cz.cvut.fit.timetracking.rest.utils;
 
 import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectRequest;
+import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateWorkTypeRequest;
 import cz.cvut.fit.timetracking.rest.dto.user.UserRoleName;
 import cz.cvut.fit.timetracking.rest.dto.user.request.UpdateUserRolesRequest;
 
@@ -36,6 +37,19 @@ public class RequestCreationUtils {
         createOrUpdateProjectRequest.setEnd(LocalDate.parse("2020-05-01"));
         createOrUpdateProjectRequest.setWorkTypes(List.of(existingWorkType()));
         return createOrUpdateProjectRequest;
+    }
+
+    public static CreateOrUpdateWorkTypeRequest workType() {
+        CreateOrUpdateWorkTypeRequest createOrUpdateWorkTypeRequest = new CreateOrUpdateWorkTypeRequest();
+        createOrUpdateWorkTypeRequest.setName("test work type");
+        createOrUpdateWorkTypeRequest.setDescription("ahoj");
+        return createOrUpdateWorkTypeRequest;
+    }
+
+    public static CreateOrUpdateWorkTypeRequest workType2() {
+        CreateOrUpdateWorkTypeRequest createOrUpdateWorkTypeRequest = new CreateOrUpdateWorkTypeRequest();
+        createOrUpdateWorkTypeRequest.setName("vyvoj");
+        return createOrUpdateWorkTypeRequest;
     }
 
     public static WorkTypeDTO existingWorkType() {

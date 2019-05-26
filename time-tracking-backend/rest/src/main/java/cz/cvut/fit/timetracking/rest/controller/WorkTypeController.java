@@ -9,10 +9,12 @@ import cz.cvut.fit.timetracking.rest.dto.project.response.WorkTypesResponse;
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,7 @@ public class WorkTypeController {
     private RestModelMapper restModelMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WorkTypesResponse> getWorkTypes() {
         List<WorkType> projectRoles = workTypeService.findAll();
         WorkTypesResponse workTypesResponse = new WorkTypesResponse();
@@ -40,18 +43,21 @@ public class WorkTypeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WorkTypeDTO> createWorkType(@RequestBody @Valid CreateOrUpdateWorkTypeRequest request) {
         WorkType workType = workTypeService.create(request.getName(), request.getDescription());
         return ResponseEntity.ok(map(workType));
     }
 
-    @PostMapping("/{workTypeId}")
+    @PutMapping("/{workTypeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<WorkTypeDTO> updateWorkType(@PathVariable("workTypeId") Integer workTypeId, @RequestBody @Valid CreateOrUpdateWorkTypeRequest request) {
         WorkType workType = workTypeService.update(workTypeId, request.getName(), request.getDescription());
         return ResponseEntity.ok(map(workType));
     }
 
     @DeleteMapping("/{workTypeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteWorkType(@PathVariable("workTypeId") Integer workTypeId) {
         workTypeService.deleteById(workTypeId);
         return ResponseEntity.ok().build();
