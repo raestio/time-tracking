@@ -30,7 +30,7 @@ public class ReportControllerTests extends RestApiTestsConfiguration {
 
     @Test
     @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
-    public void whenGetById_shouldReturnProject() throws Exception {
+    public void userMonthly() throws Exception {
         mockMvc.perform(get(monthly("2019-01-01", "2019-05-01", -1)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.monthlyReportItems", hasSize(2)))
@@ -55,12 +55,88 @@ public class ReportControllerTests extends RestApiTestsConfiguration {
                 .andExpect(jsonPath("$.monthlyReportItems[1].month", is("APRIL")));
     }
 
-    private String monthly(String from, String to, int userId) {
-        return PATH + "/monthly?" + from(LocalDate.parse(from)) + "&" + to(LocalDate.parse(to)) + "&" + user(userId);
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void monthly() throws Exception {
+        mockMvc.perform(get(monthly("2019-01-01", "2019-05-01")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.monthlyReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.monthlyReportItems[0].projectReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.monthlyReportItems[0].projectReportItems[0].project.id", is(-1)))
+                .andExpect(jsonPath("$.monthlyReportItems[0].projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.monthlyReportItems[0].projectReportItems[0].workReportItems[0].workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.monthlyReportItems[0].projectReportItems[0].workReportItems[0].minutesSpent", is(480)))
+                .andExpect(jsonPath("$.monthlyReportItems[0].month", is("MARCH")))
+
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[0].project.id", is(-3)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[0].workReportItems[0].workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[0].workReportItems[0].minutesSpent", is(480)))
+
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[1].project.id", is(-2)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[1].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[1].workReportItems[0].workType.name", is("analyza")))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[1].workReportItems[0].minutesSpent", is(960)))
+
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].project.id", is(-1)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].workReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].workReportItems[0].workType.name", is("analyza")))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].workReportItems[0].minutesSpent", is(30)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].workReportItems[1].workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.monthlyReportItems[1].projectReportItems[2].workReportItems[1].minutesSpent", is(1440)))
+                .andExpect(jsonPath("$.monthlyReportItems[1].month", is("APRIL")));
     }
 
-    private String monthly(LocalDate from, LocalDate to, int userId) {
-        return PATH + "/monthly?" + from(from) + "&" + to(to) + "&" + user(userId);
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void daily() throws Exception {
+        mockMvc.perform(get(daily("2019-04-01", "2019-05-01", -1)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.dailyReportItems", hasSize(3)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void yearly() throws Exception {
+        mockMvc.perform(get(yearly("2018", "2020")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.yearlyReportItems", hasSize(2)))
+
+                .andExpect(jsonPath("$.yearlyReportItems[0].year", is(2018)))
+                .andExpect(jsonPath("$.yearlyReportItems[0].projectReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.yearlyReportItems[0].projectReportItems[0].project.id", is(-1)))
+                .andExpect(jsonPath("$.yearlyReportItems[0].projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.yearlyReportItems[0].projectReportItems[0].workReportItems[0].minutesSpent", is(960)))
+
+                .andExpect(jsonPath("$.yearlyReportItems[1].year", is(2019)))
+                .andExpect(jsonPath("$.yearlyReportItems[1].projectReportItems", hasSize(3)))
+                .andExpect(jsonPath("$.yearlyReportItems[1].projectReportItems[2].project.id", is(-1)))
+                .andExpect(jsonPath("$.yearlyReportItems[1].projectReportItems[2].workReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.yearlyReportItems[1].projectReportItems[2].workReportItems[1].minutesSpent", is(1920)));
+    }
+
+    private String yearly(String from, String to) {
+        return PATH + "/yearly?" + from(from) + "&" + to(to);
+    }
+
+    private String daily(String from, String to) {
+        return timely(from, to, "/daily?");
+    }
+
+    private String monthly(String from, String to) {
+        return timely(from, to, "/monthly?");
+    }
+
+    private String timely(String from, String to, String time) {
+        return PATH + time + from(LocalDate.parse(from)) + "&" + to(LocalDate.parse(to));
+    }
+
+    private String daily(String from, String to, int userId) {
+        return daily(from, to) + "&" + user(userId);
+    }
+
+    private String monthly(String from, String to, int userId) {
+        return monthly(from, to) + "&" + user(userId);
     }
 
     private String user(int i) {
@@ -68,11 +144,19 @@ public class ReportControllerTests extends RestApiTestsConfiguration {
     }
 
     private String to(LocalDate date) {
-        return "to=" + dateString(date);
+        return to(dateString(date));
+    }
+
+    private String to(String date) {
+        return "to=" + date;
     }
 
     private String from(LocalDate date) {
-        return "from=" + dateString(date);
+        return from(dateString(date));
+    }
+
+    private String from(String dateString) {
+        return "from=" + dateString;
     }
 
     private String dateString(LocalDate date) {

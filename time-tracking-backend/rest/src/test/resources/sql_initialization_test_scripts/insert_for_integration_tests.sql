@@ -46,7 +46,7 @@ INSERT INTO time_tracking_schema.project_roles_assignment(id, id_project_role, i
 INSERT INTO time_tracking_schema.work_record(id, date_from, date_to, description, date_created, id_project, id_work_type, id_user) VALUES
                                             (-1, '2019-04-15 08:00', '2019-04-15 16:00', 'test popis', '2019-04-15', -1, -1, -1),
                                             (-10, '2019-04-19 08:00', '2019-04-19 16:00', 'test popis', '2019-04-15', -3, -1, -1),
-                                            (-7, '2019-04-15 08:00', '2019-04-15 16:00', 'test popis', '2019-04-15', -1, -2, -2),
+                                            (-7, '2019-04-15 08:00', '2019-04-15 16:00', 'test popis', '2019-04-15', -1, -1, -2),
                                             (-8, '2019-04-16 08:00', '2019-04-16 16:00', 'test popis', '2019-04-15', -2, -2, -2),
                                             (-9, '2019-04-20 08:00', '2019-04-20 16:00', 'test popis', '2019-04-15', -2, -2, -2),
                                             (-2, '2019-04-15 16:00', '2019-04-15 16:30', 'test popis', '2019-04-15', -1, -2, -1),
