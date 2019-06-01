@@ -106,11 +106,22 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public boolean isUserAssignedToProject(Integer userId, Integer projectId) {
         List<ProjectAssignmentDTO> projectAssignments = dataAccessApi.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
-        var isAssigned = projectAssignments.stream().anyMatch(projectAssignmentDTO -> {
-            var now = LocalDate.now();
-            return !now.isBefore(projectAssignmentDTO.getValidFrom()) && (projectAssignmentDTO.getValidTo() == null || !now.isAfter(projectAssignmentDTO.getValidTo()));
-        });
+        var isAssigned = projectAssignments.stream().anyMatch(this::isAssignmentValid);
         return isAssigned;
+    }
+
+    @Override
+    public boolean isUserAssignedToProjectAndHasRole(Integer userId, Integer projectId, String role) {
+        List<ProjectAssignmentDTO> projectAssignments = dataAccessApi.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
+        var isAssigned = projectAssignments.stream().anyMatch(projectAssignmentDTO ->
+                isAssignmentValid(projectAssignmentDTO)
+                && projectAssignmentDTO.getProjectRoles().stream().anyMatch(roleDTO -> roleDTO.getName().toString().equals(role)));
+        return isAssigned;
+    }
+
+    private boolean isAssignmentValid(ProjectAssignmentDTO projectAssignmentDTO) {
+        var now = LocalDate.now();
+        return !now.isBefore(projectAssignmentDTO.getValidFrom()) && (projectAssignmentDTO.getValidTo() == null || !now.isAfter(projectAssignmentDTO.getValidTo()));
     }
 
     private List<WorkTypeDTO> map(List<WorkType> workTypes) {

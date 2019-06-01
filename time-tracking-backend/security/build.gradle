@@ -1,5 +1,7 @@
 dependencies {
     implementation project(':user')
+    implementation project(':work-record')
+    implementation project(':project')
     api 'org.springframework.boot:spring-boot-starter-security'
     api 'org.springframework.security:spring-security-oauth2-client'
     implementation "io.jsonwebtoken:jjwt-api:${jsonWebTokenVersion}"

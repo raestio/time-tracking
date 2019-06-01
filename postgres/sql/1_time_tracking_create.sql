@@ -53,6 +53,12 @@ CREATE TABLE time_tracking_schema.project_work_type (
 	UNIQUE (id_project, id_work_type)
 );
 
+CREATE INDEX idx_project_work_type_project
+ON time_tracking_schema.project_work_type(id_project);
+
+CREATE INDEX idx_project_work_type_work_type
+ON time_tracking_schema.project_work_type(id_work_type);
+
 CREATE TABLE time_tracking_schema.project_assignment (
 	id SERIAL PRIMARY KEY,
 	valid_from date NOT NULL,

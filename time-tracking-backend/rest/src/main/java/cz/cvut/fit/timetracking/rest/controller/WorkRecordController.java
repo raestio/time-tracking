@@ -21,6 +21,7 @@ import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,7 +68,8 @@ public class WorkRecordController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WorkRecordDTO> getById(@PathVariable("id") Integer id) {
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.workRecordIsMineOrIam(#user.id, #id, 'PROJECT_MANAGER')")
+    public ResponseEntity<WorkRecordDTO> getById(@PathVariable("id") Integer id, @CurrentUser UserPrincipal user) {
         Optional<WorkRecord> workRecordOptional = workRecordService.findById(id);
         ResponseEntity<WorkRecordDTO> response = workRecordOptional.map(u -> ResponseEntity.ok(map(u))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;

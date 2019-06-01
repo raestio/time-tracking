@@ -12,7 +12,7 @@ time-tracking:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       hbm2ddl:
         auto: validate
-      show_sql: false
+      show_sql: true
   security:
     auth:
       jwt:

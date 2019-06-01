@@ -21,4 +21,6 @@ public interface ProjectService {
     Optional<ProjectRole> findProjectRoleByName(ProjectRoleName projectRoleName);
     List<ProjectRole> findAllProjectRoles();
     boolean isUserAssignedToProject(Integer userId, Integer projectId);
+
+    boolean isUserAssignedToProjectAndHasRole(Integer userId, Integer projectId, String role);
 }
