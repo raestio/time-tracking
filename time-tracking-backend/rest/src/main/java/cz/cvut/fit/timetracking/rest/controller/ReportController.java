@@ -23,6 +23,7 @@ import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +48,7 @@ public class ReportController {
     private RestModelMapper restModelMapper;
 
     @GetMapping("/monthly")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MonthlyReportsResponse> getMonthlyReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                     @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
                                                                     @RequestParam(value = "userId", required = false) Integer userId) {
@@ -56,6 +58,7 @@ public class ReportController {
     }
 
     @GetMapping("/daily")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<DailyReportsResponse> getDailyReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                 @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
                                                                 @RequestParam(value = "userId", required = false) Integer userId) {
@@ -64,6 +67,7 @@ public class ReportController {
     }
 
     @GetMapping("/yearly")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<YearlyReportsResponse> getYearlyReports(@RequestParam(value = "from", required = false) @Positive Integer fromInclusive,
                                                                   @RequestParam(value = "to", required = false) @Positive Integer toExclusive,
                                                                   @RequestParam(value = "userId", required = false) Integer userId) {
@@ -72,6 +76,7 @@ public class ReportController {
     }
 
     @GetMapping("/projects")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectsReportsResponse> getProjectsReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                       @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive) {
 
@@ -85,6 +90,7 @@ public class ReportController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UsersReportsResponse> getUsersReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                 @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive) {
         LocalDate tomorrow = LocalDate.now().plusDays(1);

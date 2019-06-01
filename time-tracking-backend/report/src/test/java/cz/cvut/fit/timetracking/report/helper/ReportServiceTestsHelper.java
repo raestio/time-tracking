@@ -1,6 +1,5 @@
 package cz.cvut.fit.timetracking.report.helper;
 
-import cz.cvut.fit.timetracking.report.dto.DayReportItem;
 import cz.cvut.fit.timetracking.report.dto.ProjectReportItem;
 import cz.cvut.fit.timetracking.report.dto.WorkReportItem;
 import cz.cvut.fit.timetracking.workrecord.dto.Project;

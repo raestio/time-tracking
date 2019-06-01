@@ -1,3 +1,13 @@
+DELETE FROM time_tracking_schema.work_record WHERE id = -10;
+DELETE FROM time_tracking_schema.work_record WHERE id = -9;
+DELETE FROM time_tracking_schema.work_record WHERE id = -8;
+DELETE FROM time_tracking_schema.work_record WHERE id = -7;
+DELETE FROM time_tracking_schema.work_record WHERE id = -6;
+DELETE FROM time_tracking_schema.work_record WHERE id = -5;
+DELETE FROM time_tracking_schema.work_record WHERE id = -4;
+DELETE FROM time_tracking_schema.work_record WHERE id = -3;
+DELETE FROM time_tracking_schema.work_record WHERE id = -2;
+DELETE FROM time_tracking_schema.work_record WHERE id = -1;
 DELETE FROM time_tracking_schema.project_roles_assignment WHERE id = -4;
 DELETE FROM time_tracking_schema.project_roles_assignment WHERE id = -3;
 DELETE FROM time_tracking_schema.project_roles_assignment WHERE id = -2;
