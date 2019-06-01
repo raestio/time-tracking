@@ -1,5 +1,5 @@
 package cz.cvut.fit.timetracking.security.service;
 
-public interface AccessService {
+public interface SecurityAccessService {
     boolean sameUser(Integer id1, Integer id2);
 }

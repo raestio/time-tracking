@@ -55,7 +55,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "User with given ID not found")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or @accessServiceImpl.sameUser(#id, #userPrincipal.id)")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.sameUser(#id, #userPrincipal.id)")
     public ResponseEntity<UserDTO> getById(@ApiParam(value = "User ID") @PathVariable("id") Integer id, @CurrentUser UserPrincipal userPrincipal) {
         Optional<User> user = userService.findById(id);
         ResponseEntity<UserDTO> response = user.map(u -> ResponseEntity.ok(restModelMapper.map(u, UserDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/projects")
-    @PreAuthorize("hasAuthority('ADMIN') or @accessServiceImpl.sameUser(#userId, #userPrincipal.id)")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.sameUser(#userId, #userPrincipal.id)")
     public ResponseEntity<ProjectsResponse> getCurrentlyAssignedProjectsOfUser(@PathVariable("userId") Integer userId, @CurrentUser UserPrincipal userPrincipal) {
         ProjectsResponse projectsResponse = getCurrentlyAssignedProjects(userId);
         return ResponseEntity.ok(projectsResponse);
