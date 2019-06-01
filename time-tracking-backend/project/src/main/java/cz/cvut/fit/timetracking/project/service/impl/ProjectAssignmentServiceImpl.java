@@ -60,7 +60,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
 
     @Override
     public ProjectAssignment create(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
-        if (projectRoleNames.stream().noneMatch(role -> role.equals(ProjectRoleName.MEMBER))) {
+        if (!memberRoleExists(projectRoleNames)) {
             LOGGER.info("Project assignment creation - missing MEMBER project role... MEMBER project role added as default");
             projectRoleNames.add(ProjectRoleName.MEMBER);
         }
@@ -81,7 +81,7 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
     }
 
     private ProjectAssignment createOrUpdate(Integer projectAssignmentId, Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
-        checkConstraintsForCreateOrUpdate(projectId, userId, validFrom, validTo, projectRoleNames);
+        checkConstraintsForCreateOrUpdate(projectId, userId, validFrom, validTo, projectRoleNames, projectAssignmentId);
         List<ProjectRoleDTO> projectRoleDTOs = dataAccessApi.findAllProjectRolesIn(projectRoleNames.stream().map(this::map).collect(Collectors.toList()));
         Assert.isTrue(projectRoleDTOs.size() == projectRoleNames.size(), "All project roles must be persisted in DB");
         ProjectAssignmentDTOLight projectAssignmentDTO = new ProjectAssignmentDTOLight();
@@ -97,23 +97,35 @@ public class ProjectAssignmentServiceImpl implements ProjectAssignmentService {
         return findById(updatedProjectAssignmentDTO.getId()).get();
     }
 
-    private void checkConstraintsForCreateOrUpdate(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames) {
+    private void checkConstraintsForCreateOrUpdate(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, List<ProjectRoleName> projectRoleNames, Integer projectAssignmentId) {
         Assert.notNull(projectId, "project id cannot be null");
         Assert.notNull(userId, "user id cannot be null");
         Assert.notNull(validFrom, "valid from cannot be null");
         if (validTo != null) {
             Assert.isTrue(validTo.isAfter(validFrom), "validTo must be after validFrom");
         }
-        Assert.isTrue(projectRoleNames.stream().anyMatch(name -> name.equals(ProjectRoleName.MEMBER)), "MEMBER project role in project assignment must exist and cannot be removed");
+
+        if (!memberRoleExists(projectRoleNames)) {
+            throw new ProjectAssignmentException("MEMBER project role in project assignment must exist and cannot be removed");
+        }
+
         userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        if (assignmentWithProjectAndUserAtGivenDateAlreadyExists(projectId, userId, validFrom, validTo)) {
+        if (assignmentWithProjectAndUserAtGivenDateAlreadyExists(projectId, userId, validFrom, validTo, projectAssignmentId)) {
             throw new ProjectAssignmentException("Project assignment with user = " + userId + " and project = " + projectId + " already exists in given time from = " + validFrom.toString() + " and to = " + (validTo == null ? "[null]" : validTo.toString()));
         }
     }
 
-    private boolean assignmentWithProjectAndUserAtGivenDateAlreadyExists(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo) {
+    private boolean memberRoleExists(List<ProjectRoleName> projectRoleNames) {
+        return projectRoleNames.stream().anyMatch(name -> name.equals(ProjectRoleName.MEMBER));
+    }
+
+    private boolean assignmentWithProjectAndUserAtGivenDateAlreadyExists(Integer projectId, Integer userId, LocalDate validFrom, LocalDate validTo, Integer projectAssignmentId) {
         List<ProjectAssignmentDTO> projectAssignments = dataAccessApi.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
         for (ProjectAssignmentDTO projectAssignment : projectAssignments) {
+            if (projectAssignment.getId().equals(projectAssignmentId)) {
+                continue;
+            }
+
             if (projectAssignment.getValidTo() == null) {
                 if (validTo == null || !validTo.isBefore(projectAssignment.getValidFrom())) {
                     return true;

@@ -8,6 +8,7 @@ import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectAs
 import cz.cvut.fit.timetracking.rest.mapper.RestModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class ProjectAssignmentController {
     private RestModelMapper restModelMapper;
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectAssignmentDTO> getById(@PathVariable("id") Integer id) {
         Optional<ProjectAssignment> projectAssignmentOptional = projectAssignmentService.findById(id);
         ProjectAssignmentDTO projectAssignmentDTO = projectAssignmentOptional.map(p -> restModelMapper.map(p, ProjectAssignmentDTO.class)).orElseThrow(() -> new ProjectAssignmentNotFoundException(id));
@@ -38,6 +40,7 @@ public class ProjectAssignmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectAssignmentDTO> create(@Valid @RequestBody CreateOrUpdateProjectAssignmentRequest request) {
         ProjectAssignment projectAssignment = projectAssignmentService.create(request.getProjectId(), request.getUserId(), request.getValidFrom(), request.getValidTo(), request.getProjectRoleNames());
         ProjectAssignmentDTO result = restModelMapper.map(projectAssignment, ProjectAssignmentDTO.class);
@@ -45,6 +48,7 @@ public class ProjectAssignmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProjectAssignmentDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateProjectAssignmentRequest request) {
         ProjectAssignment projectAssignment = projectAssignmentService.update(id, request.getProjectId(), request.getUserId(), request.getValidFrom(), request.getValidTo(), request.getProjectRoleNames());
         ProjectAssignmentDTO result = restModelMapper.map(projectAssignment, ProjectAssignmentDTO.class);
@@ -52,6 +56,7 @@ public class ProjectAssignmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         projectAssignmentService.deleteProjectAssignmentById(id);
         return ResponseEntity.ok().build();

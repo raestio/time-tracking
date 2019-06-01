@@ -25,11 +25,14 @@ public class ConsistentDateParametersValidator implements ConstraintValidator<Co
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field);
         Object isAfterValue = new BeanWrapperImpl(value).getPropertyValue(isAfter);
-        makeAssert(fieldValue);
         makeAssert(isAfterValue);
-        LocalDateTime localDateTimeFieldValue = getLocalDateTime(fieldValue);
-        LocalDateTime localDateTimeIsAfterValue = getLocalDateTime(isAfterValue);
-        return localDateTimeFieldValue.isAfter(localDateTimeIsAfterValue);
+        if (fieldValue != null) {
+            makeAssert(fieldValue);
+            LocalDateTime localDateTimeFieldValue = getLocalDateTime(fieldValue);
+            LocalDateTime localDateTimeIsAfterValue = getLocalDateTime(isAfterValue);
+            return localDateTimeFieldValue.isAfter(localDateTimeIsAfterValue);
+        }
+        return true;
     }
 
     private LocalDateTime getLocalDateTime(Object fieldValue) {

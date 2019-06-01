@@ -1,6 +1,8 @@
 package cz.cvut.fit.timetracking.rest.utils;
 
+import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.rest.dto.project.WorkTypeDTO;
+import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectAssignmentRequest;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateProjectRequest;
 import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateWorkTypeRequest;
 import cz.cvut.fit.timetracking.rest.dto.user.UserRoleName;
@@ -57,5 +59,31 @@ public class RequestCreationUtils {
         workTypeDTO.setId(-1);
         workTypeDTO.setName("vyvoj");
         return workTypeDTO;
+    }
+
+    public static CreateOrUpdateProjectAssignmentRequest projectAssignmentWithoutRole(int projectId) {
+        CreateOrUpdateProjectAssignmentRequest request = new CreateOrUpdateProjectAssignmentRequest();
+        request.setProjectId(projectId);
+        request.setUserId(-1);
+        request.setValidFrom(LocalDate.parse("2019-05-01"));
+        return request;
+    }
+
+    public static CreateOrUpdateProjectAssignmentRequest projectAssignmentMember(int projectId) {
+        CreateOrUpdateProjectAssignmentRequest request = projectAssignmentWithoutRole(projectId);
+        request.getProjectRoleNames().add(ProjectRoleName.MEMBER);
+        return request;
+    }
+
+    public static CreateOrUpdateProjectAssignmentRequest projectAssignmentProjectManager(int projectId) {
+        CreateOrUpdateProjectAssignmentRequest request = projectAssignmentWithoutRole(projectId);
+        request.getProjectRoleNames().add(ProjectRoleName.PROJECT_MANAGER);
+        return request;
+    }
+
+    public static CreateOrUpdateProjectAssignmentRequest projectAssignmentProjectManagerAndMember(int projectId) {
+        CreateOrUpdateProjectAssignmentRequest request = projectAssignmentProjectManager(projectId);
+        request.getProjectRoleNames().add(ProjectRoleName.MEMBER);
+        return request;
     }
 }

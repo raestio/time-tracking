@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.rest.validation.constraints.ConsistentDateParameters;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.List;
 public class CreateOrUpdateProjectAssignmentRequest {
 
     @JsonProperty("projectId")
+    @NotNull
     private Integer projectId;
 
     @JsonProperty("userId")
+    @NotNull
     private Integer userId;
 
     @JsonProperty("validFrom")
