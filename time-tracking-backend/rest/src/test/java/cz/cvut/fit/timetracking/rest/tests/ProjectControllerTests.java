@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -137,7 +139,7 @@ public class ProjectControllerTests extends RestApiTestsConfiguration {
 
     @Test
     @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
-    public void updateAndFindAndDeleteProject() throws Exception {
+    public void updateAndFindProject() throws Exception {
         mockMvc.perform(put(PATH + "/-3")
                 .content(JsonUtils.toJsonString(RequestCreationUtils.project()))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -169,7 +171,11 @@ public class ProjectControllerTests extends RestApiTestsConfiguration {
                 .andExpect(jsonPath("$.workTypes[0].name", is("vyvoj")))
                 .andReturn();
 
-        mockMvc.perform(delete(PATH + "/-3")
+
+        var toUpdate = RequestCreationUtils.project();
+        toUpdate.setWorkTypes(new ArrayList<>());
+        mockMvc.perform(put(PATH + "/-3")
+                .content(JsonUtils.toJsonString(toUpdate))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

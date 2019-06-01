@@ -9,6 +9,7 @@ import cz.cvut.fit.timetracking.rest.dto.user.UserRoleName;
 import cz.cvut.fit.timetracking.rest.dto.user.request.UpdateUserRolesRequest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 public class RequestCreationUtils {
