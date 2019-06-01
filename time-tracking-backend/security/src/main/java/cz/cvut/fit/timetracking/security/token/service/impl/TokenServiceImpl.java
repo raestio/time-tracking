@@ -61,15 +61,15 @@ public class TokenServiceImpl implements TokenService {
             Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException ex) {
-            LOGGER.error("Invalid JWT signature");
+            LOGGER.warn("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            LOGGER.error("Invalid JWT token");
+            LOGGER.warn("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            LOGGER.error("Expired JWT token");
+            LOGGER.warn("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            LOGGER.error("Unsupported JWT token");
+            LOGGER.warn("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            LOGGER.error("JWT claims string is empty.");
+            LOGGER.warn("JWT claims string is empty.");
         }
         return false;
     }
