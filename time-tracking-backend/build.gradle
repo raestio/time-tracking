@@ -35,6 +35,8 @@ subprojects {
 	sonarqube {
 		properties {
 			property "sonar.exclusions", "**/dto/**,**/data/entity/**"
+			property "sonar.java.coveragePlugin", "jacoco"
+			property "sonar.sources", "src/main/java/"
 		}
 	}
 
