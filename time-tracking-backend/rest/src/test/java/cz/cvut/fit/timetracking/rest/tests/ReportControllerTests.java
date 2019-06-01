@@ -115,6 +115,63 @@ public class ReportControllerTests extends RestApiTestsConfiguration {
                 .andExpect(jsonPath("$.yearlyReportItems[1].projectReportItems[2].workReportItems[1].minutesSpent", is(1920)));
     }
 
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void projects() throws Exception {
+        mockMvc.perform(get(projects("2019-01-01", "2019-05-01")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.projectReportItems", hasSize(3)))
+                .andExpect(jsonPath("$.projectReportItems[0].project.id", is(-3)))
+                .andExpect(jsonPath("$.projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.projectReportItems[0].workReportItems[0].workType.id", is(-1)))
+                .andExpect(jsonPath("$.projectReportItems[0].workReportItems[0].minutesSpent", is(480)))
+
+                .andExpect(jsonPath("$.projectReportItems[1].project.id", is(-1)))
+                .andExpect(jsonPath("$.projectReportItems[1].workReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.projectReportItems[1].workReportItems[0].workType.id", is(-2)))
+                .andExpect(jsonPath("$.projectReportItems[1].workReportItems[1].workType.id", is(-1)))
+                .andExpect(jsonPath("$.projectReportItems[1].workReportItems[0].minutesSpent", is(30)))
+                .andExpect(jsonPath("$.projectReportItems[1].workReportItems[1].minutesSpent", is(1920)))
+
+                .andExpect(jsonPath("$.projectReportItems[2].project.id", is(-2)))
+                .andExpect(jsonPath("$.projectReportItems[2].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.projectReportItems[2].workReportItems[0].workType.id", is(-2)))
+                .andExpect(jsonPath("$.projectReportItems[2].workReportItems[0].minutesSpent", is(960)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void users() throws Exception {
+        mockMvc.perform(get(users("2019-01-01", "2019-05-01")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.userReportItems[0].user.id", is(-1)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems[0].project.id", is(-3)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems[0].workReportItems[0].minutesSpent", is(480)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems[1].project.id", is(-1)))
+                .andExpect(jsonPath("$.userReportItems[0].projectReportItems[1].workReportItems", hasSize(2)))
+
+                .andExpect(jsonPath("$.userReportItems[1].user.id", is(-2)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems", hasSize(2)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[0].project.id", is(-2)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[0].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[0].workReportItems[0].minutesSpent", is(960)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[1].project.id", is(-1)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[1].workReportItems", hasSize(1)))
+                .andExpect(jsonPath("$.userReportItems[1].projectReportItems[1].workReportItems[0].minutesSpent", is(480)));
+
+    }
+
+    private String users(String from, String to) {
+        return timely(from, to, "/users?");
+    }
+
+    private String projects(String from, String to) {
+        return timely(from, to, "/projects?");
+    }
+
     private String yearly(String from, String to) {
         return PATH + "/yearly?" + from(from) + "&" + to(to);
     }
