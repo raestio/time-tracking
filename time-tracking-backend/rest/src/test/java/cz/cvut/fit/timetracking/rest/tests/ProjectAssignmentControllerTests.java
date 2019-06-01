@@ -211,4 +211,13 @@ public class ProjectAssignmentControllerTests extends RestApiTestsConfiguration 
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void validToBeforeValidFrom_expectBadRequest() throws Exception {
+        mockMvc.perform(put(PATH + "/-2")
+                .content(JsonUtils.toJsonString(RequestCreationUtils.projectAssignmentMember2(-3)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
 }

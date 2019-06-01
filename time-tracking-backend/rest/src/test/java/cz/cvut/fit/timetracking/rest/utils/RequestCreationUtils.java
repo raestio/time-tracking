@@ -75,6 +75,13 @@ public class RequestCreationUtils {
         return request;
     }
 
+    public static CreateOrUpdateProjectAssignmentRequest projectAssignmentMember2(int projectId) {
+        CreateOrUpdateProjectAssignmentRequest request = projectAssignmentWithoutRole(projectId);
+        request.getProjectRoleNames().add(ProjectRoleName.MEMBER);
+        request.setValidTo(request.getValidFrom());
+        return request;
+    }
+
     public static CreateOrUpdateProjectAssignmentRequest projectAssignmentProjectManager(int projectId) {
         CreateOrUpdateProjectAssignmentRequest request = projectAssignmentWithoutRole(projectId);
         request.getProjectRoleNames().add(ProjectRoleName.PROJECT_MANAGER);
