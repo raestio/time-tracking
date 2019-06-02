@@ -108,7 +108,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
 
         boolean overlap = workRecordTimesOverlapWithOtherUserRecords(from, to, userId);
         if (overlap) {
-            throw new WorkRecordServiceException("Work record times cannot overlap.");
+            throw new WorkRecordServiceException("Work record times cannot overlap. projectId: " + projectId + " userId: " + userId + " from: " + from.toString() + " to: " + to.toString());
         }
 
         boolean isAssigned = projectService.isUserAssignedToProject(userId, projectId);
