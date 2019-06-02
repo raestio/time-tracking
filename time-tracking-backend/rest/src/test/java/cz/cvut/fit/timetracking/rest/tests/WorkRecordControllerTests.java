@@ -2,15 +2,20 @@ package cz.cvut.fit.timetracking.rest.tests;
 
 import cz.cvut.fit.timetracking.configuration.RestApiTestsConfiguration;
 import cz.cvut.fit.timetracking.rest.context.WithMockOAuth2AuthenticationToken;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
+import cz.cvut.fit.timetracking.rest.utils.JsonUtils;
+import cz.cvut.fit.timetracking.rest.utils.RequestCreationUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,5 +102,112 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
     public void whenOtherUserWorkRecordByIdAndIamNotProjectManager_isForbidden() throws Exception {
         mockMvc.perform(get(PATH + "/-1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -4, authorities = {"USER"})
+    public void createAndFindAndDeleteWorkRecord() throws Exception {
+        var result = mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(null, -1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.project.id", is(-1)))
+                .andExpect(jsonPath("$.workType.id", is(-1)))
+                .andExpect(jsonPath("$.workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.dateFrom[0]", is(2019)))
+                .andExpect(jsonPath("$.dateFrom[1]", is(5)))
+                .andExpect(jsonPath("$.dateFrom[2]", is(1)))
+                .andExpect(jsonPath("$.dateFrom[3]", is(0)))
+                .andExpect(jsonPath("$.dateFrom[4]", is(0)))
+                .andExpect(jsonPath("$.dateTo[0]", is(2019)))
+                .andExpect(jsonPath("$.dateTo[1]", is(5)))
+                .andExpect(jsonPath("$.dateTo[2]", is(1)))
+                .andExpect(jsonPath("$.dateTo[3]", is(8)))
+                .andExpect(jsonPath("$.dateTo[4]", is(0)))
+                .andReturn();
+
+        var content = result.getResponse().getContentAsString();
+        var workRecord = JsonUtils.fromJsonString(content, WorkRecordDTO.class);
+        mockMvc.perform(get(PATH + "/" + workRecord.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(workRecord.getId())))
+                .andExpect(jsonPath("$.project.id", is(-1)))
+                .andExpect(jsonPath("$.workType.id", is(-1)))
+                .andExpect(jsonPath("$.workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.dateFrom[0]", is(2019)))
+                .andExpect(jsonPath("$.dateFrom[1]", is(5)))
+                .andExpect(jsonPath("$.dateFrom[2]", is(1)))
+                .andExpect(jsonPath("$.dateFrom[3]", is(0)))
+                .andExpect(jsonPath("$.dateFrom[4]", is(0)))
+                .andExpect(jsonPath("$.dateTo[0]", is(2019)))
+                .andExpect(jsonPath("$.dateTo[1]", is(5)))
+                .andExpect(jsonPath("$.dateTo[2]", is(1)))
+                .andExpect(jsonPath("$.dateTo[3]", is(8)))
+                .andExpect(jsonPath("$.dateTo[4]", is(0)))
+                .andReturn();
+
+        mockMvc.perform(delete(PATH + "/" + workRecord.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(PATH + "/" + workRecord.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -4, authorities = {"USER"})
+    public void createWorkRecordForDifferentUser_expectForbidden() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-1, -1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void createWorkRecordForDifferentUserWithAdminWithNoProjectAssignment_expectBadRequest() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-1, -1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
+    public void createWorkRecordForDifferentUserWithAdmin_expectOk() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void createWorkRecordForDifferentUserWithProjectManagerOnDifferentProject_expectForbidden() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -2)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER", "ADMIN"})
+    public void createWorkRecordForDifferentUserWithProjectManagerAndAdminOnDifferentProject_expectok() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -2)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void createWorkRecordForDifferentUserWithProjectManager_expectOk() throws Exception {
+        mockMvc.perform(post(PATH)
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -1)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

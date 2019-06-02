@@ -1,9 +1,11 @@
 package cz.cvut.fit.timetracking.security.service.impl;
 
 import cz.cvut.fit.timetracking.project.service.ProjectService;
+import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.security.service.SecurityAccessService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,23 +18,38 @@ public class SecurityAccessServiceImpl implements SecurityAccessService {
     private ProjectService projectService;
 
     @Override
-    public boolean sameUser(Integer id1, Integer id2) {
-        return id1.equals(id2);
+    public boolean itIsMe(Integer userId) {
+        return userPrincipal().getId().equals(userId);
     }
 
     @Override
-    public boolean workRecordIsMineOrIam(Integer userId, Integer workRecordId, String role) {
+    public boolean workRecordIsMineOrHasProjectRole(Integer workRecordId, String role) {
         var workRecordOptional = workRecordService.findById(workRecordId);
         if (workRecordOptional.isPresent()) {
             var workRecord = workRecordOptional.get();
+            var userId = userPrincipal().getId();
             if (workRecord.getUser().getId().equals(userId)) {
                 return true;
             }
 
             Integer projectId = workRecord.getProject().getId();
-            var hasRole = projectService.isUserAssignedToProjectAndHasRole(userId, projectId, role);
-            return hasRole;
+            return hasProjectRole(projectId, userId, role);
         }
         return true;
+    }
+
+    @Override
+    public boolean hasProjectRole(Integer projectId, String role) {
+        return hasProjectRole(projectId, userPrincipal().getId(), role);
+    }
+
+    private boolean hasProjectRole(Integer projectId, Integer userId, String role) {
+        var hasRole = projectService.isUserAssignedToProjectAndHasRole(userId, projectId, role);
+        return hasRole;
+    }
+
+    private UserPrincipal userPrincipal() {
+        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (UserPrincipal) principal;
     }
 }

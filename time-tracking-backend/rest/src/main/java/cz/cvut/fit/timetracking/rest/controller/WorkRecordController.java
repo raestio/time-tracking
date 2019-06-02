@@ -62,14 +62,15 @@ public class WorkRecordController {
     }
 
     @PostMapping
+    @PreAuthorize("#request.userId == null or hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#request.projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
-        WorkRecordDTO result = create(request, user.getId());
+        WorkRecordDTO result = create(request, request.getUserId() == null ? user.getId() : request.getUserId());
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.workRecordIsMineOrIam(#user.id, #id, 'PROJECT_MANAGER')")
-    public ResponseEntity<WorkRecordDTO> getById(@PathVariable("id") Integer id, @CurrentUser UserPrincipal user) {
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.workRecordIsMineOrHasProjectRole(#id, 'PROJECT_MANAGER')")
+    public ResponseEntity<WorkRecordDTO> getById(@PathVariable("id") Integer id) {
         Optional<WorkRecord> workRecordOptional = workRecordService.findById(id);
         ResponseEntity<WorkRecordDTO> response = workRecordOptional.map(u -> ResponseEntity.ok(map(u))).orElseGet(() -> ResponseEntity.notFound().build());
         return response;

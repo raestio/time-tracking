@@ -113,7 +113,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
 
         boolean isAssigned = projectService.isUserAssignedToProject(userId, projectId);
         if (!isAssigned) {
-            throw new WorkRecordServiceException("Work record cannot be created. User with id = " + userId + " has no valid project assignment. Project id = " + projectId);
+            throw new WorkRecordServiceException("Work record cannot be created. User with id = " + userId + " has no valid project assignment with project id = " + projectId);
         }
 
         Project project = projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));

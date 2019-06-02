@@ -1,14 +1,3 @@
-TRUNCATE time_tracking_schema.work_record CASCADE;
-TRUNCATE time_tracking_schema.project_roles_assignment CASCADE;
-TRUNCATE time_tracking_schema.project_assignment CASCADE;
-TRUNCATE time_tracking_schema.project_role CASCADE;
-TRUNCATE time_tracking_schema.user_roles_assignment CASCADE;
-TRUNCATE time_tracking_schema.project_work_type CASCADE;
-TRUNCATE time_tracking_schema.work_type CASCADE;
-TRUNCATE time_tracking_schema.project CASCADE;
-TRUNCATE time_tracking_schema.user CASCADE;
-TRUNCATE time_tracking_schema.user_role CASCADE;
-
 INSERT INTO time_tracking_schema.user_role(id, "name", description) VALUES
 (-1, 'USER', NULL),
 (-2, 'ADMIN', NULL);
