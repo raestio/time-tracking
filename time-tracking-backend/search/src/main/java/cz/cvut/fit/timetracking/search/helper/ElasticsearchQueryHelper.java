@@ -3,7 +3,7 @@ package cz.cvut.fit.timetracking.search.helper;
 import org.springframework.util.Assert;
 
 public class ElasticsearchQueryHelper {
-    private final static String DAY_ROUND_FORMAT = "%s||/d";
+    private static final String DAY_ROUND_FORMAT = "%s||/d";
 
     private ElasticsearchQueryHelper() {
 

@@ -1,7 +1,6 @@
 package cz.cvut.fit.timetracking.project.service;
 
 import cz.cvut.fit.timetracking.project.dto.Project;
-import cz.cvut.fit.timetracking.project.dto.ProjectAssignment;
 import cz.cvut.fit.timetracking.project.dto.ProjectRole;
 import cz.cvut.fit.timetracking.project.dto.ProjectRoleName;
 import cz.cvut.fit.timetracking.project.dto.WorkType;

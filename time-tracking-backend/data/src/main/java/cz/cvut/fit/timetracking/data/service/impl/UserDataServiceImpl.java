@@ -1,7 +1,6 @@
 package cz.cvut.fit.timetracking.data.service.impl;
 
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 import cz.cvut.fit.timetracking.data.entity.User;
 import cz.cvut.fit.timetracking.data.mapper.DataModelMapper;
 import cz.cvut.fit.timetracking.data.repository.UserRepository;

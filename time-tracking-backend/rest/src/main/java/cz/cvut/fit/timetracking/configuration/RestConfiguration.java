@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Import({SwaggerConfiguration.class, RestSecurityConfiguration.class})
 public class RestConfiguration implements WebMvcConfigurer {
 
-    private final int MAX_AGE_SECS = 3600;
+    private final static int MAX_AGE_SECS = 3600;
 
     @Bean
     public RestModelMapper restModelMapper() {

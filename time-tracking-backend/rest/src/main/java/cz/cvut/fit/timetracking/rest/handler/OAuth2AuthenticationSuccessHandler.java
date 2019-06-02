@@ -2,7 +2,6 @@ package cz.cvut.fit.timetracking.rest.handler;
 
 import cz.cvut.fit.timetracking.rest.component.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import cz.cvut.fit.timetracking.rest.utils.CookieUtils;
-import cz.cvut.fit.timetracking.security.oauth2.exception.OAuth2AuthenticationProcessingException;
 import cz.cvut.fit.timetracking.security.oauth2.exception.OAuth2BadRequestException;
 import cz.cvut.fit.timetracking.security.token.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

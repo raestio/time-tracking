@@ -8,6 +8,10 @@ import java.util.stream.Stream;
 public class StringUtils {
     public static final String ASTERISKS_WRAP_FORMAT = "*%s*";
 
+    private StringUtils() {
+
+    }
+
     public static String wrapWordsInAsterisks(String str) {
         Assert.notNull(str, "String value cannot be null");
         StringJoiner stringJoiner = new StringJoiner(" ");
