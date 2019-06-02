@@ -2,7 +2,7 @@ time-tracking:
   search:
     elasticsearch:
       clusterName: time-tracking-cluster
-      hosts: localhost:9200
+      hosts: elasticsearch:9200
       indexName:
         projects: test_index_projects
         users: test_index_users

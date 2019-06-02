@@ -23,14 +23,14 @@ time-tracking:
       authorizedRedirectUris: http://localhost:3000/oauth2/redirect
   jira:
     restClient:
-      serverUri: http://localhost:8081
+      serverUri: http://jira:8081
       authentication:
         username: time.tracking
         password: Q557hKbtsRT9yf6
   search:
     elasticsearch:
       clusterName: time-tracking-cluster
-      hosts: localhost:9200
+      hosts: elasticsearch:9200
       indexName:
         projects: projects_test
         users: users_test
