@@ -58,6 +58,7 @@ public interface DataAccessApi {
     Optional<WorkRecordDTO> findWorkRecordById(Integer id);
     List<WorkRecordDTO> findAllWorkRecordsBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
     List<WorkRecordDTO> findAllWorkRecordsBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
+    List<WorkRecordDTO> findAllWorkRecordsBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId);
 
     //work types
     List<WorkTypeDTO> findAllWorkTypes();

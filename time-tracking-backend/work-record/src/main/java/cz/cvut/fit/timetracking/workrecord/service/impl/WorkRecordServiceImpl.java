@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,11 +88,17 @@ public class WorkRecordServiceImpl implements WorkRecordService {
 
     @Override
     public List<WorkRecord> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
+        return findAllBetweenByUserIdAndProjectId(fromInclusive, toExclusive, userId, null);
+    }
+
+    @Override
+    public List<WorkRecord> findAllBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId) {
         Assert.notNull(userId, "userId cannot be null");
         Assert.notNull(fromInclusive, "fromInclusive cannot be null");
         Assert.notNull(toExclusive, "toExclusive cannot be null");
-        List<WorkRecordDTO> workRecordDTOs = dataAccessApi.findAllWorkRecordsBetweenByUserId(fromInclusive, toExclusive, userId);
-        List<WorkRecord> workRecords = workRecordDTOs.stream().map(this::map).collect(Collectors.toList());
+        List<WorkRecordDTO> workRecordDTOs = projectId == null ? dataAccessApi.findAllWorkRecordsBetweenByUserId(fromInclusive, toExclusive, userId)
+                                                               : dataAccessApi.findAllWorkRecordsBetweenByUserIdAndProjectId(fromInclusive, toExclusive, userId, projectId);
+        List<WorkRecord> workRecords = workRecordDTOs.stream().map(this::map).sorted(Comparator.comparing(WorkRecord::getDateFrom)).collect(Collectors.toList());
         return workRecords;
     }
 

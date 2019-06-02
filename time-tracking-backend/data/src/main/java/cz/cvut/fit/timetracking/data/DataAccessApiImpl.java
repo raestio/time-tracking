@@ -189,6 +189,11 @@ public class DataAccessApiImpl implements DataAccessApi {
     }
 
     @Override
+    public List<WorkRecordDTO> findAllWorkRecordsBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId) {
+        return workRecordDataService.findAllWorkRecordsBetweenByUserIdAndProjectId(fromInclusive, toExclusive, userId, projectId);
+    }
+
+    @Override
     public List<WorkTypeDTO> findAllWorkTypes() {
         return workTypeDataService.findAll();
     }

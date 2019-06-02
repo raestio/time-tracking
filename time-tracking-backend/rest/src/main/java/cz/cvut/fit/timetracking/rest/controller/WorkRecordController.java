@@ -91,14 +91,16 @@ public class WorkRecordController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMeOrNull(#userId) or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<WorkRecordsResponse> getWorkRecords(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                               @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
                                                               @RequestParam(value = "userId", required = false) Integer userId,
+                                                              @RequestParam(value = "projectId", required = false) Integer projectId,
                                                               @CurrentUser UserPrincipal userPrincipal) {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DEFAULT_LAST_WORK_RECORD_DAYS), date -> date.minusDays(DEFAULT_LAST_WORK_RECORD_DAYS));
         LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
-        List<WorkRecord> workRecords = workRecordService.findAllBetweenByUserId(from.atStartOfDay(), to.atStartOfDay(), (userId == null ? userPrincipal.getId() : userId));
+        List<WorkRecord> workRecords = workRecordService.findAllBetweenByUserIdAndProjectId(from.atStartOfDay(), to.atStartOfDay(), (userId == null ? userPrincipal.getId() : userId), projectId);
         WorkRecordsResponse workRecordsResponse = new WorkRecordsResponse();
         workRecordsResponse.setWorkRecords(workRecords.stream().map(this::map).collect(Collectors.toList()));
         return ResponseEntity.ok(workRecordsResponse);

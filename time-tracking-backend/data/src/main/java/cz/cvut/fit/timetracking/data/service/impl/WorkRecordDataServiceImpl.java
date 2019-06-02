@@ -52,15 +52,26 @@ public class WorkRecordDataServiceImpl implements WorkRecordDataService {
     @Override
     public List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive) {
         List<WorkRecord> workRecords = workRecordRepository.findAllBetween(fromInclusive, toExclusive);
-        List<WorkRecordDTO> workRecordDTOs = workRecords.stream().map(this::map).collect(Collectors.toList());
+        List<WorkRecordDTO> workRecordDTOs = map(workRecords);
         return workRecordDTOs;
     }
 
     @Override
     public List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId) {
         List<WorkRecord> workRecords = workRecordRepository.findAllBetweenByUserId(fromInclusive, toExclusive, userId);
-        List<WorkRecordDTO> workRecordDTOs = workRecords.stream().map(this::map).collect(Collectors.toList());
+        List<WorkRecordDTO> workRecordDTOs = map(workRecords);
         return workRecordDTOs;
+    }
+
+    @Override
+    public List<WorkRecordDTO> findAllWorkRecordsBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId) {
+        List<WorkRecord> workRecords = workRecordRepository.findAllBetweenByUserIdAndProjectId(fromInclusive, toExclusive, userId, projectId);
+        List<WorkRecordDTO> workRecordDTOs = map(workRecords);
+        return workRecordDTOs;
+    }
+
+    private List<WorkRecordDTO> map(List<WorkRecord> workRecords) {
+        return workRecords.stream().map(this::map).collect(Collectors.toList());
     }
 
     @Override

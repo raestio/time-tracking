@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -216,7 +217,7 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
 
     @Test
     @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER", "ADMIN"})
-    public void createWorkRecordForDifferentUserWithProjectManagerAndAdminOnDifferentProject_expectok() throws Exception {
+    public void createWorkRecordForDifferentUserWithProjectManagerAndAdminOnDifferentProject_expectOk() throws Exception {
         mockMvc.perform(post(PATH)
                 .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -2)))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -230,5 +231,67 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
                 .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(-4, -1)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER"})
+    public void getMyWorkRecords() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(4)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER"})
+    public void getMyWorkRecordsDefault() throws Exception {
+        mockMvc.perform(get(PATH)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(0)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER"})
+    public void getMyWorkRecordsWithParam_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30&userId=-1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(4)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER"})
+    public void getMyWorkRecordsAndFilterByProject_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30&projectId=-3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(1)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER"})
+    public void getOtherUserWorkRecords_expectForbidden() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30&userId=-2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = {"USER", "ADMIN"})
+    public void getOtherUserWorkRecordsWithAdmin_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30&userId=-2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(3)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = {"USER"})
+    public void getOtherUserWorkRecordsWithProjectManager_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "?from=2019-04-01&to=2019-04-30&userId=-1&projectId=-1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(3)));
     }
 }

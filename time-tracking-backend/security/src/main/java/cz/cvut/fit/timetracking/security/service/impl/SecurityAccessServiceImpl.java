@@ -4,9 +4,11 @@ import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import cz.cvut.fit.timetracking.security.service.SecurityAccessService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class SecurityAccessServiceImpl implements SecurityAccessService {
@@ -49,7 +51,7 @@ public class SecurityAccessServiceImpl implements SecurityAccessService {
     }
 
     private boolean hasProjectRole(Integer projectId, Integer userId, String role) {
-        var hasRole = projectService.isUserAssignedToProjectAndHasRole(userId, projectId, role);
+        var hasRole = projectId != null && StringUtils.isNotBlank(role) && projectService.isUserAssignedToProjectAndHasRole(userId, projectId, role);
         return hasRole;
     }
 
