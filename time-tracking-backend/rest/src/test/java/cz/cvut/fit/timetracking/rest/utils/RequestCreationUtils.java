@@ -106,4 +106,15 @@ public class RequestCreationUtils {
         createOrUpdateWorkRecordRequest.setDescription("popis");
         return createOrUpdateWorkRecordRequest;
     }
+
+    public static Object workRecord2(Integer userId, Integer projectId) {
+        CreateOrUpdateWorkRecordRequest createOrUpdateWorkRecordRequest = new CreateOrUpdateWorkRecordRequest();
+        createOrUpdateWorkRecordRequest.setUserId(userId);
+        createOrUpdateWorkRecordRequest.setProjectId(projectId);
+        createOrUpdateWorkRecordRequest.setWorkTypeId(-1);
+        createOrUpdateWorkRecordRequest.setDateFrom(LocalDate.parse("2019-05-29").atStartOfDay());
+        createOrUpdateWorkRecordRequest.setDateTo(LocalDate.parse("2019-05-29").atStartOfDay().plusHours(8));
+        createOrUpdateWorkRecordRequest.setDescription("popis 2");
+        return createOrUpdateWorkRecordRequest;
+    }
 }

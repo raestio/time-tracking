@@ -16,6 +16,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,7 +107,7 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
 
     @Test
     @WithMockOAuth2AuthenticationToken(userId = -4, authorities = {"USER"})
-    public void createAndFindAndDeleteWorkRecord() throws Exception {
+    public void createAndFindAndUpdateAndDeleteWorkRecord() throws Exception {
         var result = mockMvc.perform(post(PATH)
                 .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord(null, -1)))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -144,6 +145,26 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
                 .andExpect(jsonPath("$.dateTo[0]", is(2019)))
                 .andExpect(jsonPath("$.dateTo[1]", is(5)))
                 .andExpect(jsonPath("$.dateTo[2]", is(1)))
+                .andExpect(jsonPath("$.dateTo[3]", is(8)))
+                .andExpect(jsonPath("$.dateTo[4]", is(0)))
+                .andReturn();
+
+         mockMvc.perform(put(PATH + "/" + workRecord.getId())
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecord2(null, -2)))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.project.id", is(-2)))
+                .andExpect(jsonPath("$.workType.id", is(-1)))
+                .andExpect(jsonPath("$.workType.name", is("vyvoj")))
+                .andExpect(jsonPath("$.dateFrom[0]", is(2019)))
+                .andExpect(jsonPath("$.dateFrom[1]", is(5)))
+                .andExpect(jsonPath("$.dateFrom[2]", is(29)))
+                .andExpect(jsonPath("$.dateFrom[3]", is(0)))
+                .andExpect(jsonPath("$.dateFrom[4]", is(0)))
+                .andExpect(jsonPath("$.dateTo[0]", is(2019)))
+                .andExpect(jsonPath("$.dateTo[1]", is(5)))
+                .andExpect(jsonPath("$.dateTo[2]", is(29)))
                 .andExpect(jsonPath("$.dateTo[3]", is(8)))
                 .andExpect(jsonPath("$.dateTo[4]", is(0)))
                 .andReturn();

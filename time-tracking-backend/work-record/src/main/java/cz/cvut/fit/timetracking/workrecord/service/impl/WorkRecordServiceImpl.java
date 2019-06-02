@@ -119,7 +119,7 @@ public class WorkRecordServiceImpl implements WorkRecordService {
         Project project = projectService.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
         boolean workTypeExists = project.getWorkTypes().stream().anyMatch(workType -> workType.getId().equals(workTypeId));
         if (!workTypeExists) {
-            throw new WorkTypeNotFoundException(workTypeId);
+            throw new WorkTypeNotFoundException("Work type with id: " + workTypeId + " doesn't exist in project with id: " + projectId);
         }
     }
 
