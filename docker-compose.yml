@@ -8,6 +8,8 @@ services:
     build: ./time-tracking-backend
     ports:
       - "8080:8080"
+    depends_on:
+      - "db"
   google-login-poc-app:
     build: ./google-login-poc-app
     ports:
@@ -26,6 +28,9 @@ services:
       - "9300:9300"
   logstash:
     build: ./logstash
+    depends_on:
+      - "elasticsearch"
+      - "db"
   sonarqube:
     build: ./sonarqube
     ports:
