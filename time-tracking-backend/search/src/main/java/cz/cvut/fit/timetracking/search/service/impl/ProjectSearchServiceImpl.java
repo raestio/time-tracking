@@ -6,11 +6,9 @@ import cz.cvut.fit.timetracking.search.service.ElasticsearchService;
 import cz.cvut.fit.timetracking.search.service.ProjectSearchService;
 import cz.cvut.fit.timetracking.search.utils.DateUtils;
 import cz.cvut.fit.timetracking.search.utils.StringUtils;
-import org.elasticsearch.common.time.DateFormatter;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -19,14 +17,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.NAME;
-import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.DESCRIPTION;
-import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.START;
-import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.END;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.DESCRIPTION;
+import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.END;
+import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.NAME;
+import static cz.cvut.fit.timetracking.search.constants.ElasticsearchProjectFieldNames.START;
 
 @Service
 public class ProjectSearchServiceImpl implements ProjectSearchService {

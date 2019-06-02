@@ -3,7 +3,6 @@ package cz.cvut.fit.timetracking.workrecord.service;
 import cz.cvut.fit.timetracking.workrecord.dto.WorkRecord;
 import cz.cvut.fit.timetracking.workrecord.dto.input.WorkRecordInput;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

@@ -59,7 +59,4 @@ public class UserDataServiceImpl implements UserDataService {
     private UserDTO map(User user) {
         return dataModelMapper.map(user, UserDTO.class);
     }
-    private UserDTOLight mapLight(User user) {
-        return dataModelMapper.map(user, UserDTOLight.class);
-    }
 }

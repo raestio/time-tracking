@@ -33,7 +33,7 @@ public class ApiError {
     public ApiError(int status, Throwable ex) {
         this();
         this.status = status;
-        this.message = "Unexpected error";
+        this.message = "Unexpected error " + ex.getLocalizedMessage();
     }
 
     public ApiError(int status, String message) {

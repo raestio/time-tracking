@@ -1,7 +1,6 @@
 package cz.cvut.fit.timetracking.data.service;
 
 import cz.cvut.fit.timetracking.data.api.dto.UserDTO;
-import cz.cvut.fit.timetracking.data.api.dto.UserDTOLight;
 
 import java.util.List;
 import java.util.Optional;
