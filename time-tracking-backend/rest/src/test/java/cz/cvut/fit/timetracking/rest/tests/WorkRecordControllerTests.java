@@ -294,4 +294,97 @@ public class WorkRecordControllerTests extends RestApiTestsConfiguration {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.workRecords", hasSize(3)));
     }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = { "USER" })
+    public void testJiraUserAvailability_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "/jira/availability")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isUserAvailable", is(true)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -1, authorities = { "USER" })
+    public void testJiraUserAvailability_expectOkAndUserIsNotAvailable() throws Exception {
+        mockMvc.perform(get(PATH + "/jira/availability")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isUserAvailable", is(false)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = { "USER" })
+    public void testJiraUserAvailability_expectForbidden() throws Exception {
+        mockMvc.perform(get(PATH + "/jira/availability?userId=-3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = { "USER", "ADMIN" })
+    public void testJiraUserAvailabilityWithAdmin_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "/jira/availability?userId=-3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isUserAvailable", is(true)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(authorities = { "USER", "ADMIN" })
+    public void testGetWorkRecordsToImportFromJira_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "/jira?from=2019-05-29&to=2019-06-03&userId=-3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -3, authorities = { "USER" })
+    public void testGetWorkRecordsToImportFromJiraMe_expectOk() throws Exception {
+        mockMvc.perform(get(PATH + "/jira/me?from=2019-05-29&to=2020-06-03")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.availableProjects", hasSize(1)))
+                .andExpect(jsonPath("$.availableProjects[0].id", is(-1)))
+                .andExpect(jsonPath("$.availableProjects[0].name", is("test google project")))
+                .andExpect(jsonPath("$.workRecordImports", hasSize(4)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.project.name", is("test project")))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateFrom[0]", is(2019)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateFrom[1]", is(5)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateFrom[2]", is(29)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateFrom[3]", is(11)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateFrom[4]", is(0)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateTo[0]", is(2019)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateTo[1]", is(5)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateTo[2]", is(29)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateTo[3]", is(17)))
+                .andExpect(jsonPath("$.workRecordImports[0].workRecord.dateTo[4]", is(0)))
+                .andExpect(jsonPath("$.workRecordImports[0].isInConflict", is(false)))
+                .andExpect(jsonPath("$.workRecordImports[1].workRecord.project.name", is("test project")))
+                .andExpect(jsonPath("$.workRecordImports[1].isInConflict", is(false)))
+                .andExpect(jsonPath("$.workRecordImports[3].isInConflict", is(true)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -4, authorities = {"USER"})
+    public void testBulkCreate() throws Exception {
+        mockMvc.perform(post(PATH + "/bulk")
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecordsBulk()))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(PATH +"?from=2019-05-01&to=2019-06-01")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workRecords", hasSize(3)));
+    }
+
+    @Test
+    @WithMockOAuth2AuthenticationToken(userId = -4, authorities = {"USER"})
+    public void testBulkCreate_expectBadRequest() throws Exception {
+        mockMvc.perform(post(PATH + "/bulk")
+                .content(JsonUtils.toJsonString(RequestCreationUtils.workRecordsBulk1()))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

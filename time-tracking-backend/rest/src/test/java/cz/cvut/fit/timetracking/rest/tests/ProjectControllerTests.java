@@ -53,7 +53,7 @@ public class ProjectControllerTests extends RestApiTestsConfiguration {
     public void whenGetById_shouldReturnProject() throws Exception {
         mockMvc.perform(get(PATH + "/-1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("test project")))
+                .andExpect(jsonPath("$.name", is("test google project")))
                 .andExpect(jsonPath("$.id", is(-1)))
                 .andExpect(jsonPath("$.start[0]", is(2019)))
                 .andExpect(jsonPath("$.start[1]", is(4)))

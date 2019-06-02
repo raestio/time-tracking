@@ -148,7 +148,7 @@ public class UserControllerTests extends RestApiTestsConfiguration {
         mockMvc.perform(get(PATH + "/-4/projects").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.projects", hasSize(2)))
-                .andExpect(jsonPath("$.projects[0].name", is("test project")))
+                .andExpect(jsonPath("$.projects[0].name", is("test google project")))
                 .andExpect(jsonPath("$.projects[0].id", is(-1)))
                 .andExpect(jsonPath("$.projects[0].start[0]", is(2019)))
                 .andExpect(jsonPath("$.projects[0].start[1]", is(4)))
@@ -174,7 +174,7 @@ public class UserControllerTests extends RestApiTestsConfiguration {
         mockMvc.perform(get(PATH + "/me/projects").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.projects", hasSize(1)))
-                .andExpect(jsonPath("$.projects[0].name", is("test project")))
+                .andExpect(jsonPath("$.projects[0].name", is("test google project")))
                 .andExpect(jsonPath("$.projects[0].id", is(-1)));
     }
 

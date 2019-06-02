@@ -10,7 +10,7 @@ INSERT INTO time_tracking_schema.project_role(id, "name", description) VALUES
 INSERT INTO time_tracking_schema.work_type(id, "name") VALUES (-1, 'vyvoj');
 INSERT INTO time_tracking_schema.work_type(id, "name") VALUES (-2, 'analyza');
 
-INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-1, 'test project', '2019-04-04');
+INSERT INTO time_tracking_schema.project(id, "name", "start") VALUES (-1, 'test google project', '2019-04-04');
 INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-1, -1, -1);
 INSERT INTO time_tracking_schema.project_work_type(id, id_work_type, id_project) VALUES (-2, -2, -1);
 
@@ -27,7 +27,7 @@ INSERT INTO time_tracking_schema.user(id, "name", surname, email, auth_provider)
 INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role) VALUES (-3, -2, -1);
 
 
-INSERT INTO time_tracking_schema.user(id, "name", surname, email, auth_provider) VALUES (-3, 'user but project manager', 'test', 'pmanager@ahoj2.cau', 'GOOGLE');
+INSERT INTO time_tracking_schema.user(id, "name", surname, email, auth_provider) VALUES (-3, 'user but project manager', 'test', 'rastislav.zlacky@inventi.cz', 'GOOGLE');
 INSERT INTO time_tracking_schema.user_roles_assignment(id, id_user, id_user_role) VALUES (-4, -3, -1);
 INSERT INTO time_tracking_schema.project_assignment(id, valid_from, id_project, id_user) VALUES (-1, '2019-04-04', -1, -3);
 INSERT INTO time_tracking_schema.project_roles_assignment(id, id_project_role, id_project_assignment) VALUES (-1, -1, -1);
@@ -46,6 +46,7 @@ INSERT INTO time_tracking_schema.project_roles_assignment(id, id_project_role, i
 INSERT INTO time_tracking_schema.work_record(id, date_from, date_to, description, date_created, id_project, id_work_type, id_user) VALUES
                                             (-1, '2019-04-15 08:00', '2019-04-15 16:00', 'test popis', '2019-04-15', -1, -1, -1),
                                             (-10, '2019-04-19 08:00', '2019-04-19 16:00', 'test popis', '2019-04-15', -3, -1, -1),
+                                            (-11, '2020-01-20 08:00', '2020-01-20 16:00', 'test popis 54', '2020-01-20', -1, -1, -3),
                                             (-7, '2019-04-15 08:00', '2019-04-15 16:00', 'test popis', '2019-04-15', -1, -1, -2),
                                             (-8, '2019-04-16 08:00', '2019-04-16 16:00', 'test popis', '2019-04-15', -2, -2, -2),
                                             (-9, '2019-04-20 08:00', '2019-04-20 16:00', 'test popis', '2019-04-15', -2, -2, -2),

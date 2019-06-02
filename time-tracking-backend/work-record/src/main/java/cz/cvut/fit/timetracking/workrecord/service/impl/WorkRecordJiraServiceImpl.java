@@ -14,15 +14,21 @@ import cz.cvut.fit.timetracking.workrecord.service.WorkRecordJiraService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TimeZone;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +57,10 @@ public class WorkRecordJiraServiceImpl implements WorkRecordJiraService {
         User user = findJiraUser(userId).orElseThrow(() -> new JiraUserNotFoundException(userId));
         Map<Issue, List<Worklog>> worklogsGroupedByIssue = jiraWorklogService.findWorklogsByUserEmail(user.getEmailAddress(), fromInclusive, toExclusive);
         List<WorkRecord> workRecords = createIncompleteWorkRecords(worklogsGroupedByIssue);
-        List<WorkRecordConflictInfo> workRecordConflictInfos = workRecords.stream().map(w -> createWorkRecordConflictInfo(w, userId)).collect(Collectors.toList());
+        List<WorkRecordConflictInfo> workRecordConflictInfos = workRecords.stream()
+                .map(w -> createWorkRecordConflictInfo(w, userId))
+                .sorted(Comparator.comparing(workRecordConflictInfo -> workRecordConflictInfo.getWorkRecord().getDateFrom()))
+                .collect(Collectors.toList());
         return workRecordConflictInfos;
     }
 
@@ -92,6 +101,7 @@ public class WorkRecordJiraServiceImpl implements WorkRecordJiraService {
     }
 
     private LocalDateTime toLocalDateTime(DateTime dateTime) {
+        dateTime = dateTime.withZone(DateTimeZone.forTimeZone(TimeZone.getDefault()));
         LocalDateTime localDateTime = LocalDateTime.of(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth(), dateTime.getHourOfDay(), dateTime.getMinuteOfHour());
         return localDateTime;
     }

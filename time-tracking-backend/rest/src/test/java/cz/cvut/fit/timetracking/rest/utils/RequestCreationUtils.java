@@ -8,6 +8,7 @@ import cz.cvut.fit.timetracking.rest.dto.project.request.CreateOrUpdateWorkTypeR
 import cz.cvut.fit.timetracking.rest.dto.user.UserRoleName;
 import cz.cvut.fit.timetracking.rest.dto.user.request.UpdateUserRolesRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateOrUpdateWorkRecordRequest;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateWorkRecordsBulkRequest;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -107,7 +108,7 @@ public class RequestCreationUtils {
         return createOrUpdateWorkRecordRequest;
     }
 
-    public static Object workRecord2(Integer userId, Integer projectId) {
+    public static CreateOrUpdateWorkRecordRequest workRecord2(Integer userId, Integer projectId) {
         CreateOrUpdateWorkRecordRequest createOrUpdateWorkRecordRequest = new CreateOrUpdateWorkRecordRequest();
         createOrUpdateWorkRecordRequest.setUserId(userId);
         createOrUpdateWorkRecordRequest.setProjectId(projectId);
@@ -116,5 +117,32 @@ public class RequestCreationUtils {
         createOrUpdateWorkRecordRequest.setDateTo(LocalDate.parse("2019-05-29").atStartOfDay().plusHours(8));
         createOrUpdateWorkRecordRequest.setDescription("popis 2");
         return createOrUpdateWorkRecordRequest;
+    }
+
+    public static CreateOrUpdateWorkRecordRequest workRecord3(Integer userId, Integer projectId) {
+        CreateOrUpdateWorkRecordRequest createOrUpdateWorkRecordRequest = new CreateOrUpdateWorkRecordRequest();
+        createOrUpdateWorkRecordRequest.setUserId(userId);
+        createOrUpdateWorkRecordRequest.setProjectId(projectId);
+        createOrUpdateWorkRecordRequest.setWorkTypeId(-1);
+        createOrUpdateWorkRecordRequest.setDateFrom(LocalDate.parse("2019-05-30").atStartOfDay());
+        createOrUpdateWorkRecordRequest.setDateTo(LocalDate.parse("2019-05-30").atStartOfDay().plusHours(8));
+        createOrUpdateWorkRecordRequest.setDescription("popis 2");
+        return createOrUpdateWorkRecordRequest;
+    }
+
+    public static CreateWorkRecordsBulkRequest workRecordsBulk() {
+        CreateWorkRecordsBulkRequest createWorkRecordsBulkRequest = new CreateWorkRecordsBulkRequest();
+        createWorkRecordsBulkRequest.getRequests().add(workRecord(-4, -1));
+        createWorkRecordsBulkRequest.getRequests().add(workRecord2(-4, -1));
+        createWorkRecordsBulkRequest.getRequests().add(workRecord3(-4, -2));
+        return createWorkRecordsBulkRequest;
+    }
+
+    public static CreateWorkRecordsBulkRequest workRecordsBulk1() {
+        CreateWorkRecordsBulkRequest createWorkRecordsBulkRequest = new CreateWorkRecordsBulkRequest();
+        createWorkRecordsBulkRequest.getRequests().add(workRecord(-4, -1));
+        createWorkRecordsBulkRequest.getRequests().add(workRecord2(-4, -1));
+        createWorkRecordsBulkRequest.getRequests().add(workRecord2(-4, -2));
+        return createWorkRecordsBulkRequest;
     }
 }

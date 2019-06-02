@@ -3,6 +3,7 @@ package cz.cvut.fit.timetracking.rest.controller;
 import cz.cvut.fit.timetracking.project.dto.Project;
 import cz.cvut.fit.timetracking.project.service.ProjectService;
 import cz.cvut.fit.timetracking.rest.dto.project.ProjectDTO;
+import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordConflictInfoDTO;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateOrUpdateWorkRecordRequest;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.WorkRecordDTO;
 import cz.cvut.fit.timetracking.rest.dto.workrecord.request.CreateWorkRecordsBulkRequest;
@@ -20,6 +21,7 @@ import cz.cvut.fit.timetracking.workrecord.service.WorkRecordJiraService;
 import cz.cvut.fit.timetracking.workrecord.service.WorkRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,6 +59,9 @@ public class WorkRecordController {
 
     @PostMapping("/bulk")
     public ResponseEntity create(@Valid @RequestBody CreateWorkRecordsBulkRequest request, @CurrentUser UserPrincipal user) {
+        if (!authorizedForBulk(user, request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not authorized for bulk create operation. Check if all 'userId' fields are set up, not null and correspond to logged user.");
+        }
         workRecordService.create(request.getRequests().stream().map(r -> restModelMapper.map(r, WorkRecordInput.class)).collect(Collectors.toList()));
         return ResponseEntity.ok().build();
     }
@@ -107,6 +112,7 @@ public class WorkRecordController {
     }
 
     @GetMapping("/jira/availability")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMeOrNull(#userId)")
     public ResponseEntity<JiraAvailabilityResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "userId", required = false) Integer userId,
                                                                                    @CurrentUser UserPrincipal userPrincipal) {
         boolean isAvailable = workRecordJiraService.isUserAvailableInJira(userId == null ? userPrincipal.getId() : userId);
@@ -116,6 +122,7 @@ public class WorkRecordController {
     }
 
     @GetMapping("/jira")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMe(#userId)")
     public ResponseEntity<WorkRecordsJiraImportResponse> getWorkRecordsFromJiraToImport(@RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                                         @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
                                                                                         @RequestParam(value = "userId") Integer userId) {
@@ -136,9 +143,13 @@ public class WorkRecordController {
         List<Project> projects = projectService.findAllCurrentlyAssignedProjectsByUserId(userId);
 
         WorkRecordsJiraImportResponse workRecordsJiraImportResponse = new WorkRecordsJiraImportResponse();
-        workRecordsJiraImportResponse.setWorkRecordConflictInfos(workRecordConflictInfos);
+        workRecordsJiraImportResponse.setWorkRecordConflictInfos(map(workRecordConflictInfos));
         workRecordsJiraImportResponse.setProjects(projects.stream().map(p -> restModelMapper.map(p, ProjectDTO.class)).collect(Collectors.toList()));
         return workRecordsJiraImportResponse;
+    }
+
+    private List<WorkRecordConflictInfoDTO> map(List<WorkRecordConflictInfo> workRecordConflictInfos) {
+        return workRecordConflictInfos.stream().map(w -> restModelMapper.map(w, WorkRecordConflictInfoDTO.class)).collect(Collectors.toList());
     }
 
     private WorkRecordDTO map(WorkRecord workRecord) {
@@ -150,5 +161,14 @@ public class WorkRecordController {
         WorkRecord workRecord = workRecordService.create(request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId(), userId);
         WorkRecordDTO result = map(workRecord);
         return result;
+    }
+
+    private boolean authorizedForBulk(@CurrentUser UserPrincipal user, CreateWorkRecordsBulkRequest request) {
+        return user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN")) || createForUserOnly(user, request);
+    }
+
+    private boolean createForUserOnly(UserPrincipal user, CreateWorkRecordsBulkRequest request) {
+        var userOnly = request.getRequests().stream().allMatch(r -> user.getId().equals(r.getUserId()));
+        return userOnly;
     }
 }
