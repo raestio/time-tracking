@@ -17,6 +17,8 @@ import cz.cvut.fit.timetracking.security.CurrentUser;
 import cz.cvut.fit.timetracking.security.oauth2.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +44,7 @@ public class SearchController {
     private RestModelMapper restModelMapper;
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SearchUsersResponse> searchUsers(@RequestParam("keyword") String keyword) {
         List<UserDocument> userDocuments = userSearchService.searchUsers(keyword);
         List<UserSearchDTO> userSearchDTOs = userDocuments.stream().map(u -> restModelMapper.map(u, UserSearchDTO.class)).collect(Collectors.toList());
@@ -49,6 +52,7 @@ public class SearchController {
     }
 
     @GetMapping("/projects")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<SearchProjectsResponse> searchProjects(@RequestParam("keyword") String keyword) {
         List<ProjectDocument> projectDocuments = projectSearchService.searchProjects(keyword);
         List<ProjectSearchDTO> projectSearchDTOs = projectDocuments.stream().map(u -> restModelMapper.map(u, ProjectSearchDTO.class)).collect(Collectors.toList());
@@ -57,7 +61,12 @@ public class SearchController {
 
     @GetMapping("/work-records")
     public ResponseEntity<SearchWorkRecordsResponse> searchWorkRecords(@RequestParam("keyword") String keyword, @CurrentUser UserPrincipal userPrincipal) {
-        List<WorkRecordDocument> workRecordDocuments = workRecordSearchService.searchWorkRecords(keyword, userPrincipal.getId());
+        List<WorkRecordDocument> workRecordDocuments;
+        if (userPrincipal.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            workRecordDocuments = workRecordSearchService.searchWorkRecords(keyword);
+        } else {
+            workRecordDocuments = workRecordSearchService.searchWorkRecords(keyword, userPrincipal.getId());
+        }
         List<WorkRecordSearchDTO> workRecordDocumentsDTOs = workRecordDocuments.stream().map(u -> restModelMapper.map(u, WorkRecordSearchDTO.class)).collect(Collectors.toList());
         return ResponseEntity.ok(new SearchWorkRecordsResponse(workRecordDocumentsDTOs));
     }

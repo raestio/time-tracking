@@ -56,7 +56,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#id, 'PROJECT_MANAGER')")
     public ResponseEntity<ProjectDTO> getById(@PathVariable("id") Integer id) {
         Optional<Project> projectOptional = projectService.findById(id);
         ResponseEntity<ProjectDTO> response = projectOptional.map(u -> ResponseEntity.ok(restModelMapper.map(u, ProjectDTO.class))).orElseGet(() -> ResponseEntity.notFound().build());
@@ -80,13 +80,14 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         projectService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/project-assignments")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<ProjectAssignmentsResponse> getProjectAssignments(@PathVariable("id") Integer projectId) {
         List<ProjectAssignment> projectAssignments = projectAssignmentService.findByProjectId(projectId);
         ProjectAssignmentsResponse projectAssignmentsResponse = new ProjectAssignmentsResponse();

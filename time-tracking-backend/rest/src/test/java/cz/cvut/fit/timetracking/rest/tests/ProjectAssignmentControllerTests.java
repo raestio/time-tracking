@@ -96,7 +96,7 @@ public class ProjectAssignmentControllerTests extends RestApiTestsConfiguration 
                 .andExpect(status().isNotFound());
     }
 
-    @Test(timeout = 1000)
+    @Test
     @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
     public void createAndFindAndDeleteProjectAssignmentProjectManager() throws Exception {
         var result = mockMvc.perform(post(PATH)
@@ -127,7 +127,7 @@ public class ProjectAssignmentControllerTests extends RestApiTestsConfiguration 
                 .andExpect(status().isNotFound());
     }
 
-    @Test(timeout = 1000)
+    @Test
     @WithMockOAuth2AuthenticationToken(authorities = {"USER", "ADMIN"})
     public void updateProjectAssignment() throws Exception {
         mockMvc.perform(put(PATH + "/-2")

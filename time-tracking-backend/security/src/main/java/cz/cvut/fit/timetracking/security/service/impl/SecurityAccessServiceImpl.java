@@ -23,6 +23,11 @@ public class SecurityAccessServiceImpl implements SecurityAccessService {
     }
 
     @Override
+    public boolean itIsMeOrNull(Integer userId) {
+        return userId == null || itIsMe(userId);
+    }
+
+    @Override
     public boolean workRecordIsMineOrHasProjectRole(Integer workRecordId, String role) {
         var workRecordOptional = workRecordService.findById(workRecordId);
         if (workRecordOptional.isPresent()) {

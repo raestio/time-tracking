@@ -62,7 +62,7 @@ public class WorkRecordController {
     }
 
     @PostMapping
-    @PreAuthorize("#request.userId == null or hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#request.projectId, 'PROJECT_MANAGER')")
+    @PreAuthorize("@securityAccessServiceImpl.itIsMeOrNull(#request.userId) or hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#request.projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<WorkRecordDTO> create(@Valid @RequestBody CreateOrUpdateWorkRecordRequest request, @CurrentUser UserPrincipal user) {
         WorkRecordDTO result = create(request, request.getUserId() == null ? user.getId() : request.getUserId());
         return ResponseEntity.ok(result);
@@ -77,12 +77,14 @@ public class WorkRecordController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.workRecordIsMineOrHasProjectRole(#id, 'PROJECT_MANAGER')")
     public ResponseEntity<WorkRecordDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody CreateOrUpdateWorkRecordRequest request) {
         WorkRecord workRecord = workRecordService.update(id, request.getDateFrom(), request.getDateTo(), request.getDescription(), request.getProjectId(), request.getWorkTypeId());
         return ResponseEntity.ok(map(workRecord));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.workRecordIsMineOrHasProjectRole(#id, 'PROJECT_MANAGER')")
     public ResponseEntity deleteById(@PathVariable("id") Integer id) {
         workRecordService.deleteById(id);
         return ResponseEntity.ok().build();
