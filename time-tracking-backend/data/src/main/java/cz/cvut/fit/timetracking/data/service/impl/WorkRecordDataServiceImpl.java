@@ -64,6 +64,13 @@ public class WorkRecordDataServiceImpl implements WorkRecordDataService {
     }
 
     @Override
+    public List<WorkRecordDTO> findAllBetweenByProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer projectId) {
+        List<WorkRecord> workRecords = workRecordRepository.findAllBetweenByProjectId(fromInclusive, toExclusive, projectId);
+        List<WorkRecordDTO> workRecordDTOs = map(workRecords);
+        return workRecordDTOs;
+    }
+
+    @Override
     public List<WorkRecordDTO> findAllWorkRecordsBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId) {
         List<WorkRecord> workRecords = workRecordRepository.findAllBetweenByUserIdAndProjectId(fromInclusive, toExclusive, userId, projectId);
         List<WorkRecordDTO> workRecordDTOs = map(workRecords);

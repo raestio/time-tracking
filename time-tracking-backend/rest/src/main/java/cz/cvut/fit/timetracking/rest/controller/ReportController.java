@@ -48,42 +48,46 @@ public class ReportController {
     private RestModelMapper restModelMapper;
 
     @GetMapping("/monthly")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMe(#userId) or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<MonthlyReportsResponse> getMonthlyReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                     @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
-                                                                    @RequestParam(value = "userId", required = false) Integer userId) {
+                                                                    @RequestParam(value = "userId", required = false) Integer userId,
+                                                                    @RequestParam(value = "projectId", required = false) Integer projectId) {
 
-        MonthlyReportsResponse monthlyReportsResponse = createMonthlyReports(fromInclusive, toExclusive, userId);
+        MonthlyReportsResponse monthlyReportsResponse = createMonthlyReports(fromInclusive, toExclusive, userId, projectId);
         return ResponseEntity.ok(monthlyReportsResponse);
     }
 
     @GetMapping("/daily")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMe(#userId) or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<DailyReportsResponse> getDailyReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
                                                                 @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
-                                                                @RequestParam(value = "userId", required = false) Integer userId) {
-        DailyReportsResponse dailyReportsResponse = createDailyReports(fromInclusive, toExclusive, userId);
+                                                                @RequestParam(value = "userId", required = false) Integer userId,
+                                                                @RequestParam(value = "projectId", required = false) Integer projectId) {
+        DailyReportsResponse dailyReportsResponse = createDailyReports(fromInclusive, toExclusive, userId, projectId);
         return ResponseEntity.ok(dailyReportsResponse);
     }
 
     @GetMapping("/yearly")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.itIsMe(#userId) or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<YearlyReportsResponse> getYearlyReports(@RequestParam(value = "from", required = false) @Positive Integer fromInclusive,
                                                                   @RequestParam(value = "to", required = false) @Positive Integer toExclusive,
-                                                                  @RequestParam(value = "userId", required = false) Integer userId) {
-        YearlyReportsResponse yearlyReportsResponse = createYearlyReports(fromInclusive, toExclusive, userId);
+                                                                  @RequestParam(value = "userId", required = false) Integer userId,
+                                                                  @RequestParam(value = "projectId", required = false) Integer projectId) {
+        YearlyReportsResponse yearlyReportsResponse = createYearlyReports(fromInclusive, toExclusive, userId, projectId);
         return ResponseEntity.ok(yearlyReportsResponse);
     }
 
     @GetMapping("/projects")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or @securityAccessServiceImpl.hasProjectRole(#projectId, 'PROJECT_MANAGER')")
     public ResponseEntity<ProjectsReportsResponse> getProjectsReports(@RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromInclusive,
-                                                                      @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive) {
+                                                                      @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toExclusive,
+                                                                      @RequestParam(value = "projectId", required = false) Integer projectId) {
 
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
         LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
-        List<ProjectReportItem> projectReportItems = reportService.createProjectsReports(from, to);
+        List<ProjectReportItem> projectReportItems = reportService.createProjectsReports(from, to, projectId);
         ProjectsReportsResponse projectsReportsResponse = new ProjectsReportsResponse();
         projectsReportsResponse.setProjectReportItems(projectReportItems.stream().map(p -> restModelMapper.map(p, ProjectReportItemDTO.class)).collect(Collectors.toList()));
         return ResponseEntity.ok(projectsReportsResponse);
@@ -123,36 +127,48 @@ public class ReportController {
         return ResponseEntity.ok(createYearlyReports(fromInclusive, toExclusive, userPrincipal.getId()));
     }
 
-    private MonthlyReportsResponse createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+    private MonthlyReportsResponse createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
         LocalDate nextMonth = LocalDate.now().plusMonths(1);
         LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, nextMonth.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS), date -> date.minusMonths(MONTHLY_REPORTS_DEFAULT_MONTHS));
         LocalDate to = TimeUtils.getTo(toExclusive, nextMonth);
-        List<MonthReportItem> monthReportItems = reportService.createMonthlyReports(from, to, userId);
+        List<MonthReportItem> monthReportItems = reportService.createMonthlyReports(from, to, userId, projectId);
         MonthlyReportsResponse monthlyReportsResponse = new MonthlyReportsResponse();
         monthlyReportsResponse.setMonthlyReportItems(monthReportItems.stream().map(r -> restModelMapper.map(r, MonthReportItemDTO.class)).collect(Collectors.toList()));
         return monthlyReportsResponse;
     }
 
+    private MonthlyReportsResponse createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        return createMonthlyReports(fromInclusive, toExclusive, userId, null);
+    }
+
     private DailyReportsResponse createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        return createDailyReports(fromInclusive, toExclusive, userId, null);
+    }
+
+    private DailyReportsResponse createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDate from = TimeUtils.getFrom(fromInclusive, toExclusive, tomorrow.minusDays(DAILY_REPORTS_DEFAULT_DAYS), date -> date.minusDays(DAILY_REPORTS_DEFAULT_DAYS));
         LocalDate to = TimeUtils.getTo(toExclusive, tomorrow);
-        List<DayReportItem> dayReportItems = reportService.createDailyReports(from, to, userId);
+        List<DayReportItem> dayReportItems = reportService.createDailyReports(from, to, userId, projectId);
         DailyReportsResponse dailyReportsResponse = new DailyReportsResponse();
         dailyReportsResponse.setDailyReportItems(dayReportItems.stream().map(r -> restModelMapper.map(r, DayReportItemDTO.class)).collect(Collectors.toList()));
         return dailyReportsResponse;
     }
 
-    private YearlyReportsResponse createYearlyReports(Integer fromInclusive, Integer toExclusive, Integer userId) {
+    private YearlyReportsResponse createYearlyReports(Integer fromInclusive, Integer toExclusive, Integer userId, Integer projectId) {
         LocalDate nextYear = LocalDate.now().plusYears(1);
         LocalDate from = fromInclusive == null ? null : LocalDate.ofYearDay(fromInclusive, 1);
         LocalDate to = toExclusive == null ? null : LocalDate.ofYearDay(toExclusive, 1);
         from = TimeUtils.getFrom(from, to, nextYear.minusDays(YEARLY_REPORTS_DEFAULT_YEARS), date -> date.minusYears(YEARLY_REPORTS_DEFAULT_YEARS));
         to = TimeUtils.getTo(to, nextYear);
-        List<YearReportItem> yearReportItems = reportService.createYearlyReports(from, to, userId);
+        List<YearReportItem> yearReportItems = reportService.createYearlyReports(from, to, userId, projectId);
         YearlyReportsResponse yearlyReportsResponse = new YearlyReportsResponse();
         yearlyReportsResponse.setYearlyReportItems(yearReportItems.stream().map(r -> restModelMapper.map(r, YearReportItemDTO.class)).collect(Collectors.toList()));
         return yearlyReportsResponse;
+    }
+
+    private YearlyReportsResponse createYearlyReports(Integer fromInclusive, Integer toExclusive, Integer userId) {
+        return createYearlyReports(fromInclusive, toExclusive, userId, null);
     }
 
 

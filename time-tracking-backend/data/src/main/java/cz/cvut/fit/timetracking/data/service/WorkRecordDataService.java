@@ -14,6 +14,7 @@ public interface WorkRecordDataService {
     Optional<WorkRecordDTO> findById(Integer id);
     List<WorkRecordDTO> findAllBetween(LocalDateTime fromInclusive, LocalDateTime toExclusive);
     List<WorkRecordDTO> findAllBetweenByUserId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId);
+    List<WorkRecordDTO> findAllBetweenByProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer projectId);
     List<WorkRecordDTO> findAllWorkRecordsBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId);
 
     void deleteById(Integer id);

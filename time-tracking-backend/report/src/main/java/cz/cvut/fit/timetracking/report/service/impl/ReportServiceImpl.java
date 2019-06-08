@@ -35,7 +35,7 @@ public class ReportServiceImpl implements ReportService {
     private ReportItemsHelper reportItemsHelper;
 
     @Override
-    public List<DayReportItem> createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+    public List<DayReportItem> createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
         List<DayReportItem> dayReportItems = createReportsByTemplate(
                 () -> findWorkRecordsBetween(fromInclusive, toExclusive, userId),
                 (workRecords ->  workRecordGroupingService.groupByDate(workRecords)),
@@ -46,7 +46,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+    public List<DayReportItem> createDailyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        return createDailyReports(fromInclusive, toExclusive, userId, null);
+    }
+
+    @Override
+    public List<DayReportItem> createDailyReports(LocalDate fromInclusive, LocalDate toExclusive) {
+        return createDailyReports(fromInclusive, toExclusive, null);
+    }
+
+    @Override
+    public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
         List<MonthReportItem> monthReportItems = createReportsByTemplate(
                 () -> findWorkRecordsBetween(fromInclusive.withDayOfMonth(1), toExclusive.withDayOfMonth(1), userId),
                 (workRecords -> workRecordGroupingService.groupByMonth(workRecords)),
@@ -57,7 +67,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<YearReportItem> createYearlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+    public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        return createMonthlyReports(fromInclusive, toExclusive, userId, null);
+    }
+
+    @Override
+    public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive) {
+        return createMonthlyReports(fromInclusive, toExclusive, null);
+    }
+
+    @Override
+    public List<YearReportItem> createYearlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
         List<YearReportItem> yearReportItems = createReportsByTemplate(
                 () -> findWorkRecordsBetween(fromInclusive.withDayOfYear(1), toExclusive.withDayOfYear(1), userId),
                 (workRecords -> workRecordGroupingService.groupByYear(workRecords)),
@@ -68,13 +88,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<DayReportItem> createDailyReports(LocalDate fromInclusive, LocalDate toExclusive) {
-        return createDailyReports(fromInclusive, toExclusive, null);
-    }
-
-    @Override
-    public List<MonthReportItem> createMonthlyReports(LocalDate fromInclusive, LocalDate toExclusive) {
-        return createMonthlyReports(fromInclusive, toExclusive, null);
+    public List<YearReportItem> createYearlyReports(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
+        return createYearlyReports(fromInclusive, toExclusive, userId, null);
     }
 
     @Override
@@ -95,10 +110,26 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<ProjectReportItem> createProjectsReports(LocalDate fromInclusive, LocalDate toExclusive) {
-        List<WorkRecord> workRecords = findWorkRecordsBetween(fromInclusive, toExclusive);
+        return createProjectsReports(fromInclusive, toExclusive, null);
+    }
+
+    @Override
+    public List<ProjectReportItem> createProjectsReports(LocalDate fromInclusive, LocalDate toExclusive, Integer projectId) {
+        List<WorkRecord> workRecords = findWorkRecordsBetween(fromInclusive, toExclusive, null, projectId);
         List<ProjectReportItem> projectReportItems = reportItemsHelper.createProjectReportItems(workRecords);
         projectReportItems.sort(Comparator.comparing(projectReportItem -> projectReportItem.getProject().getName()));
         return projectReportItems;
+    }
+
+    private List<WorkRecord> findWorkRecordsBetween(LocalDate fromInclusive, LocalDate toExclusive, Integer userId, Integer projectId) {
+        if (userId != null && projectId == null) {
+            return workRecordService.findAllBetweenByUserId(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay(), userId);
+        } else if (userId == null && projectId != null) {
+            return workRecordService.findAllBetweenByProjectId(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay(), projectId);
+        } else if (userId != null) {
+            return workRecordService.findAllBetweenByUserIdAndProjectId(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay(), userId, projectId);
+        }
+        return workRecordService.findAllBetween(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay());
     }
 
     private List<WorkRecord> findWorkRecordsBetween(LocalDate fromInclusive, LocalDate toExclusive) {
@@ -106,10 +137,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private List<WorkRecord> findWorkRecordsBetween(LocalDate fromInclusive, LocalDate toExclusive, Integer userId) {
-        if (userId != null) {
-            return workRecordService.findAllBetweenByUserId(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay(), userId);
-        }
-        return workRecordService.findAllBetween(fromInclusive.atStartOfDay(), toExclusive.atStartOfDay());
+        return findWorkRecordsBetween(fromInclusive, toExclusive, userId, null);
     }
 
     private <REPORT_ITEM, GROUPED_BY_TYPE> List<REPORT_ITEM> createReportsByTemplate(Supplier<List<WorkRecord>> workRecordsSupplier, Function<List<WorkRecord>, Map<GROUPED_BY_TYPE, List<WorkRecord>>> groupedByTypeFunction, BiFunction<GROUPED_BY_TYPE, List<WorkRecord>, REPORT_ITEM> reportItemCreationFunction) {

@@ -19,6 +19,9 @@ public interface WorkRecordRepository extends JpaRepository<WorkRecord, Integer>
     @Query("SELECT w FROM WorkRecord w WHERE w.dateFrom >= :dateFrom AND w.dateTo < :dateTo AND w.user.id = :userId")
     List<WorkRecord> findAllBetweenByUserId(@Param("dateFrom") LocalDateTime fromInclusive, @Param("dateTo") LocalDateTime toExclusive, @Param("userId") Integer userId);
 
+    @Query("SELECT w FROM WorkRecord w WHERE w.dateFrom >= :dateFrom AND w.dateTo < :dateTo AND w.project.id = :projectId")
+    List<WorkRecord> findAllBetweenByProjectId(@Param("dateFrom") LocalDateTime fromInclusive, @Param("dateTo") LocalDateTime toExclusive, @Param("projectId") Integer projectId);
+
     @Query("SELECT w FROM WorkRecord w WHERE w.dateFrom >= :dateFrom AND w.dateTo < :dateTo AND w.user.id = :userId AND w.project.id = :projectId")
     List<WorkRecord> findAllBetweenByUserIdAndProjectId(@Param("dateFrom") LocalDateTime fromInclusive, @Param("dateTo") LocalDateTime toExclusive, @Param("userId") Integer userId, @Param("projectId") Integer projectId);
 }

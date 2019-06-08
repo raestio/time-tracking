@@ -92,6 +92,13 @@ public class WorkRecordServiceImpl implements WorkRecordService {
     }
 
     @Override
+    public List<WorkRecord> findAllBetweenByProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer projectId) {
+        var workRecordDTOs = dataAccessApi.findAllWorkRecordsBetweenByProjectId(fromInclusive, toExclusive, projectId);
+        List<WorkRecord> workRecordsResult = workRecordDTOs.stream().map(this::map).sorted(Comparator.comparing(WorkRecord::getDateFrom)).collect(Collectors.toList());
+        return workRecordsResult;
+    }
+
+    @Override
     public List<WorkRecord> findAllBetweenByUserIdAndProjectId(LocalDateTime fromInclusive, LocalDateTime toExclusive, Integer userId, Integer projectId) {
         Assert.notNull(userId, "userId cannot be null");
         Assert.notNull(fromInclusive, "fromInclusive cannot be null");
