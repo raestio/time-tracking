@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -111,11 +113,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean isUserAssignedToProjectAndHasRole(Integer userId, Integer projectId, String role) {
+    public boolean isUserAssignedToProjectAndHasAnyRole(Integer userId, Integer projectId, String... roles) {
         List<ProjectAssignmentDTO> projectAssignments = dataAccessApi.findProjectAssignmentsByProjectIdAndUserId(projectId, userId);
         var isAssigned = projectAssignments.stream().anyMatch(projectAssignmentDTO ->
                 isAssignmentValid(projectAssignmentDTO)
-                && projectAssignmentDTO.getProjectRoles().stream().anyMatch(roleDTO -> roleDTO.getName().toString().equals(role)));
+                && projectAssignmentDTO.getProjectRoles().stream().anyMatch(roleDTO -> Arrays.asList(roles).contains(roleDTO.getName().toString())));
         return isAssigned;
     }
 

@@ -45,12 +45,17 @@ public class SecurityAccessServiceImpl implements SecurityAccessService {
     }
 
     @Override
+    public boolean hasAnyProjectRole(Integer projectId, String... roles) {
+        return hasProjectRole(projectId, userPrincipal().getId(), roles);
+    }
+
+    @Override
     public boolean hasProjectRole(Integer projectId, String role) {
         return hasProjectRole(projectId, userPrincipal().getId(), role);
     }
 
-    private boolean hasProjectRole(Integer projectId, Integer userId, String role) {
-        var hasRole = projectId != null && StringUtils.isNotBlank(role) && projectService.isUserAssignedToProjectAndHasRole(userId, projectId, role);
+    private boolean hasProjectRole(Integer projectId, Integer userId, String... role) {
+        var hasRole = projectId != null && projectService.isUserAssignedToProjectAndHasAnyRole(userId, projectId, role);
         return hasRole;
     }
 
