@@ -3,3 +3,4 @@ Time tracking and project management backend system made with Spring Boot, Elast
 
 
 ![arch](arch.png)
+![comp](component_diagram.png)
